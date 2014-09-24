@@ -1,6 +1,7 @@
 # Folders #
 #.settings/*
 target/*
+*/tmp/*
 
 *.class
 
@@ -14,3 +15,4 @@ target/*
 
 # Temporary files #
 *~*
+*/.vpprefdata/*
