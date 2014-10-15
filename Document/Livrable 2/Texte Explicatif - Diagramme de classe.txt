@@ -1,0 +1,10 @@
+Texte Explicatif - Diagramme de classe
+
+Pour réaliser le diagramme de classe, on a appliqué le principe du contrôleur, avec la classe Plan ayant le rôle de contrôleur, contenant le plan du centre de recyclage. 
+Cette classe gère le passage du domaine à l'interface. 
+Pour l'interface, on a une classe InterfacePrincipale, rattachée au Plan, qui va contenir les classes InterfacePlan et InterfaceOutils, qui héritent de Jpanel et gèrent chacun une partie de l'interface. 
+Le plan contient des objets de héritant de la classe abstraite Element, ce qui permet de regrouper les traitements similaires à un seul type d'objet. 
+De plus la classe plan contient les arcs reliants les éléments. 
+La classe persistence gère la sauvegarde et l'export du plan.  
+La classe historique gère ce qui est nécessaire à la fonctionnalité undo/redo.
+La classe OptionAffichage gère la configuration de l'affichage actuelle.
