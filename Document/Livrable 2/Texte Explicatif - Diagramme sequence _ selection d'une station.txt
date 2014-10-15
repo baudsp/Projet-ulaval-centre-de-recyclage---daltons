@@ -1,0 +1,5 @@
+Texte explicatif : Diagramme sequence _ selection d'une station
+
+L'utilisateur de l'application va cliquer sur une station. Lorsque l'action aura été réalisé nous allons vérifier quel est la station qui se trouve à ces coordonnées là. Pour cela notre interface va appeler une méthode se trouvant dans la classe plan. Cette méthode, s'appelant verifierElement, retourne un objet Element qui va être la station trouvée aux coordonnées qui ont été cliquées.
+Une deuxième méthode se trouvant dans la classe Interface va décorer la station cliquée afin que l'utilisateur ait un retour sur la selection de sa station.
+Une dernière méthode va afficher les paramètres de cette station dans le panel. Cela permettra à l'utilisateur d'avoir accès aux informations relatives à cette station facilement.
