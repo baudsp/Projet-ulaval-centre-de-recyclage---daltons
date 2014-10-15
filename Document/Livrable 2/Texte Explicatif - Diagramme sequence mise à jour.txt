@@ -1,0 +1,4 @@
+Texte Explicatif - Diagramme sequence mise à jour des calculs
+
+On attend que l'utilisateur ait sélectionné une station. Quand c'est le cas, on affiche les propriétés de la station dans la zone de l'interface qui est responsable de cette tâche, avec la méthode panelParameter.
+Puis l'utilisateur va entrer les propriétés et cliquer sur le bouton pour sauvegarder ce qu'il a entré. Ces propriétés seront transmises à l'élément sélectionné, via la méthode editProperties de la classe Element. Puis on demande la validation du plan à la classe Plan via la méthode verificationPlan, qui va refaire les calculs nécessaires.
