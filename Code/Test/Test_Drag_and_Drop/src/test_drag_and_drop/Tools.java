@@ -49,8 +49,17 @@ public class Tools extends JPanel implements MouseListener{
         images = new Vector<Image>();
         coord = new Coordonnees(0,0,0,0);
         liste = new Vector<Coordonnees>();
-        images.add(getToolkit().getImage("resources\\tool1.png")); 
-        images.add(getToolkit().getImage("resources\\tool2.png")); 
+        String OS = System.getProperty("os.name").toLowerCase();
+        if(OS.indexOf("win") >= 0)
+        {
+            images.add(getToolkit().getImage("resources\\tool1.png")); 
+            images.add(getToolkit().getImage("resources\\tool2.png")); 
+        }
+        else
+        {
+            images.add(getToolkit().getImage("resources/tool1.png")); 
+            images.add(getToolkit().getImage("resources/tool2.png")); 
+        }
         
     }
     
@@ -144,19 +153,6 @@ public class Tools extends JPanel implements MouseListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
-       /* this.idTools = this.searchTool(e.getX(),e.getY());
-        System.out.print("Id trouvé : "+this.idTools+"\n");
-        if(idTools >= 0)
-        {
-            this.moveTools = true;
-            System.out.print("Outils selectionné \n");
-        }
-        else
-        {
-            System.out.print("Outils non selectionné \n");
-            this.idTools = -1;
-            this.moveTools = false;
-        }*/
     }
 
     @Override
