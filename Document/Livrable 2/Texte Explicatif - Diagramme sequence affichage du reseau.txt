@@ -1,0 +1,5 @@
+Texte explicatif - Diagramme sequence : affichage du réseau
+
+Dès qu'une modification est effectuée sur le réseau, ainsi qu'à son premier chargement, l'interface graphique va tout d'abord dessiner la grille en arrière plan.
+Ensuite, une méthode de l'interface va demander au plan les différents éléments à dessiner.
+Enfin, le plan va envoyer les éléments un à un pour que l'interface les affiches graphiquement.
