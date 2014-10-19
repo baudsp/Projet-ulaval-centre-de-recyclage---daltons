@@ -1,0 +1,1 @@
+Ce diagramme represente la création d'un arc en utilisant la methode du glisser - déposer .L'utilisateur devra glisser son arc sur une sortie puis cliquer sur une entrée pour valider la creation de l'arc
