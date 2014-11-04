@@ -47,24 +47,21 @@ class Map extends JPanel {
         super.paintComponent(g);
         if(doGrid == true)
         {
-            int ecartHor= this.getWidth()/10;
-            int ecartVert = this.getHeight()/10;
+            int ecart= 50;
             g.setColor(Color.BLACK);
 
-            int x1,x2,y1,y2 ;
-            x1 = x2 = y1 = y2= 0;
+            int x, y;
+            x = y = 0;
 
-            for(int i=0;i<9;i++)
-            {
-                x1 = x2 += ecartHor;
-                g.drawLine(x1, 0, x2, getHeight());
+            while (x < getWidth()) {
+                x += ecart;
+                g.drawLine(x, 0, x, getHeight());
             }
 
-            for(int j=0;j<9;j++)
-            {
-                y1 = y2 += ecartVert;
-                g.drawLine(0, y1, getWidth(),y2);
-            } 
+            while (y < getHeight()) {
+                y += ecart;
+                g.drawLine(0, y, getWidth(), y);
+            }
         }
         
         for(int i = 0;i<elements.size();i++)
