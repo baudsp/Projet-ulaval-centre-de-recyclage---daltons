@@ -159,16 +159,7 @@ public class Station {
         this.matrix = matrix;
     }
 
-    public Station clone() {
-        Station station = new Station(nbExits);
-        station.name = name;
-        station.description = description;
-        for (Arc arc : exits) {
-            station.addExit(arc);
-        }
-        return station;
-    }
-
+    @Override
     public String toString() {
         String infos = "Station : " + name + "\n";
         infos += "Nombre de sorties : " + nbExits + "\n";
