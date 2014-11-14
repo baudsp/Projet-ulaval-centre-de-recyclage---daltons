@@ -3,19 +3,26 @@ package recyclapp;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.Calendar;
 import java.util.LinkedList;
 import javax.swing.JPanel;
+import recyclapp.model.Arc;
 import recyclapp.model.Element;
 
 public class MapPane extends JPanel {
 
     private LinkedList<Element> elements;
     private boolean withGrid;
+    private LinkedList<Arc> arcs;
+    private int t;
+    
 
     public MapPane() {
         elements = new LinkedList<>();
         withGrid = false;
+	arcs = new LinkedList<>();
         setBackground(new java.awt.Color(255, 255, 255));
+	
     }
 
     @Override
@@ -24,9 +31,13 @@ public class MapPane extends JPanel {
         if (withGrid) {
             drawGrid(g);
         }
-		
+	
+	for (Arc arc : arcs) {
+	    drawArc(arc, g);
+	}
+	
         for (Element e : elements) {
-            g.drawImage(e.image, e.x, e.y, e.height, e.width, this);
+            g.drawImage(e.image, (e.x), e.y, e.height, e.width, this);
         }
     }
 
@@ -107,4 +118,18 @@ public class MapPane extends JPanel {
         repaint();
     }
 
+    private void drawArc(Arc arc, Graphics g) {
+	if (arc.getStatus()) {
+	    int xExit = UI.transformCoordinateFromDomain(arc.getExit())[0];
+	    int yExit = UI.transformCoordinateFromDomain(arc.getExit())[1];
+	    int xEntrance = UI.transformCoordinateFromDomain(arc.getEntrance())[0];
+	    int yEntrance = UI.transformCoordinateFromDomain(arc.getEntrance())[1];
+	    
+	    g.drawLine(xExit, yExit, xEntrance, yEntrance);
+	}
+    }
+
+    void addArc(Arc curArc) {
+	this.arcs.add(curArc);
+    }
 }
