@@ -3,8 +3,11 @@ package recyclapp;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.LinkedList;
 import javax.swing.JPanel;
+import recyclapp.model.Coordinate;
 
 public class MapPane extends JPanel {
 
@@ -92,8 +95,35 @@ public class MapPane extends JPanel {
         elements.clear();
         repaint();
     }
+    
+    public void deleteElement(Element element) {
+        elements.removeLastOccurrence(element);
+        repaint();
+    }
+    
+    
+    public void drawImageFollowingCursor(Image image, int id) {
+        Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+        
+        if(element.id != -1){
+            System.out.println("SIZE " + elements.size());
+            elements.remove(elements.size() - 1);
+        }
+        
+        element.id = 4;
+        element.x = mousePosition.x - 220;
+        element.y = mousePosition.y - 75;
+        element.height = 50;
+        element.width = 50;
+        element.image = image;
+        
+        addElement(element.id, element.x, element.y, element.width, element.height, element.image);
+    }
 
+    Element element = new Element(-1, -1, -1, -1, -1, null);
+    
     private class Element {
+        
 
         public int id;
         public int x, y;

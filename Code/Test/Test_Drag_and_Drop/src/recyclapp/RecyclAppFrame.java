@@ -100,7 +100,9 @@ public class RecyclAppFrame extends javax.swing.JFrame implements ActionListener
     public void mouseDragged(MouseEvent e) {
         if (jPanel1.isMoveTools()) {
             System.out.print("Drag Outils \n");
-            ui.changeCursor(jPanel1.getIdTools());
+            // Show cursor with the selected tool's image
+            ui.getImageFollowing(jPanel1.getIdTools());
+            //ui.changeCursor(jPanel1.getIdTools());
             this.jPanel1.repaint();
         }
         System.out.print("------ \n");
