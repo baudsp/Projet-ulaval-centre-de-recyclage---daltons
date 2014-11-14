@@ -28,9 +28,11 @@ public class ToolsPane extends JPanel implements MouseListener {
         if (OS.contains("win")) {
             images.add(getToolkit().getImage("resources\\tool1.png"));
             images.add(getToolkit().getImage("resources\\tool2.png"));
+            images.add(getToolkit().getImage("resources\\arc.png"));
         } else {
             images.add(getToolkit().getImage("resources/tool1.png"));
             images.add(getToolkit().getImage("resources/tool2.png"));
+            images.add(getToolkit().getImage("resources/arc.png"));
         }
 
     }
@@ -40,8 +42,10 @@ public class ToolsPane extends JPanel implements MouseListener {
         super.paintComponent(g);
         coordonnees.add(new Coordinates(this.getWidth() / 2 - 25, 200, 50, 50));
         coordonnees.add(new Coordinates(this.getWidth() / 2 - 25, 100, 50, 50));
+        coordonnees.add(new Coordinates(this.getWidth() / 2 - 25, 300, 50, 50));
         g.drawImage(images.get(0), coordonnees.get(0).x, coordonnees.get(0).y, coordonnees.get(0).width, coordonnees.get(0).height, this);
         g.drawImage(images.get(1), coordonnees.get(1).x, coordonnees.get(1).y, coordonnees.get(1).width, coordonnees.get(1).height, this);
+        g.drawImage(images.get(2), coordonnees.get(2).x, coordonnees.get(2).y, coordonnees.get(2).width, coordonnees.get(2).height, this);
         g.setColor(Color.red);
         g.drawRect(coord.x, coord.y, coord.width, coord.height);
         g.setColor(Color.red);
