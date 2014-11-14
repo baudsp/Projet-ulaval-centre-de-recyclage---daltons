@@ -3,18 +3,24 @@ package recyclapp;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.util.LinkedList;
 import javax.swing.JPanel;
+import recyclapp.model.Element;
 
 public class MapPane extends JPanel {
 
     private LinkedList<Element> elements;
     private boolean withGrid;
-
+    
+    private Element eltCursor;
+    
     public MapPane() {
         elements = new LinkedList<>();
         withGrid = false;
         setBackground(new java.awt.Color(255, 255, 255));
+	eltCursor = null;
     }
 
     @Override
@@ -23,6 +29,11 @@ public class MapPane extends JPanel {
         if (withGrid) {
             drawGrid(g);
         }
+	
+	if (eltCursor != null) {
+	    g.drawImage(eltCursor.image, eltCursor.x, eltCursor.y, eltCursor.height, eltCursor.width, this);
+	}
+		
         for (Element e : elements) {
             g.drawImage(e.image, e.x, e.y, e.height, e.width, this);
         }
@@ -54,6 +65,7 @@ public class MapPane extends JPanel {
     }
 
     public void addElement(int id, int x, int y, int width, int height, Image image) {
+	eltCursor = null;
         elements.add(new Element(id, x, y, width, height, image));
         repaint();
     }
@@ -88,25 +100,38 @@ public class MapPane extends JPanel {
         repaint();
     }
 
+    /**
+     * retourne l'element existant aux coordonnées en paramètres
+     */
+    public Element checkElement(int x, int y) {
+	for (Element e : elements) {
+	    if (x>= e.x && x<=(e.x+e.width) && y>=e.y && y<=(e.y + e.height)) {
+		return e;
+	    }
+	}	
+	return null;
+    }
+    
     public void deleteElements() {
         elements.clear();
         repaint();
     }
-
-    private class Element {
-
-        public int id;
-        public int x, y;
-        public int width, height;
-        public Image image;
-
-        public Element(int id, int x, int y, int width, int height, Image image) {
-            this.id = id;
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            this.image = image;
-        }
+    
+    public void deleteElement(Element element) {
+        elements.removeLastOccurrence(element);
+        repaint();
+    }
+    
+    
+    public void drawImageFollowingCursor(Image image) {
+        Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+		
+	if (eltCursor == null) {
+	    eltCursor = new Element(4, mousePosition.x - 220, mousePosition.y - 75, 50, 50, image);
+	}
+	
+	this.eltCursor.x = mousePosition.x - 263;
+	this.eltCursor.y = mousePosition.y - 59;
+	this.repaint();
     }
 }

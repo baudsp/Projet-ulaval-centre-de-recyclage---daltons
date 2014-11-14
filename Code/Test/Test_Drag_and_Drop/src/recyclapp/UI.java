@@ -39,5 +39,9 @@ public class UI {
             this.frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
     }
+    
+    public void drawImageFromFollowingCursor(int id){
+        frame.getjPanel2().drawImageFollowingCursor(frame.getjPanel1().getImages(id));
+    }
 
 }
