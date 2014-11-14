@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
 import javax.swing.JPanel;
+import recyclapp.model.Element;
 
 public class MapPane extends JPanel {
 
@@ -23,6 +24,7 @@ public class MapPane extends JPanel {
         if (withGrid) {
             drawGrid(g);
         }
+		
         for (Element e : elements) {
             g.drawImage(e.image, e.x, e.y, e.height, e.width, this);
         }
@@ -88,25 +90,21 @@ public class MapPane extends JPanel {
         repaint();
     }
 
+    /**
+     * retourne l'element existant aux coordonnées en paramètres
+     */
+    public Element checkElement(int x, int y) {
+	for (Element e : elements) {
+	    if (x>= e.x && x<=(e.x+e.width) && y>=e.y && y<=(e.y + e.height)) {
+		return e;
+	    }
+	}	
+	return null;
+    }
+    
     public void deleteElements() {
         elements.clear();
         repaint();
     }
 
-    private class Element {
-
-        public int id;
-        public int x, y;
-        public int width, height;
-        public Image image;
-
-        public Element(int id, int x, int y, int width, int height, Image image) {
-            this.id = id;
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            this.image = image;
-        }
-    }
 }
