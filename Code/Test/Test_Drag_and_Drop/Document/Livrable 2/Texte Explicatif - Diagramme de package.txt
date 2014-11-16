@@ -1,0 +1,3 @@
+Texte Explicatif diagramme de package
+
+Pour le diagramme de package, on a essayé d'appliquer le modèle en couche, avec une couche Interface contenant les classes gérant l'affichage, une couche domaine contenant tout le traitement et la logique du logiciel et la couche service technique, contenant des classes supportant des fonctionnalités bas niveau comme la sauvegarde et l'export.

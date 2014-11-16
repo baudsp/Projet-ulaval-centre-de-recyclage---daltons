@@ -1,0 +1,1 @@
+Ce diagramme montre la sequence pour ajouter un élément. Le choix de la procedure est basé sur le glisser - déposer. L'utilisateur devra selectionner un outil et le glisser sur le plan.
