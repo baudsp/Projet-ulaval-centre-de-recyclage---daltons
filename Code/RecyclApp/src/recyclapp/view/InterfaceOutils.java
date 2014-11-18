@@ -25,9 +25,9 @@ public class InterfaceOutils extends JPanel{
         coord[1] = 0;
         images = new LinkedList<>();
         coordImage = new int [2][2];
-        images.add(getToolkit().getImage("resources/tool1.png"));
+        images.add(getToolkit().getImage("resources/Station.png"));
         images.add(getToolkit().getImage("resources/tool2.png"));
-        sizeImage = 50;
+        sizeImage = 70;
         
     }
     
@@ -76,9 +76,9 @@ public class InterfaceOutils extends JPanel{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        coordImage[0][0] = this.getWidth() / 2 - 25;
+        coordImage[0][0] = this.getWidth() / 2 - (sizeImage/2);
         coordImage[0][1] = 100;
-        coordImage[1][0] = this.getWidth() / 2 - 25;
+        coordImage[1][0] = this.getWidth() / 2 - (sizeImage/2);
         coordImage[1][1] = 200;
         g.drawImage(images.get(0), coordImage[0][0],coordImage[0][1],sizeImage,sizeImage, this);
         g.drawImage(images.get(1), coordImage[1][0],coordImage[1][1],sizeImage,sizeImage, this);

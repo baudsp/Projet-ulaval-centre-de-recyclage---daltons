@@ -43,4 +43,14 @@ public class ModeleInterfacePrincipal {
             this.frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
     }
+    
+    public void setVisiblePaneTools(boolean b)
+    {
+        this.frame.getPanelTools().setVisible(b);
+    }
+    
+    public void setVisiblePaneParam(boolean b)
+    {
+        this.frame.getPanelParam().setVisible(b);
+    }
 }

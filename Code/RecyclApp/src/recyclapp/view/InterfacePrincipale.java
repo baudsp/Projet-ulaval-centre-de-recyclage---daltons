@@ -1,5 +1,6 @@
 package recyclapp.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -36,7 +37,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         panelTools = new InterfaceOutils();
         panelTools.add(jLabel1, java.awt.BorderLayout.PAGE_START);
         panelTools = new InterfaceOutils();
-        panelTools.setBackground(javax.swing.UIManager.getDefaults().getColor("List.selectionBackground"));
+        panelTools.setBackground(new Color(164, 183, 145));
         panelTools.setPreferredSize(new java.awt.Dimension(150, 588));
         panelTools.setLayout(new java.awt.BorderLayout());
         panelTools.add(jLabel1, java.awt.BorderLayout.PAGE_START);
@@ -164,12 +165,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        itemTools = new javax.swing.JCheckBoxMenuItem();
+        itemParam = new javax.swing.JCheckBoxMenuItem();
         itemGrid = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        panelParam.setBackground(javax.swing.UIManager.getDefaults().getColor("CheckBoxMenuItem.selectionBackground"));
+        panelParam.setBackground(new java.awt.Color(164, 183, 145));
         panelParam.setMaximumSize(new java.awt.Dimension(300, 32767));
         panelParam.setPreferredSize(new java.awt.Dimension(250, 588));
         panelParam.setLayout(new java.awt.BorderLayout());
@@ -203,9 +205,25 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
         jMenu3.setText("vue");
 
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText("Afficher le panneaux de paramètre");
-        jMenu3.add(jCheckBoxMenuItem1);
+        itemTools.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        itemTools.setSelected(true);
+        itemTools.setText("Afficher le panneau d'outils");
+        itemTools.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemToolsActionPerformed(evt);
+            }
+        });
+        jMenu3.add(itemTools);
+
+        itemParam.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        itemParam.setSelected(true);
+        itemParam.setText("Afficher le panneaux de paramètre");
+        itemParam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemParamActionPerformed(evt);
+            }
+        });
+        jMenu3.add(itemParam);
 
         itemGrid.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         itemGrid.setText("Afficher la grille");
@@ -224,14 +242,22 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }// </editor-fold>//GEN-END:initComponents
 
     private void itemGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGridActionPerformed
-        
         this.mip.GridView();
     }//GEN-LAST:event_itemGridActionPerformed
+
+    private void itemParamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemParamActionPerformed
+        this.mip.setVisiblePaneParam(this.itemParam.getState());
+    }//GEN-LAST:event_itemParamActionPerformed
+
+    private void itemToolsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemToolsActionPerformed
+        this.mip.setVisiblePaneTools(this.itemTools.getState());
+    }//GEN-LAST:event_itemToolsActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem itemGrid;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JCheckBoxMenuItem itemParam;
+    private javax.swing.JCheckBoxMenuItem itemTools;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
