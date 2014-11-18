@@ -4,18 +4,17 @@ package recyclapp.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import javax.swing.JPanel;
 
-public class InterfaceOutils extends JPanel implements MouseListener {
+public class InterfaceOutils extends JPanel{
     private boolean moveTools;
     private int idTools;
     private int[][] coordImage;
     private int[] coord;
     private LinkedList<Image> images;
     private int sizeImage;
+    private int paddingTop;
 
     public InterfaceOutils() {
         this.idTools = -1;
@@ -29,13 +28,14 @@ public class InterfaceOutils extends JPanel implements MouseListener {
         images.add(getToolkit().getImage("resources/tool1.png"));
         images.add(getToolkit().getImage("resources/tool2.png"));
         sizeImage = 50;
+        
     }
     
     private int searchTool(int x, int y) {
         for(int i=0;i<2;i++){
-            if (x >= coordImage[i][0] && x <= coordImage[i][0] + sizeImage && y >= coordImage[i][1] && y <= coordImage[i][1] + sizeImage) {
+            if (x >= coordImage[i][0] && x <= coordImage[i][0] + sizeImage && y >= coordImage[i][1]  && y <= coordImage[i][1]  + sizeImage) {
                 coord[0] = coordImage[i][0];
-                coord[0] = coordImage[i][1];
+                coord[1] = coordImage[i][1];
                 return i;
             }
         }
@@ -55,8 +55,21 @@ public class InterfaceOutils extends JPanel implements MouseListener {
         }
     }
     
+    public int getIdTools() {
+        return idTools;
+    }
+    
+    public void setMoveTools(boolean b)
+    {
+        this.moveTools = b;
+    }
+    
     public boolean isMoveTools() {
         return moveTools;
+    }
+    
+    public Image getImages(int i) {
+        return images.get(i);
     }
     
     @Override
@@ -70,33 +83,10 @@ public class InterfaceOutils extends JPanel implements MouseListener {
         g.drawImage(images.get(0), coordImage[0][0],coordImage[0][1],sizeImage,sizeImage, this);
         g.drawImage(images.get(1), coordImage[1][0],coordImage[1][1],sizeImage,sizeImage, this);
         g.setColor(Color.red);
-        g.drawRect(coord[0],coord[1],sizeImage,sizeImage);
-        g.setColor(Color.red);
-    }
-    
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.moveTools)
+            g.drawRect(coord[0],coord[1],sizeImage,sizeImage);
+        else
+            g.drawRect(0,0,0,0);
     }
     
 }
