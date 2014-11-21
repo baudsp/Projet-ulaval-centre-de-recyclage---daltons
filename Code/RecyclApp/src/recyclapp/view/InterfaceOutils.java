@@ -68,6 +68,14 @@ public class InterfaceOutils extends JPanel{
         return moveTools;
     }
     
+    public int getCoordW(int i) {
+        return coordImage[i][0]+sizeImage;
+    }
+
+    public int getCoordH(int i) {
+        return coordImage[i][1]+sizeImage;
+    }
+    
     public Image getImages(int i) {
         return images.get(i);
     }

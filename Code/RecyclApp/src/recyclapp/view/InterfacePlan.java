@@ -8,18 +8,23 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.LinkedList;
 import javax.swing.JPanel;
+import recyclapp.model.Element;
 
 public class InterfacePlan extends JPanel{
-    //private LinkedList<Element> elements;
+    private LinkedList<Element> elements;
     private boolean withGrid;
-    //private Element eltCursor;
+    private boolean isDrag;
+    private int[] coordCursor;
+    private Image imgCursor;
     //private LinkedList<Arc> arcs;
     private int t;
     
 
     public InterfacePlan() {
-        //elements = new LinkedList<>();
+        elements = new LinkedList<>();
         withGrid = false;
+        isDrag = false;
+        coordCursor = new int[2];
 	//arcs = new LinkedList<>();
         //setBackground(new java.awt.Color(255, 255, 255));
 	//eltCursor = null;
@@ -32,16 +37,26 @@ public class InterfacePlan extends JPanel{
             drawGrid(g);
         }
 	
-	/*if (eltCursor != null) {
-	    g.drawImage(eltCursor.image, eltCursor.x, eltCursor.y, eltCursor.height, eltCursor.width, this);
+	if (isDrag) {
+	    g.drawImage(imgCursor, coordCursor[0], coordCursor[1], imgCursor.getWidth(this),imgCursor.getWidth(this), this);
+            isDrag = false;
 	}
-	for (Arc arc : arcs) {
+	/*for (Arc arc : arcs) {
 	    drawArc(arc, g);
 	}
 	
         for (Element e : elements) {
             g.drawImage(e.image, (e.x), e.y, e.height, e.width, this);
         }*/
+    }
+    
+    public void drawImageFollowingCursor(Image image,int x, int y) {
+        
+	imgCursor = image;
+        isDrag = true;
+        this.coordCursor[0] = x;
+        this.coordCursor[1] = y;
+	this.repaint();
     }
 
     private void drawGrid(Graphics g) {
@@ -70,9 +85,8 @@ public class InterfacePlan extends JPanel{
     }
 
     public void addElement(int id, int x, int y, int width, int height, Image image) {
-	/*eltCursor = null;
         elements.add(new Element(id, x, y, width, height, image));
-        repaint();*/
+        repaint();
     }
 
     public void moveElement(int id, int x, int y) {

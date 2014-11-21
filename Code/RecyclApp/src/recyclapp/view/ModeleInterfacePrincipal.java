@@ -6,14 +6,18 @@
 package recyclapp.view;
 
 import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
+import javax.swing.JPanel;
 
 /**
  *
  * @author kevinsalles
  */
-public class ModeleInterfacePrincipal {
+public class ModeleInterfacePrincipal{
     
     private InterfacePrincipale frame;
 
@@ -43,6 +47,15 @@ public class ModeleInterfacePrincipal {
             this.frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
     }
+    
+    public void drawImageFromFollowingCursor(int id,int x, int y){
+        Image img = frame.getPanelTools().getImages(id);
+        x -= frame.getPanelTools().getWidth()+img.getWidth(frame)/2;
+        y -= img.getWidth(frame)/2;
+        frame.getPanelMap().drawImageFollowingCursor(frame.getPanelTools().getImages(id),x,y);
+    }
+    
+    
     
     public void setVisiblePaneTools(boolean b)
     {

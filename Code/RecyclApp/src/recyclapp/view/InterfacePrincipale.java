@@ -1,6 +1,10 @@
 package recyclapp.view;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -8,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import recyclapp.model.Plan;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -16,7 +21,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private ModeleInterfacePrincipal mip;
     private JLabel jLabel1;
 
-    public InterfacePrincipale() {
+    public InterfacePrincipale(Plan plan) {
         initComponents();
         initialize();
     }
@@ -41,8 +46,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         panelTools.setPreferredSize(new java.awt.Dimension(150, 588));
         panelTools.setLayout(new java.awt.BorderLayout());
         panelTools.add(jLabel1, java.awt.BorderLayout.PAGE_START);
-        getContentPane().add(panelTools, java.awt.BorderLayout.LINE_START);
-        
+        getContentPane().add(panelTools, java.awt.BorderLayout.WEST);
+        panelTools.addMouseMotionListener(this);
         mip = new ModeleInterfacePrincipal(this);
     }
 
@@ -85,27 +90,27 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public void setPanelTools(InterfaceOutils panelTools) {
         this.panelTools = panelTools;
     }
-    
-    
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        /*if (e.getSource().equals(reset)) {
-            this.jPanel2.deleteElements();
-        } else {
-            ui.GridView();
-        }*/
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        System.out.print(e.getSource().getClass().toString());
         if (e.getSource().equals(panelMap)) {
-            System.out.print(e.getSource().toString());
+            
             log.setText("[" + e.getX() + ";" + e.getY() + "]");
         }
-   
-        int top = this.jMenuBar1.getHeight() * 2;
-        panelTools.moveTool(e.getX(), e.getY()-top);
+        if (e.getSource().equals(panelTools)) {
+            int top = this.jMenuBar1.getHeight() + this.panelInfo.getHeight();
+            panelTools.moveTool(e.getX(), e.getY());
+        }
+        else
+        {
+            panelTools.setMoveTools(false);
+        }
+        
         if (panelTools.isMoveTools()) {
             mip.changeCursor(-2);
         } else {
@@ -117,9 +122,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseDragged(MouseEvent e) {
         if (this.panelTools.isMoveTools()) {
-            System.out.print("Drag Outils \n");
-            mip.changeCursor(this.panelTools.getIdTools());
-            this.panelTools.repaint();
+            System.out.print(e.getSource().getClass().toString()+"  Drag Outils \n");
+            mip.drawImageFromFollowingCursor(this.panelTools.getIdTools(),e.getX(),e.getY()); 
+            this.panelTools.repaint();   
         }
     }
 
@@ -136,12 +141,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public void mouseReleased(MouseEvent e) {
         mip.changeCursor(-1);
         this.panelTools.setMoveTools(false);
-        this.panelTools.repaint();
         if (this.panelTools.getIdTools() >= 0) {
-            //int x = e.getX() - this.panelTools.getWidth() - 25 - 8;
-            //int y = e.getY() - this.jButton1.getHeight() - 25 - 8;
-            //Image img = jPanel1.getImages(jPanel1.getIdTools());
-            //jPanel2.addElement(jPanel1.getIdTools(), x, y, jPanel1.getCoordW(jPanel1.getIdTools()), jPanel1.getCoordH(jPanel1.getIdTools()), jPanel1.getImages(jPanel1.getIdTools()));
+            int x = e.getX() - this.panelTools.getWidth() - 25 - 8;
+            int y = e.getY() - this.log.getHeight() - 25 - 8;
+            Image img = this.panelTools.getImages(panelTools.getIdTools());
+	    this.panelMap.addElement(panelTools.getIdTools(), x, y, panelTools.getCoordW(panelTools.getIdTools()), panelTools.getCoordH(panelTools.getIdTools()), panelTools.getImages(panelTools.getIdTools()));
         }
     }
 
@@ -240,6 +244,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
 
     private void itemGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGridActionPerformed
         this.mip.GridView();
