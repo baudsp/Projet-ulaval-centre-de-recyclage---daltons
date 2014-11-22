@@ -1,10 +1,7 @@
 package recyclapp.view;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,10 +13,7 @@ import recyclapp.model.Plan;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
-    private InterfaceOutils panelTools;
-    private InterfacePlan  panelMap;
     private ModeleInterfacePrincipal mip;
-    private JLabel jLabel1;
 
     public InterfacePrincipale(Plan plan) {
         initComponents();
@@ -29,26 +23,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private void initialize() {
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
-        panelMap = new InterfacePlan ();
-        panelMap.setBackground(java.awt.Color.white);
-        javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(panelMap);
-        panelMap.setLayout(panelMapLayout);
-        getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
-        panelMap.addMouseMotionListener(this);
-        jLabel1 = new javax.swing.JLabel();
-        jLabel1.setFont(new java.awt.Font("Waree", 1, 18));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Outils");
-        panelTools = new InterfaceOutils();
-        panelTools.add(jLabel1, java.awt.BorderLayout.PAGE_START);
-        panelTools = new InterfaceOutils();
-        panelTools.setBackground(new Color(164, 183, 145));
-        panelTools.setPreferredSize(new java.awt.Dimension(150, 588));
-        panelTools.setLayout(new java.awt.BorderLayout());
-        panelTools.add(jLabel1, java.awt.BorderLayout.PAGE_START);
-        getContentPane().add(panelTools, java.awt.BorderLayout.WEST);
+       
+	panelMap.addMouseMotionListener(this);
+	
         panelTools.addMouseMotionListener(this);
-        mip = new ModeleInterfacePrincipal(this);
+        
+	mip = new ModeleInterfacePrincipal(this);
+	
     }
 
     public JLabel getLog() {
@@ -76,11 +57,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }
 
     public JPanel getPanelParam() {
-        return panelParam;
+        return panelParams;
     }
 
-    public void setPanelParam(JPanel panelParam) {
-        this.panelParam = panelParam;
+    public void setPanelParam(InterfaceParam panelParam) {
+        this.panelParams = panelParam;
     }
 
     public InterfaceOutils getPanelTools() {
@@ -161,10 +142,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelParam = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         panelInfo = new javax.swing.JPanel();
         log = new javax.swing.JLabel();
+        panelParams = new recyclapp.view.InterfaceParam();
+        panelTools = new recyclapp.view.InterfaceOutils();
+        panelMap = new recyclapp.view.InterfacePlan();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -174,18 +156,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         itemGrid = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        panelParam.setBackground(new java.awt.Color(164, 183, 145));
-        panelParam.setMaximumSize(new java.awt.Dimension(300, 32767));
-        panelParam.setPreferredSize(new java.awt.Dimension(250, 588));
-        panelParam.setLayout(new java.awt.BorderLayout());
-
-        jLabel2.setFont(new java.awt.Font("Waree", 1, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Paramètres");
-        panelParam.add(jLabel2, java.awt.BorderLayout.PAGE_START);
-
-        getContentPane().add(panelParam, java.awt.BorderLayout.LINE_END);
 
         panelInfo.setBackground(java.awt.Color.darkGray);
         panelInfo.setMaximumSize(new java.awt.Dimension(100, 20));
@@ -198,6 +168,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         panelInfo.add(log, java.awt.BorderLayout.LINE_START);
 
         getContentPane().add(panelInfo, java.awt.BorderLayout.PAGE_END);
+        getContentPane().add(panelParams, java.awt.BorderLayout.EAST);
+        getContentPane().add(panelTools, java.awt.BorderLayout.LINE_START);
+        getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
 
         jMenuBar1.setBackground(new java.awt.Color(164, 183, 145));
 
@@ -263,14 +236,15 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private javax.swing.JCheckBoxMenuItem itemGrid;
     private javax.swing.JCheckBoxMenuItem itemParam;
     private javax.swing.JCheckBoxMenuItem itemTools;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel log;
     private javax.swing.JPanel panelInfo;
-    private javax.swing.JPanel panelParam;
+    private recyclapp.view.InterfacePlan panelMap;
+    private recyclapp.view.InterfaceParam panelParams;
+    private recyclapp.view.InterfaceOutils panelTools;
     // End of variables declaration//GEN-END:variables
 
 }

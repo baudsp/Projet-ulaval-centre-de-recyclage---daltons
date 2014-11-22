@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class InterfaceOutils extends JPanel{
@@ -14,7 +15,6 @@ public class InterfaceOutils extends JPanel{
     private int[] coord;
     private LinkedList<Image> images;
     private int sizeImage;
-    private int paddingTop;
 
     public InterfaceOutils() {
         this.idTools = -1;
@@ -28,7 +28,15 @@ public class InterfaceOutils extends JPanel{
         images.add(getToolkit().getImage("resources/Station.png"));
         images.add(getToolkit().getImage("resources/tool2.png"));
         sizeImage = 70;
-        
+        JLabel jLabel1 = new javax.swing.JLabel();
+        jLabel1.setFont(new java.awt.Font("Waree", 1, 18));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Outils");
+	
+        this.setBackground(new Color(164, 183, 145));
+        this.setPreferredSize(new java.awt.Dimension(150, 588));
+        this.setLayout(new java.awt.BorderLayout());
+        this.add(jLabel1, java.awt.BorderLayout.PAGE_START);
     }
     
     private int searchTool(int x, int y) {

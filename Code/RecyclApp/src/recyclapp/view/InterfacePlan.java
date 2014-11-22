@@ -4,8 +4,6 @@ package recyclapp.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.util.LinkedList;
 import javax.swing.JPanel;
 import recyclapp.model.Element;
@@ -28,6 +26,10 @@ public class InterfacePlan extends JPanel{
 	//arcs = new LinkedList<>();
         //setBackground(new java.awt.Color(255, 255, 255));
 	//eltCursor = null;
+	
+	this.setBackground(java.awt.Color.white);
+        javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(this);
+        this.setLayout(panelMapLayout);
     }
 
     @Override
