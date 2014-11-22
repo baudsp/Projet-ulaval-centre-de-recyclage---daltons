@@ -25,9 +25,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         this.addMouseListener(this);
        
 	panelMap.addMouseMotionListener(this);
+	panelMap.addMouseListener(this);
 	
         panelTools.addMouseMotionListener(this);
-        
+        panelTools.addMouseListener(this);
+	
 	mip = new ModeleInterfacePrincipal(this);
 	
     }
