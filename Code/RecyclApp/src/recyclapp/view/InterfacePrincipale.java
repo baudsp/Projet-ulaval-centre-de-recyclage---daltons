@@ -7,13 +7,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.HashMap;
+import java.util.LinkedList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import recyclapp.model.Plan;
+import recyclapp.model.Plan.DataElement;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
+    private InterfacePlan panelMap;
     private ModeleInterfacePrincipal mip;
+    private JLabel jLabel1;
+    private Plan plan;
 
     public InterfacePrincipale(Plan plan) {
         initComponents();
@@ -23,7 +29,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private void initialize() {
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
-       
+      
 	panelMap.addMouseMotionListener(this);
 	panelMap.addMouseListener(this);
 	
@@ -31,7 +37,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         panelTools.addMouseListener(this);
 	
 	mip = new ModeleInterfacePrincipal(this);
-	
     }
 
     public JLabel getLog() {
@@ -73,6 +78,16 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public void setPanelTools(InterfaceOutils panelTools) {
         this.panelTools = panelTools;
     }
+    
+    public LinkedList<DataElement> getPositionElements()
+    {
+        return this.plan.getPositionElement();
+    }
+    
+    public Image getImageType(int i)
+    {
+        return this.panelTools.getImages(i);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -80,13 +95,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        System.out.print(e.getSource().getClass().toString());
         if (e.getSource().equals(panelMap)) {
             
             log.setText("[" + e.getX() + ";" + e.getY() + "]");
         }
         if (e.getSource().equals(panelTools)) {
-            int top = this.jMenuBar1.getHeight() + this.panelInfo.getHeight();
             panelTools.moveTool(e.getX(), e.getY());
         }
         else
@@ -104,8 +117,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        if (e.getSource().equals(panelMap)) {
+            
+            log.setText("[" + e.getX() + ";" + e.getY() + "]");
+        }
         if (this.panelTools.isMoveTools()) {
-            System.out.print(e.getSource().getClass().toString()+"  Drag Outils \n");
             mip.drawImageFromFollowingCursor(this.panelTools.getIdTools(),e.getX(),e.getY()); 
             this.panelTools.repaint();   
         }
@@ -123,13 +139,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseReleased(MouseEvent e) {
         mip.changeCursor(-1);
+        if(this.panelTools.isMoveTools())
+            if (this.panelTools.getIdTools() >= 0) {
+                int x = e.getX() - this.panelTools.getWidth() - 35;
+                int y = e.getY()  - 35;
+                this.plan.newElement(this.panelTools.getIdTools(),x, y);
+                this.panelMap.repaint();
+            }
         this.panelTools.setMoveTools(false);
-        if (this.panelTools.getIdTools() >= 0) {
-            int x = e.getX() - this.panelTools.getWidth() - 25 - 8;
-            int y = e.getY() - this.log.getHeight() - 25 - 8;
-            Image img = this.panelTools.getImages(panelTools.getIdTools());
-	    this.panelMap.addElement(panelTools.getIdTools(), x, y, panelTools.getCoordW(panelTools.getIdTools()), panelTools.getCoordH(panelTools.getIdTools()), panelTools.getImages(panelTools.getIdTools()));
-        }
     }
 
     @Override
@@ -148,7 +165,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         log = new javax.swing.JLabel();
         panelParams = new recyclapp.view.InterfaceParam();
         panelTools = new recyclapp.view.InterfaceOutils();
-        panelMap = new recyclapp.view.InterfacePlan();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -172,7 +188,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         getContentPane().add(panelInfo, java.awt.BorderLayout.PAGE_END);
         getContentPane().add(panelParams, java.awt.BorderLayout.EAST);
         getContentPane().add(panelTools, java.awt.BorderLayout.LINE_START);
-        getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
 
         jMenuBar1.setBackground(new java.awt.Color(164, 183, 145));
 
@@ -244,7 +259,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel log;
     private javax.swing.JPanel panelInfo;
-    private recyclapp.view.InterfacePlan panelMap;
     private recyclapp.view.InterfaceParam panelParams;
     private recyclapp.view.InterfaceOutils panelTools;
     // End of variables declaration//GEN-END:variables

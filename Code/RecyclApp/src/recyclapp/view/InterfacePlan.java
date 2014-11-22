@@ -6,20 +6,17 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
 import javax.swing.JPanel;
-import recyclapp.model.Element;
+import javax.swing.RowFilter.Entry;
 
 public class InterfacePlan extends JPanel{
-    private LinkedList<Element> elements;
     private boolean withGrid;
     private boolean isDrag;
     private int[] coordCursor;
     private Image imgCursor;
-    //private LinkedList<Arc> arcs;
-    private int t;
-    
+    private InterfacePrincipale ip;
 
-    public InterfacePlan() {
-        elements = new LinkedList<>();
+    public InterfacePlan(InterfacePrincipale ip) {
+
         withGrid = false;
         isDrag = false;
         coordCursor = new int[2];
@@ -30,6 +27,7 @@ public class InterfacePlan extends JPanel{
 	this.setBackground(java.awt.Color.white);
         javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(this);
         this.setLayout(panelMapLayout);
+        this.ip = ip;
     }
 
     @Override
@@ -38,18 +36,20 @@ public class InterfacePlan extends JPanel{
         if (withGrid) {
             drawGrid(g);
         }
-	
+
 	if (isDrag) {
 	    g.drawImage(imgCursor, coordCursor[0], coordCursor[1], imgCursor.getWidth(this),imgCursor.getWidth(this), this);
             isDrag = false;
 	}
-	/*for (Arc arc : arcs) {
-	    drawArc(arc, g);
-	}
-	
-        for (Element e : elements) {
-            g.drawImage(e.image, (e.x), e.y, e.height, e.width, this);
-        }*/
+
+        for(int i=0;i<this.ip.getPositionElements().size();i++)
+        {
+            //System.out .print("Value : "+entry.getValue().x);
+            int id = this.ip.getPositionElements().get(i).id;
+            int x = this.ip.getPositionElements().get(i).x;
+            int y = this.ip.getPositionElements().get(i).y;
+            g.drawImage(this.ip.getImageType(id),x,y,70,70, this);
+        }
     }
     
     public void drawImageFollowingCursor(Image image,int x, int y) {
@@ -87,7 +87,6 @@ public class InterfacePlan extends JPanel{
     }
 
     public void addElement(int id, int x, int y, int width, int height, Image image) {
-        elements.add(new Element(id, x, y, width, height, image));
         repaint();
     }
 
