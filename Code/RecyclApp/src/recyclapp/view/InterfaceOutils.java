@@ -52,12 +52,9 @@ public class InterfaceOutils extends JPanel{
 
     public void moveTool(int x, int y) {
         this.idTools = this.searchTool(x, y);
-        System.out.print("Id trouvé : " + this.idTools + "\n");
         if (idTools >= 0) {
             this.moveTools = true;
-            System.out.print("Outils selectionné \n");
         } else {
-            System.out.print("Outils non selectionné \n");
             this.idTools = -1;
             this.moveTools = false;
         }

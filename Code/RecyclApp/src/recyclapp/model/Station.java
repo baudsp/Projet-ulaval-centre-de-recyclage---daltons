@@ -1,6 +1,7 @@
 package recyclapp.model;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,22 +10,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Station {
+public class Station extends Element{
 
     private int nbExits;
     private String name;
     private String description;
     private List<Arc> exits;
-    private Coordinate coordinates;
     private Dimension dimension;
     private Map<Product, Map<Product, Float>> matrix;
 
-    public Station(int nbExits) {
-        this.nbExits = nbExits;
+    public Station(int id,int x, int y, int width, int height)  {
+        this.id = id;
         this.exits = new LinkedList<>();
         this.matrix = new HashMap<>();
         this.dimension = new Dimension();
-        this.coordinates = new Coordinate(0, 0);
+        this.dimension.height = height;
+        this.dimension.width = width;
+        this.coordinate = new Coordinate(x, y);
     }
 
     public void addExit(Arc arc) {
@@ -68,15 +70,15 @@ public class Station {
     }
 
     public Coordinate getCoordinates() {
-        return coordinates;
+        return coordinate;
     }
 
     public void setCoordinates(int x, int y) {
-        coordinates = new Coordinate(x, y);
+        coordinate = new Coordinate(x, y);
     }
 
     public void setCoordinates(Coordinate c) {
-        coordinates = c;
+        coordinate = c;
     }
 
     public Dimension getDimension() {
