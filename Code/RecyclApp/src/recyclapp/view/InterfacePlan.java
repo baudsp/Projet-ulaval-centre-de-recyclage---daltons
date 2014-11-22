@@ -87,7 +87,6 @@ public class InterfacePlan extends JPanel{
     }
 
     public void addElement(int id, int x, int y, int width, int height, Image image) {
-        elements.add(new Element(id, x, y, width, height, image));
         repaint();
     }
 

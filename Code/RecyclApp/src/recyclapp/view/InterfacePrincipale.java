@@ -16,6 +16,7 @@ import recyclapp.model.Plan.DataElement;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
+    private InterfacePlan panelMap;
     private ModeleInterfacePrincipal mip;
     private JLabel jLabel1;
     private Plan plan;
@@ -28,13 +29,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private void initialize() {
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
-       
-	panelMap.addMouseMotionListener(this);
-	
-        panelTools.addMouseMotionListener(this);
-        
-	mip = new ModeleInterfacePrincipal(this);
-	
         panelMap = new InterfacePlan (this);
         panelMap.setBackground(java.awt.Color.white);
         javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(panelMap);
@@ -46,14 +40,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         jLabel1.setFont(new java.awt.Font("Waree", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Outils");
-        panelTools = new InterfaceOutils();
-        panelTools.add(jLabel1, java.awt.BorderLayout.PAGE_START);
-        panelTools = new InterfaceOutils();
-        panelTools.setBackground(new Color(164, 183, 145));
-        panelTools.setPreferredSize(new java.awt.Dimension(150, 588));
-        panelTools.setLayout(new java.awt.BorderLayout());
-        panelTools.add(jLabel1, java.awt.BorderLayout.PAGE_START);
-        getContentPane().add(panelTools, java.awt.BorderLayout.WEST);
         panelTools.addMouseMotionListener(this);
         panelTools.addMouseListener(this);
         mip = new ModeleInterfacePrincipal(this);
@@ -121,7 +107,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             log.setText("[" + e.getX() + ";" + e.getY() + "]");
         }
         if (e.getSource().equals(panelTools)) {
-            int top = this.jMenuBar1.getHeight() + this.panelInfo.getHeight();
             panelTools.moveTool(e.getX(), e.getY());
         }
         else
@@ -187,7 +172,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         log = new javax.swing.JLabel();
         panelParams = new recyclapp.view.InterfaceParam();
         panelTools = new recyclapp.view.InterfaceOutils();
-        panelMap = new recyclapp.view.InterfacePlan();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -211,7 +195,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         getContentPane().add(panelInfo, java.awt.BorderLayout.PAGE_END);
         getContentPane().add(panelParams, java.awt.BorderLayout.EAST);
         getContentPane().add(panelTools, java.awt.BorderLayout.LINE_START);
-        getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
 
         jMenuBar1.setBackground(new java.awt.Color(164, 183, 145));
 
@@ -283,7 +266,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel log;
     private javax.swing.JPanel panelInfo;
-    private recyclapp.view.InterfacePlan panelMap;
     private recyclapp.view.InterfaceParam panelParams;
     private recyclapp.view.InterfaceOutils panelTools;
     // End of variables declaration//GEN-END:variables
