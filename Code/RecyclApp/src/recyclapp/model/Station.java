@@ -10,16 +10,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Station extends Element{
+public class Station extends Element {
 
     private int nbExits;
     private String name;
     private String description;
-    private List<Arc> exits;
     private Dimension dimension;
-    private Map<Product, Map<Product, Float>> matrix;
 
-    public Station(int id,int x, int y, int width, int height)  {
+    public Station(int id, int x, int y, int width, int height) {
+        super();
         this.id = id;
         this.exits = new LinkedList<>();
         this.matrix = new HashMap<>();
@@ -109,83 +108,7 @@ public class Station extends Element{
         dimension = new Dimension(width, height);
     }
 
-    public Map<Product, Map<Product, Float>> getMatrix() {
+    public Map<String, Map<Arc, Map<String, Float>>> getMatrix() {
         return matrix;
-    }
-
-    public Map<Product, Float> getMatrixPerProduct(Product p) {
-        return matrix.get(p);
-    }
-
-    public List<Product> getEntranceProducts() {
-        List<Product> products = new ArrayList<>();
-        Set listKeys = matrix.keySet();
-        for (Object p : listKeys) {
-            products.add((Product) p);
-        }
-        return products;
-    }
-
-    public List<Product> getExitProducts() {
-        List<Product> products = new ArrayList<>();
-        Set listKeys = matrix.keySet();
-        Iterator iterator = listKeys.iterator();
-        while (iterator.hasNext()) {
-            Map<Product, Float> exit = (Map<Product, Float>) iterator.next();
-            Set exitKeys = exit.keySet();
-            for (Object key : exitKeys) {
-                Product p = (Product) key;
-                Float f = exit.get(p);
-                if ((f > 0) && (!products.contains(p))) {
-                    products.add(p);
-                }
-            }
-        }
-        return products;
-    }
-
-    public float getExitRateForProduct(Product p) {
-        float rate = 0;
-        Set listKeys = matrix.keySet();
-        Iterator iterator = listKeys.iterator();
-        while (iterator.hasNext()) {
-            Map<Product, Float> exit = (Map<Product, Float>) iterator.next();
-            if (exit.containsKey(p)) {
-                rate += exit.get(p);
-            }
-        }
-        return rate;
-    }
-
-    public void setMatrix(HashMap<Product, Map<Product, Float>> matrix) {
-        this.matrix = matrix;
-    }
-
-    @Override
-    public String toString() {
-        String infos = "Station : " + name + "\n";
-        infos += "Nombre de sorties : " + nbExits + "\n";
-        if (description != null) {
-            infos += description + "\n";
-        }
-        infos += "Dimentsions : " + dimension + "\n";
-        if (exits.size() >= 0) {
-            infos += "Sorties : \n";
-            for (Arc arc : exits) {
-                infos += arc;
-            }
-        }
-        if (matrix.size() > 0) {
-            infos += "Matrice de recyclage : \n";
-            infos += "\tEntrées : \n";
-            for (Product p : getEntranceProducts()) {
-                infos += "\t\t" + p + "\n";
-            }
-            infos += "\tSorties : \n";
-            for (Product p : getExitProducts()) {
-                infos += "\t\t" + p + " : " + getExitRateForProduct(p) + "\n";
-            }
-        }
-        return infos;
     }
 }
