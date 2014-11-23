@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 public class ModeleInterfacePrincipal{
     
     private InterfacePrincipale frame;
+    // NEW
+    private int idImage;
 
     public ModeleInterfacePrincipal(InterfacePrincipale frame) {
         this.frame = frame;

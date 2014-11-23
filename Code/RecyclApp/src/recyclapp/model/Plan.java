@@ -22,6 +22,12 @@ public class Plan {
             this.x = x;
             this.y = y;
         }
+        
+        public DataElement(){
+            this.id = -1;
+            this.x = 0;
+            this.y = 0;
+        }
     };
     
     public Plan(){
@@ -41,11 +47,35 @@ public class Plan {
         LinkedList<DataElement> dataElements = new LinkedList<DataElement>();
         for(int i=0;i<elements.size();i++)
         {
-            System.out.print(" => id : "+elements.get(i).id+" "+elements.get(i).coordinate.getX()+" ; "+elements.get(i).coordinate.getY()+"\n");
             dataElements.add(new DataElement(elements.get(i).id,elements.get(i).coordinate.getX(),elements.get(i).coordinate.getY()));
         }
-        System.out.print("\n");
         return dataElements;
+    }
+    
+    //NEW
+    public DataElement findDataElement(int x,int y)
+    {
+        
+        for(Element e:elements){
+            if (x >= e.coordinate.getX() && x <= e.coordinate.getX()+e.width && y >= e.coordinate.getY()  && y <= e.coordinate.getY() + e.height) {
+                
+                return new DataElement(e.id,e.coordinate.getX(),e.coordinate.getY());
+            }
+        }
+        
+        return new DataElement();
+    }
+    
+    // NEW
+    public void remplacePositionElements(DataElement de,int x,int y)
+    {
+        for(Element e:elements){
+            if (de.x >= e.coordinate.getX() && de.x <= e.coordinate.getX()+e.width && de.y >= e.coordinate.getY()  && de.y <= e.coordinate.getY() + e.height) {
+                e.setCoordinate(new Coordinate(x,y));
+            }
+        }
+        
+        System.out.print("Nb elements : "+elements.size()+"\n");
     }
     
 }

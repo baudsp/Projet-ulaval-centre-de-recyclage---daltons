@@ -22,11 +22,11 @@ public class Station extends Element {
         this.id = id;
         this.exits = new LinkedList<>();
         this.matrix = new HashMap<>();
-        this.dimension = new Dimension();
-        this.dimension.height = height;
-        this.dimension.width = width;
+        this.height = height;
+        this.width = width;
         this.coordinate = new Coordinate(x, y);
     }
+    
 
     public void addExit(Arc arc) {
         if (exits.size() < nbExits) {

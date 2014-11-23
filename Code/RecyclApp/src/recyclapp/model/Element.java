@@ -24,6 +24,15 @@ abstract class Element extends Component {
         matrix = new HashMap<>();
     }
 
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
+
+    
     public void addExit(Arc arc) {
         if (!exits.contains(arc)) {
             exits.add(arc);
