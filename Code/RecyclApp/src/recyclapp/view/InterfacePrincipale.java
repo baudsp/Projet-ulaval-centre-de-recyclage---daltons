@@ -185,27 +185,38 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             {
                     int x = e.getX() - this.panelTools.getWidth() - this.panelTools.getSizeImage()/2;
                     int y = e.getY()  - this.panelTools.getSizeImage()/2;;
-                     if (this.panelTools.getIdTools() >= 0) 
+                     if (this.panelTools.getIdTools() >= 0 && !this.mip.isOverlapElement(e.getX()- this.panelTools.getWidth(), e.getY(),this.panelTools.getSizeImage(),this.panelTools.getSizeImage())) 
                         this.plan.newElement(this.panelTools.getIdTools(),x, y);
             }
             
             this.panelTools.setMoveTools(false);
-            // NEW
             this.panelTools.repaint();
         }
         else if (e.getSource().equals(panelMap))
         {
-            if(e.getX()+this.panelTools.getWidth() >= this.panelMap.getX() && e.getX() <= this.panelMap.getWidth() 
+            
+            int marginLeft = 0;
+            if(this.itemTools.getState())
+                marginLeft = this.panelTools.getWidth();
+            if(e.getX()+marginLeft >= this.panelMap.getX() && e.getX() <= this.panelMap.getWidth() 
                     && e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getHeight())
             {
-                int x = e.getX() - this.panelTools.getSizeImage()/2;
-                int y = e.getY()  - this.panelTools.getSizeImage()/2;;
-                this.plan.remplacePositionElements(elementTemp,x,y);
+                int x = e.getX() - elementTemp.width/2;
+                int y = e.getY()  - elementTemp.height/2;
+                this.debug.setText(" X : "+(e.getX()+marginLeft)+" et Y : "+ e.getY()+"\n");
+                if(!this.mip.isOverlapElement(e.getX(), e.getY(),elementTemp.width,elementTemp.height))
+                    this.plan.remplacePositionElements(elementTemp,x,y);
             }
             elementTemp = this.plan.new DataElement();
-            this.panelMap.repaint();
         }
+        this.panelMap.repaint();
     }
+
+    public JLabel getDebug() {
+        return debug;
+    }
+    
+    
     
     @Override
     public void mouseEntered(MouseEvent e) {
@@ -221,6 +232,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
         panelInfo = new javax.swing.JPanel();
         log = new javax.swing.JLabel();
+        debug = new javax.swing.JLabel();
         panelParams = new recyclapp.view.InterfaceParam();
         panelTools = new recyclapp.view.InterfaceOutils();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -242,6 +254,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         log.setFont(new java.awt.Font("Waree", 1, 12)); // NOI18N
         log.setForeground(java.awt.Color.white);
         panelInfo.add(log, java.awt.BorderLayout.LINE_START);
+
+        debug.setForeground(new java.awt.Color(254, 254, 254));
+        panelInfo.add(debug, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(panelInfo, java.awt.BorderLayout.PAGE_END);
         getContentPane().add(panelParams, java.awt.BorderLayout.EAST);
@@ -308,6 +323,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel debug;
     private javax.swing.JCheckBoxMenuItem itemGrid;
     private javax.swing.JCheckBoxMenuItem itemParam;
     private javax.swing.JCheckBoxMenuItem itemTools;
