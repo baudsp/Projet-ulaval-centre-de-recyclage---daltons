@@ -53,6 +53,9 @@ public class InterfacePlan extends JPanel {
 	    for (Arc arc : arcs) {
 		g.drawLine(x + 35, y + 35, arc.getEntranceElement().getCoordinate().getX() + 35, 
 			arc.getEntranceElement().getCoordinate().getY() + 35);
+		int [][] tabPts = drawTriangle(x + 35, y + 35, arc.getEntranceElement().getCoordinate().getX() + 35, 
+			arc.getEntranceElement().getCoordinate().getY() + 35);
+		g.fillPolygon(tabPts[0], tabPts[1], 3);
 	    }
 	}
     }
@@ -118,6 +121,55 @@ public class InterfacePlan extends JPanel {
 	 }*/
     }
 
+
+    private int[][] drawTriangle(int xExit, int yExit, int xEntrance, int yEntrance) {
+	
+	
+	
+	double a = ((double)yExit - yEntrance)/((double)xExit - xEntrance);
+	
+	
+	double angleAvecHorizontale = Math.atan(a);
+	
+	double angle2 = angleAvecHorizontale + Math.PI/2;
+	
+	int xPmilieu = (xEntrance + xExit) / 2;
+	int yP = (yEntrance + yExit) / 2;
+	
+	double xPi;
+	double yPi;
+	
+	if(xExit < xEntrance){
+	    xPi = xPmilieu + Math.cos(angleAvecHorizontale) * 40;
+	    yPi = yP + Math.sin(angleAvecHorizontale) * 40;
+	} else {
+	    xPi = xPmilieu - Math.cos(angleAvecHorizontale) * 40;
+	    yPi = yP - Math.sin(angleAvecHorizontale) * 40;
+	}
+	
+	
+	
+	System.out.println("angle horizontale : " + angleAvecHorizontale);
+	
+	int d_P3_P2 = 30;
+	
+	double xP2 = xPmilieu + Math.cos(angle2) * d_P3_P2/2;
+	double yP2= yP + Math.sin(angle2) * d_P3_P2/2;
+	
+	double xP3 = xPmilieu*2 - xP2;
+	double yP3= yP*2 - yP2;
+	
+	int [] tabX = {(int)xP2, (int)xP3, (int)xPi};
+	int [] tabY = {(int)yP2, (int)yP3, (int)yPi};
+	
+	int[][] tabPts = new int[2][3];
+	
+	tabPts[0] = tabX;
+	tabPts[1] = tabY;
+	
+	return tabPts;
+    }
+    
     /* private void resizeElement(Element e, int width, int height) {
      e.width = width;
      e.height = height;
