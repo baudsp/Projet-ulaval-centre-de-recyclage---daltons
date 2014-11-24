@@ -3,17 +3,24 @@ package recyclapp.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.List;
 import javax.swing.JPanel;
 import recyclapp.model.Arc;
 import recyclapp.model.Plan.DataElement;
 
-public class InterfacePlan extends JPanel {
+public class InterfacePlan extends JPanel implements MouseWheelListener,KeyListener{
 
     private boolean withGrid;
     private boolean isDrag;
     private int[] coordCursor;
     private Image imgCursor;
+    private int ecart;
+    private float zoom;
+    private boolean isZoom;
     private InterfacePrincipale ip;
 
     public InterfacePlan(InterfacePrincipale ip) {
@@ -21,6 +28,9 @@ public class InterfacePlan extends JPanel {
 	withGrid = false;
 	isDrag = false;
 	coordCursor = new int[2];
+        ecart = 50;
+        zoom = 1;
+        isZoom = false;
 	//arcs = new LinkedList<>();
 	//setBackground(new java.awt.Color(255, 255, 255));
 	//eltCursor = null;
@@ -29,6 +39,8 @@ public class InterfacePlan extends JPanel {
 	javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(this);
 	this.setLayout(panelMapLayout);
 	this.ip = ip;
+        this.addKeyListener(this);
+        this.addMouseWheelListener(this);
     }
 
     @Override
@@ -39,17 +51,19 @@ public class InterfacePlan extends JPanel {
 	}
 
 	if (isDrag) {
-	    g.drawImage(imgCursor, coordCursor[0], coordCursor[1], imgCursor.getWidth(this), imgCursor.getWidth(this), this);
-	    isDrag = false;
+            g.drawImage(imgCursor, coordCursor[0], coordCursor[1], (int) (imgCursor.getWidth(this)*zoom), (int) (imgCursor.getHeight(this)*zoom), this);
+            isDrag = false;
 	}
 
-	for (int i = 0; i < this.ip.getPositionElements().size(); i++) {
-	    DataElement de = this.ip.getPositionElements().get(i);
-	    int id = de.id;
-	    int x = de.x;
-	    int y = de.y;
-	    g.drawImage(this.ip.getImageType(id), x, y, 70, 70, this);
-	    List<Arc> arcs = de.elt.getArcs();
+	for(int i=0;i<this.ip.getPositionElements(isZoom).size();i++){
+	    
+            int id = this.ip.getPositionElements(isZoom).get(i).id;
+            int x = (int) (this.ip.getPositionElements(isZoom).get(i).x*zoom);
+            int y = (int) (this.ip.getPositionElements(isZoom).get(i).y*zoom);
+            int w = (int) (this.ip.getPositionElements(isZoom).get(i).width*zoom);
+            int h = (int) (this.ip.getPositionElements(isZoom).get(i).height*zoom);
+            g.drawImage(this.ip.getImageType(id),x,y,w,h, this);
+	    List<Arc> arcs = this.ip.getPositionElements(isZoom).get(i).elt.getArcs();
 	    for (Arc arc : arcs) {
 		g.drawLine(x + 35, y + 35, arc.getEntranceElement().getCoordinate().getX() + 35, 
 			arc.getEntranceElement().getCoordinate().getY() + 35);
@@ -71,16 +85,15 @@ public class InterfacePlan extends JPanel {
 
     private void drawGrid(Graphics g) {
 	g.setColor(Color.BLACK);
-	int ecart = 50;
 	int x = 0;
 	int y = 0;
 
 	while (x < getWidth()) {
-	    x += ecart;
+	    x += ecart*zoom;
 	    g.drawLine(x, 0, x, getHeight());
 	}
 	while (y < getHeight()) {
-	    y += ecart;
+	    y += ecart*zoom;
 	    g.drawLine(0, y, getWidth(), y);
 	}
     }
@@ -96,6 +109,10 @@ public class InterfacePlan extends JPanel {
 
     public void addElement(int id, int x, int y, int width, int height, Image image) {
 	repaint();
+    }
+    
+    public float getZoom() {
+        return zoom;
     }
 
     public void moveElement(int id, int x, int y) {
@@ -120,7 +137,6 @@ public class InterfacePlan extends JPanel {
 	 }
 	 }*/
     }
-
 
     private int[][] drawTriangle(int xExit, int yExit, int xEntrance, int yEntrance) {
 	
@@ -169,58 +185,34 @@ public class InterfacePlan extends JPanel {
 	
 	return tabPts;
     }
-    
-    /* private void resizeElement(Element e, int width, int height) {
-     e.width = width;
-     e.height = height;
-     repaint();
-     }*/
-    /**
-     * retourne l'element existant aux coordonnées en paramètres
-     */
-    /* public Element checkElement(int x, int y) {
-     for (Element e : elements) {
-     if (x>= e.x && x<=(e.x+e.width) && y>=e.y && y<=(e.y + e.height)) {
-     return e;
-     }
-     }	
-     return null;
-     }*/
-    /*public void deleteElements() {
-     elements.clear();
-     repaint();
-     }*/
-    /*
-     public void deleteElement(Element element) {
-     elements.removeLastOccurrence(element);
-     repaint();
-     }
-    
-    
-     public void drawImageFollowingCursor(Image image) {
-     Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-		
-     if (eltCursor == null) {
-     eltCursor = new Element(4, mousePosition.x - 220, mousePosition.y - 75, 50, 50, image);
-     }
-	
-     this.eltCursor.x = mousePosition.x - 263;
-     this.eltCursor.y = mousePosition.y - 59;
-     this.repaint();
-     }
 
-     private void drawArc(Arc arc, Graphics g) {
-     if (arc.getStatus()) {
-     int xExit = UI.transformCoordinateFromDomain(arc.getExit())[0];
-     int yExit = UI.transformCoordinateFromDomain(arc.getExit())[1];
-     int xEntrance = UI.transformCoordinateFromDomain(arc.getEntrance())[0];
-     int yEntrance = UI.transformCoordinateFromDomain(arc.getEntrance())[1];
-	    
-     g.drawLine(xExit, yExit, xEntrance, yEntrance);
-     }
-     }
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) { 
+        if(e.getWheelRotation() == 1)
+        {
+            if(zoom <= 2)
+            {
+                isZoom = true;
+                zoom += 0.1;
+                repaint();
+            }
+        }
+        else if(zoom > 0.2)
+        {
+            isZoom = true;
+            zoom -= 0.1;
+            repaint();
+        } 
+    }
 
-     void addArc(Arc curArc) {
-     this.arcs.add(curArc);
-     }*/
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) { }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
+
+    
 }

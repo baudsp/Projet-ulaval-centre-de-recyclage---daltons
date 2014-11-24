@@ -41,16 +41,16 @@ public class Plan {
     }
     
     public void createArcExit(int x, int y) {
-	DataElement de = findDataElement(x, y);
+	DataElement de = findDataElement(x, y,1);
 	if (de.elt != null) {
 	    tempDataElt = de;
 	}
     }
     
     public boolean createArcEntrance(int x, int y) {
-	DataElement de = findDataElement(x, y);
+	DataElement de = findDataElement(x, y,1);
 	if (de.elt != null) {
-	    tempDataElt.elt.addExit(new Arc(findDataElement(x, y).elt));
+	    tempDataElt.elt.addExit(new Arc(findDataElement(x, y,1).elt));
 	    tempDataElt = null;
 	    return true;
 	} else {
@@ -74,14 +74,12 @@ public class Plan {
         return dataElements;
     }
     
-    public DataElement findDataElement(int x,int y)
+    public DataElement findDataElement(int x,int y, float zoom)
     {
-        
         for(Element e:elements){
-            if (x >= e.coordinate.getX() && x <= e.coordinate.getX()+e.width 
-		    && y >= e.coordinate.getY()  && y <= e.coordinate.getY() + e.height) {
+            if (x >= e.coordinate.getX()*zoom && x <= (e.coordinate.getX()+e.width)*zoom && y >= e.coordinate.getY()*zoom  && y <= (e.coordinate.getY() + e.height)*zoom) {
                 
-                return new DataElement(e.id,e.coordinate.getX(),e.coordinate.getY(),e.width,e.height, e);
+                return new DataElement(e.id,e.coordinate.getX(),e.coordinate.getY(),e.width,e.height,e);
             }
         }
         
