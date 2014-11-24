@@ -32,6 +32,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         this.addMouseMotionListener(this);
         this.addMouseListener(this);
       
+        panelMap = new InterfacePlan(this);
+        panelMap.setBackground(java.awt.Color.white);
+        javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(panelMap);
+        panelMap.setLayout(panelMapLayout);
+        getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
 	panelMap.addMouseMotionListener(this);
 	panelMap.addMouseListener(this);
 	
