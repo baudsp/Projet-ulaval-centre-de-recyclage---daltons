@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import javax.swing.JPanel;
 
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 public class ModeleInterfacePrincipal{
     
     private InterfacePrincipale frame;
+    private int idImage;
 
     public ModeleInterfacePrincipal(InterfacePrincipale frame) {
         this.frame = frame;
@@ -29,11 +31,6 @@ public class ModeleInterfacePrincipal{
         frame.getPanelMap().inverseWithGrid();
         boolean b = frame.getPanelMap().isWithGrid();
         frame.repaint();
-        if (b) {
-            //frame.getjButton1().setText("Not view grid");
-        } else {
-            //frame.getjButton1().setText("View grid");
-        }
     }
 
     public void changeCursor(int id) {
@@ -55,8 +52,6 @@ public class ModeleInterfacePrincipal{
         frame.getPanelMap().drawImageFollowingCursor(frame.getPanelTools().getImages(id),x,y);
     }
     
-    
-    
     public void setVisiblePaneTools(boolean b)
     {
         this.frame.getPanelTools().setVisible(b);
@@ -65,5 +60,25 @@ public class ModeleInterfacePrincipal{
     public void setVisiblePaneParam(boolean b)
     {
         this.frame.getPanelParam().setVisible(b);
+    }
+    
+    public boolean isOverlapElement(int x,int y,int width, int height)
+    {
+        int X = x-(width/2);
+        int Y = y-(height/2);
+        int max = this.frame.getPositionElements().size();
+        Rectangle r1 = new Rectangle(X,Y,width,height);
+        
+        for(int i=0;i<max;i++){
+
+            Rectangle r2 = new Rectangle(this.frame.getPositionElements().get(i).x,this.frame.getPositionElements().get(i).y
+                    ,this.frame.getPositionElements().get(i).width,this.frame.getPositionElements().get(i).height );
+            if(r2.intersects(r1))
+            {
+                this.frame.getDebug().setText("Trouvé");
+                return true;
+            }
+        }
+        return false;
     }
 }

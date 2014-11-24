@@ -24,9 +24,10 @@ public class InterfaceOutils extends JPanel{
         coord[0] = 0;
         coord[1] = 0;
         images = new LinkedList<>();
-        coordImage = new int [2][2];
+        coordImage = new int [3][2];
         images.add(getToolkit().getImage("resources/Station.png"));
-        images.add(getToolkit().getImage("resources/tool2.png"));
+        images.add(getToolkit().getImage("resources/Entree.png"));
+        images.add(getToolkit().getImage("resources/Sortie.png"));
         sizeImage = 70;
         JLabel jLabel1 = new javax.swing.JLabel();
         jLabel1.setFont(new java.awt.Font("Waree", 1, 18));
@@ -40,7 +41,7 @@ public class InterfaceOutils extends JPanel{
     }
     
     private int searchTool(int x, int y) {
-        for(int i=0;i<2;i++){
+        for(int i=0;i<images.size();i++){
             if (x >= coordImage[i][0] && x <= coordImage[i][0] + sizeImage && y >= coordImage[i][1]  && y <= coordImage[i][1]  + sizeImage) {
                 coord[0] = coordImage[i][0];
                 coord[1] = coordImage[i][1];
@@ -85,16 +86,22 @@ public class InterfaceOutils extends JPanel{
         return images.get(i);
     }
     
+    public int getSizeImage()
+    {
+        return sizeImage;
+    }
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        int h = 100;
         
-        coordImage[0][0] = this.getWidth() / 2 - (sizeImage/2);
-        coordImage[0][1] = 100;
-        coordImage[1][0] = this.getWidth() / 2 - (sizeImage/2);
-        coordImage[1][1] = 200;
-        g.drawImage(images.get(0), coordImage[0][0],coordImage[0][1],sizeImage,sizeImage, this);
-        g.drawImage(images.get(1), coordImage[1][0],coordImage[1][1],sizeImage,sizeImage, this);
+        for(int i = 0;i<images.size();i++)
+        {
+            coordImage[i][0] = this.getWidth() / 2 - (sizeImage/2);
+            coordImage[i][1] = h*(i+1);
+            g.drawImage(images.get(i), coordImage[i][0],coordImage[i][1],sizeImage,sizeImage, this);
+        }
         g.setColor(Color.red);
         if(this.moveTools)
             g.drawRect(coord[0],coord[1],sizeImage,sizeImage);

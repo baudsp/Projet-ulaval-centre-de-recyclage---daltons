@@ -1,5 +1,8 @@
 package recyclapp.model;
 
-public class Jonction {
+public class Jonction extends Element {
     
+    public Jonction() {
+        super();
+    }
 }
