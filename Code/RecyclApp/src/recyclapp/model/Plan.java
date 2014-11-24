@@ -7,6 +7,7 @@ import java.util.LinkedList;
 public class Plan {
     
     private LinkedList<Element> elements;
+    private DataElement tempDataElt = null;
     
     public class DataElement
     {
@@ -39,8 +40,22 @@ public class Plan {
         elements = new LinkedList<>();
     }
     
-    public void createArc() {
-	
+    public void createArcExit(int x, int y) {
+	DataElement de = findDataElement(x, y);
+	if (de.elt != null) {
+	    tempDataElt = de;
+	}
+    }
+    
+    public boolean createArcEntrance(int x, int y) {
+	DataElement de = findDataElement(x, y);
+	if (de.elt != null) {
+	    tempDataElt.elt.addExit(new Arc(findDataElement(x, y).elt));
+	    tempDataElt = null;
+	    return true;
+	} else {
+	    return false;
+	}
     }
     
     public void createElement(int id,int x, int y)
@@ -63,7 +78,8 @@ public class Plan {
     {
         
         for(Element e:elements){
-            if (x >= e.coordinate.getX() && x <= e.coordinate.getX()+e.width && y >= e.coordinate.getY()  && y <= e.coordinate.getY() + e.height) {
+            if (x >= e.coordinate.getX() && x <= e.coordinate.getX()+e.width 
+		    && y >= e.coordinate.getY()  && y <= e.coordinate.getY() + e.height) {
                 
                 return new DataElement(e.id,e.coordinate.getX(),e.coordinate.getY(),e.width,e.height, e);
             }
@@ -83,4 +99,7 @@ public class Plan {
         System.out.print("Nb elements : "+elements.size()+"\n");
     }
     
+    public boolean isDrawingArc() {
+	return (tempDataElt != null);
+    }
 }

@@ -5,7 +5,6 @@
  */
 package recyclapp.view;
 
-import javax.swing.table.TableModel;
 
 /**
  *

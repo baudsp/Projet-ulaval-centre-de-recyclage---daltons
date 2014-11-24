@@ -3,11 +3,8 @@ package recyclapp.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.LinkedList;
 import java.util.List;
-import javax.lang.model.element.Element;
 import javax.swing.JPanel;
-import javax.swing.RowFilter.Entry;
 import recyclapp.model.Arc;
 import recyclapp.model.Plan.DataElement;
 
