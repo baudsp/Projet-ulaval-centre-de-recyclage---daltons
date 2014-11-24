@@ -25,6 +25,7 @@ public class Station extends Element {
         this.height = height;
         this.width = width;
         this.coordinate = new Coordinate(x, y);
+	nbExits = 1;
     }
     
 

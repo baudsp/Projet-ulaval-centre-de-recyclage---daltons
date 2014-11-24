@@ -4,45 +4,46 @@ import java.util.Map;
 
 public class Arc extends Component {
     
-    private Coordinate exit = null;
-    private Coordinate entrance = null;
-    private Element exitElement;
+    private Coordinate coordinateExit = null;
+    private Coordinate coordinateEntrance = null;
+    private Element entranceElement;
     
-    public Arc(Coordinate exit) {
-        this.exit = exit;
+    public Arc(Element entElement) {
+        this.entranceElement = entElement;
     }
+   
     
-    public void setExitElement(Element element) {
-        exitElement = element;
+    public void setEntranceElement(Element element) {
+        entranceElement = element;
     }
     
     public void pushExitProducts(Map<String, Float> entrance) {
         entranceProducts = entrance;
-        if (exitElement != null) {
-            exitElement.pushExitProducts(entranceProducts);
+        if (entranceElement != null) {
+            entranceElement.pushExitProducts(entranceProducts);
         }
     }
     
-    public void setEntrance(Coordinate entrance) {
-        this.entrance = entrance;
+    public void setCoordinateEntrance(Coordinate entrance) {
+        this.coordinateEntrance = entrance;
     }
     
     public boolean getStatus() {
-        return (entrance != null);
+        return (coordinateEntrance != null);
     }
 
     /**
      * @return the exit
      */
-    public Coordinate getExit() {
-        return exit;
+    public Element getEntranceElement() {
+        return entranceElement;
     }
 
     /**
      * @return the entrance
      */
     public Coordinate getEntrance() {
-        return entrance;
+        return coordinateEntrance;
     }
     
 }

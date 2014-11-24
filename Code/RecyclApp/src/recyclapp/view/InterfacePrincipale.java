@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
+import recyclapp.model.Arc;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -22,96 +23,94 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private Plan plan;
     // NEW
     private DataElement elementTemp;
-    
+
     public InterfacePrincipale(Plan plan) {
-        initComponents();
-        initialize();
+	initComponents();
+	initialize();
     }
 
     private void initialize() {
-        this.addMouseMotionListener(this);
-        this.addMouseListener(this);
-      
-        panelMap = new InterfacePlan(this);
-        panelMap.setBackground(java.awt.Color.white);
-        javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(panelMap);
-        panelMap.setLayout(panelMapLayout);
-        getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
+	this.addMouseMotionListener(this);
+	this.addMouseListener(this);
+
+	panelMap = new InterfacePlan(this);
+	panelMap.setBackground(java.awt.Color.white);
+	javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(panelMap);
+	panelMap.setLayout(panelMapLayout);
+	getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
 	panelMap.addMouseMotionListener(this);
 	panelMap.addMouseListener(this);
+
+	panelTools.addMouseMotionListener(this);
+	panelTools.addMouseListener(this);
+
+	mip = new ModeleInterfacePrincipal(this);
+	plan = new Plan();
+	// NEW
+	this.elementTemp = plan.new DataElement();
+	this.plan.createElement(1, 20, this.getHeight() / 2);
 	
-        panelTools.addMouseMotionListener(this);
-        panelTools.addMouseListener(this);
-	
-        mip = new ModeleInterfacePrincipal(this);
-        plan = new Plan();
-        // NEW
-        this.elementTemp = plan.new DataElement();
-        this.plan.newElement(1,20,this.getHeight()/2);     
     }
 
     public JLabel getLog() {
-        return log;
+	return log;
     }
 
     public void setLog(JLabel log) {
-        this.log = log;
+	this.log = log;
     }
 
     public JPanel getPanelInfo() {
-        return panelInfo;
+	return panelInfo;
     }
 
     public void setPanelInfo(JPanel panelInfo) {
-        this.panelInfo = panelInfo;
+	this.panelInfo = panelInfo;
     }
 
-    public InterfacePlan  getPanelMap() {
-        return panelMap;
+    public InterfacePlan getPanelMap() {
+	return panelMap;
     }
 
-    public void setPanelMap(InterfacePlan  panelMap) {
-        this.panelMap = panelMap;
+    public void setPanelMap(InterfacePlan panelMap) {
+	this.panelMap = panelMap;
     }
 
     public JPanel getPanelParam() {
-        return panelParams;
+	return panelParams;
     }
 
     public void setPanelParam(InterfaceParam panelParam) {
-        this.panelParams = panelParam;
+	this.panelParams = panelParam;
     }
 
     public InterfaceOutils getPanelTools() {
-        return panelTools;
+	return panelTools;
     }
 
     public void setPanelTools(InterfaceOutils panelTools) {
-        this.panelTools = panelTools;
+	this.panelTools = panelTools;
     }
-    
-    public LinkedList<DataElement> getPositionElements()
-    {
-        // NEW
-        LinkedList<DataElement> de = this.plan.getPositionElement();
-        if(this.elementTemp != null && this.elementTemp.id >= 0)
-        {
-            DataElement t = null;
-            for(DataElement e:de){
-                if (e.x == this.elementTemp.x && e.y == this.elementTemp.y) {
-                    t = e;
-                }
-            }
-            de.remove(t);
-        }
-        
-        return de;
-                
+
+    public LinkedList<DataElement> getPositionElements() {
+	// NEW
+	LinkedList<DataElement> de = this.plan.getPositionElement();
+	if (this.elementTemp != null && this.elementTemp.id >= 0) {
+	    DataElement t = null;
+	    for (DataElement e : de) {
+		if (e.x == this.elementTemp.x && e.y == this.elementTemp.y) {
+		    t = e;
+		}
+	    }
+	    de.remove(t);
+	}
+
+	return de;
+
     }
-    
-    public Image getImageType(int i)
-    {
-        return this.panelTools.getImages(i);
+
+    public Image getImageType(int i) {
+	return this.panelTools.getImages(i);
     }
 
     @Override
@@ -120,101 +119,95 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (e.getSource().equals(panelMap)) {
-            log.setText("[" + e.getX() + ";" + e.getY() + "]");
-            // NEW
-            this.elementTemp = this.plan.findDataElement(e.getX(), e.getY());
-            
-        }
-        
-        if (e.getSource().equals(panelTools)) {
-            panelTools.moveTool(e.getX(), e.getY());
-        }
-        else
-        {
-            panelTools.setMoveTools(false);
-        }
-        
-        if (panelTools.isMoveTools() || this.elementTemp.id >= 0) {
-            mip.changeCursor(-2);
-        } else {
-            mip.changeCursor(-1);
-        }
+	if (e.getSource().equals(panelMap)) {
+	    log.setText("[" + e.getX() + ";" + e.getY() + "]");
+	    // NEW
+	    this.elementTemp = this.plan.findDataElement(e.getX(), e.getY());
+
+	}
+
+	if (e.getSource().equals(panelTools)) {
+	    panelTools.moveTool(e.getX(), e.getY());
+	} else {
+	    panelTools.setMoveTools(false);
+	}
+
+	if (panelTools.isMoveTools() || this.elementTemp.id >= 0) {
+	    mip.changeCursor(-2);
+	} else {
+	    mip.changeCursor(-1);
+	}
 
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (e.getSource().equals(panelMap)) {
-            
-            log.setText("[" + e.getX() + ";" + e.getY() + "]");
-            if(this.elementTemp != null && this.elementTemp.id >= 0)
-            {
-                mip.drawImageFromFollowingCursor(this.elementTemp.id,e.getX()+this.panelTools.getWidth(),e.getY()); 
-                this.panelMap.repaint();
-            }
-        }
-        if (this.panelTools.isMoveTools()) {
-            mip.drawImageFromFollowingCursor(this.panelTools.getIdTools(),e.getX(),e.getY()); 
-            this.panelTools.repaint();   
-        }
+	if (e.getSource().equals(panelMap)) {
+
+	    log.setText("[" + e.getX() + ";" + e.getY() + "]");
+	    if (this.elementTemp != null && this.elementTemp.id >= 0) {
+		mip.drawImageFromFollowingCursor(this.elementTemp.id, e.getX() + this.panelTools.getWidth(), e.getY());
+		this.panelMap.repaint();
+	    }
+	}
+	if (this.panelTools.isMoveTools()) {
+	    mip.drawImageFromFollowingCursor(this.panelTools.getIdTools(), e.getX(), e.getY());
+	    this.panelTools.repaint();
+	}
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        this.panelTools.repaint();
+	this.panelTools.repaint();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        
-        if(this.panelTools.isMoveTools())
-        {
-            mip.changeCursor(-1);
-            // NEW
-            if(e.getX() >= this.panelMap.getX() && e.getX() <= this.panelMap.getX()+this.panelMap.getWidth() 
-                    && e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getY()+this.panelMap.getHeight())
-            {
-                    int x = e.getX() - this.panelTools.getWidth() - this.panelTools.getSizeImage()/2;
-                    int y = e.getY()  - this.panelTools.getSizeImage()/2;;
-                     if (this.panelTools.getIdTools() >= 0 && !this.mip.isOverlapElement(e.getX()- this.panelTools.getWidth(), e.getY(),this.panelTools.getSizeImage(),this.panelTools.getSizeImage())) 
-                        this.plan.newElement(this.panelTools.getIdTools(),x, y);
-            }
-            
-            this.panelTools.setMoveTools(false);
-            this.panelTools.repaint();
-        }
-        else if (e.getSource().equals(panelMap))
-        {
-            
-            int marginLeft = 0;
-            if(this.itemTools.getState())
-                marginLeft = this.panelTools.getWidth();
-            if(e.getX()+marginLeft >= this.panelMap.getX() && e.getX() <= this.panelMap.getWidth() 
-                    && e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getHeight())
-            {
-                int x = e.getX() - elementTemp.width/2;
-                int y = e.getY()  - elementTemp.height/2;
-                this.debug.setText(" X : "+(e.getX()+marginLeft)+" et Y : "+ e.getY()+"\n");
-                if(!this.mip.isOverlapElement(e.getX(), e.getY(),elementTemp.width,elementTemp.height))
-                    this.plan.remplacePositionElements(elementTemp,x,y);
-            }
-            elementTemp = this.plan.new DataElement();
-        }
-        this.panelMap.repaint();
+
+	if (this.panelTools.isMoveTools()) {
+	    mip.changeCursor(-1);
+	    // NEW
+
+	    if (e.getX() >= this.panelMap.getX() && e.getX() <= this.panelMap.getX() + this.panelMap.getWidth()
+		    && e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getY() + this.panelMap.getHeight()) {
+		int x = e.getX() - this.panelTools.getWidth() - this.panelTools.getSizeImage() / 2;
+		int y = e.getY() - this.panelTools.getSizeImage() / 2;
+		if (this.panelTools.getIdTools() >= 0 && !this.mip.isOverlapElement(e.getX() - this.panelTools.getWidth(), e.getY(), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
+		    this.plan.createElement(this.panelTools.getIdTools(), x, y);
+		}
+	    }
+
+	    this.panelTools.setMoveTools(false);
+	    this.panelTools.repaint();
+	} else if (e.getSource().equals(panelMap)) {
+
+	    int marginLeft = 0;
+	    if (this.itemTools.getState()) {
+		marginLeft = this.panelTools.getWidth();
+	    }
+	    if (e.getX() + marginLeft >= this.panelMap.getX() && e.getX() <= this.panelMap.getWidth()
+		    && e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getHeight()) {
+		int x = e.getX() - elementTemp.width / 2;
+		int y = e.getY() - elementTemp.height / 2;
+		this.debug.setText(" X : " + (e.getX() + marginLeft) + " et Y : " + e.getY() + "\n");
+		if (!this.mip.isOverlapElement(e.getX(), e.getY(), elementTemp.width, elementTemp.height)) {
+		    this.plan.remplacePositionElements(elementTemp, x, y);
+		}
+	    }
+	    elementTemp = this.plan.new DataElement();
+	}
+	this.panelMap.repaint();
     }
 
     public JLabel getDebug() {
-        return debug;
+	return debug;
     }
-    
-    
-    
+
     @Override
     public void mouseEntered(MouseEvent e) {
     }
@@ -307,15 +300,15 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
 
     private void itemGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGridActionPerformed
-        this.mip.GridView();
+	this.mip.GridView();
     }//GEN-LAST:event_itemGridActionPerformed
 
     private void itemParamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemParamActionPerformed
-        this.mip.setVisiblePaneParam(this.itemParam.getState());
+	this.mip.setVisiblePaneParam(this.itemParam.getState());
     }//GEN-LAST:event_itemParamActionPerformed
 
     private void itemToolsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemToolsActionPerformed
-        this.mip.setVisiblePaneTools(this.itemTools.getState());
+	this.mip.setVisiblePaneTools(this.itemTools.getState());
     }//GEN-LAST:event_itemToolsActionPerformed
 
 

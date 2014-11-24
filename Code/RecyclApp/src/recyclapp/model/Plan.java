@@ -1,11 +1,6 @@
 
 package recyclapp.model;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.Map;
-import java.util.Hashtable;
 import java.util.LinkedList;
 
 
@@ -20,13 +15,15 @@ public class Plan {
         public int y;
         public int width;
         public int height;
+	public Element elt;
         
-        public DataElement(int id,int x,int y,int width, int height){
+        public DataElement(int id,int x,int y,int width, int height, Element elt){
             this.id = id;
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
+	    this.elt = elt;
         }
         
         public DataElement(){
@@ -42,7 +39,11 @@ public class Plan {
         elements = new LinkedList<>();
     }
     
-    public void newElement(int id,int x, int y)
+    public void createArc() {
+	
+    }
+    
+    public void createElement(int id,int x, int y)
     {
         //System.out.print("create => "+x+" ; "+y+"\n");
         elements.add(new Station(id,x,y,70,70));
@@ -53,7 +54,7 @@ public class Plan {
         LinkedList<DataElement> dataElements = new LinkedList<DataElement>();
         for(Element e:elements)
         {
-            dataElements.add(new DataElement(e.id,e.coordinate.getX(),e.coordinate.getY(),e.width,e.height));
+            dataElements.add(new DataElement(e.id,e.coordinate.getX(),e.coordinate.getY(),e.width,e.height, e));
         }
         return dataElements;
     }
@@ -64,7 +65,7 @@ public class Plan {
         for(Element e:elements){
             if (x >= e.coordinate.getX() && x <= e.coordinate.getX()+e.width && y >= e.coordinate.getY()  && y <= e.coordinate.getY() + e.height) {
                 
-                return new DataElement(e.id,e.coordinate.getX(),e.coordinate.getY(),e.width,e.height);
+                return new DataElement(e.id,e.coordinate.getX(),e.coordinate.getY(),e.width,e.height, e);
             }
         }
         

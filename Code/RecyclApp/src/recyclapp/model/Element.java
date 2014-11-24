@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-abstract class Element extends Component {
+public abstract class Element extends Component {
 
     protected int id;
     protected int width, height;
@@ -84,5 +84,9 @@ abstract class Element extends Component {
             }
         }
         return exit;
+    }
+    
+    public List<Arc> getArcs(){
+	return exits;
     }
 }
