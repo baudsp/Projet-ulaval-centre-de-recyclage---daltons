@@ -9,8 +9,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
 import recyclapp.model.Arc;
@@ -21,6 +23,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private ModeleInterfacePrincipal mip;
     private JLabel jLabel1;
     private Plan plan;
+    private JScrollPane jScrollPane1;
     // NEW
     private DataElement elementTemp;
 
@@ -40,7 +43,10 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
 	panelMap.addMouseMotionListener(this);
 	panelMap.addMouseListener(this);
-
+        jScrollPane1 = new javax.swing.JScrollPane(panelMap);
+        jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
+        panelMap.setAutoscrolls(true);
+        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 	panelTools.addMouseMotionListener(this);
 	panelTools.addMouseListener(this);
 
@@ -92,10 +98,10 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	this.panelTools = panelTools;
     }
 
-    public LinkedList<DataElement> getPositionElements() {
+    public LinkedList<DataElement> getPositionElements(boolean isZoom) {
 	// NEW
 	LinkedList<DataElement> de = this.plan.getPositionElement();
-	if (this.elementTemp != null && this.elementTemp.id >= 0) {
+	if (this.elementTemp != null && this.elementTemp.id >= 0 && !isZoom) {
 	    DataElement t = null;
 	    for (DataElement e : de) {
 		if (e.x == this.elementTemp.x && e.y == this.elementTemp.y) {
@@ -122,7 +128,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	if (e.getSource().equals(panelMap)) {
 	    log.setText("[" + e.getX() + ";" + e.getY() + "]");
 	    // NEW
-	    this.elementTemp = this.plan.findDataElement(e.getX(), e.getY());
+	    this.elementTemp = this.plan.findDataElement(e.getX(), e.getY(), this.panelMap.getZoom());
 
 	}
 
@@ -147,13 +153,17 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	}
 	
 	if (e.getSource().equals(panelMap)) {
-
-	    log.setText("[" + e.getX() + ";" + e.getY() + "]");
-	    if (this.elementTemp != null && this.elementTemp.id >= 0 ) {
-		mip.drawImageFromFollowingCursor(this.elementTemp.id, e.getX() + this.panelTools.getWidth(), e.getY());
-		this.panelMap.repaint();
-	    }
-	}
+            
+            log.setText("[" + e.getX() + ";" + e.getY() + "]");
+            if(this.elementTemp != null && this.elementTemp.id >= 0)
+            {
+                mip.drawImageFromFollowingCursor(this.elementTemp.id,e.getX()+this.panelTools.getWidth(),e.getY()); 
+                this.panelMap.repaint();
+            }
+            else
+            {
+            }
+        }
 	if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
 	    mip.drawImageFromFollowingCursor(this.panelTools.getIdTools(), e.getX(), e.getY());
 	    this.panelTools.repaint();
@@ -177,12 +187,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    mip.changeCursor(-1);
 	    // NEW
 	    if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
-		if (e.getX() >= this.panelMap.getX() && e.getX() <= this.panelMap.getX() + this.panelMap.getWidth()
-			&& e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getY() + this.panelMap.getHeight()) {
-		    int x = e.getX() - this.panelTools.getWidth() - this.panelTools.getSizeImage() / 2;
-		    int y = e.getY() - this.panelTools.getSizeImage() / 2;
-		    if (this.panelTools.getIdTools() >= 0 && !this.mip.isOverlapElement(e.getX() - this.panelTools.getWidth(), e.getY(), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
-			this.plan.createElement(this.panelTools.getIdTools(), x, y);
+		if(e.getX() >= this.jScrollPane1.getX() && e.getX() <= this.jScrollPane1.getX()+this.jScrollPane1.getWidth() 
+                    && e.getY() >= this.jScrollPane1.getY() && e.getY() <= this.jScrollPane1.getY()+this.jScrollPane1.getHeight()) {float z =  this.panelMap.getZoom();
+                    int x = (int) (e.getX()/z - this.panelTools.getWidth()/z - this.panelTools.getSizeImage()/2);
+                    int y = (int) (e.getY()/z  - (this.panelTools.getSizeImage())/2);
+                    System.out.print(" taille : "+this.panelTools.getSizeImage()+"\n");
+                    if (this.panelTools.getIdTools() >= 0 && !this.mip.isOverlapElement((int) (e.getX()/z- this.panelTools.getWidth()), (int) (e.getY()/z), (int) (this.panelTools.getSizeImage()), (int) (this.panelTools.getSizeImage())))
+                    {
+                        this.plan.createElement(this.panelTools.getIdTools(),x, y);
 		    }
 		}
 		this.panelTools.setMoveTools(false);
@@ -192,7 +204,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		     int x = e.getX() - this.panelTools.getWidth();
 		    int y = e.getY();
 		    if (this.panelTools.getIdTools() >= 0 &&
-			    this.plan.findDataElement(x, y).elt != null ) {
+			    this.plan.findDataElement(x, y,1).elt != null ) {
 			if (this.plan.isDrawingArc()) {
 			    if (this.plan.createArcEntrance(x, y)) {
 				this.panelTools.setMoveTools(false);
@@ -213,12 +225,12 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    }
 	    if (e.getX() + marginLeft >= this.panelMap.getX() && e.getX() <= this.panelMap.getWidth()
 		    && e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getHeight()) {
-		int x = e.getX() - elementTemp.width / 2;
-		int y = e.getY() - elementTemp.height / 2;
-		this.debug.setText(" X : " + (e.getX() + marginLeft) + " et Y : " + e.getY() + "\n");
-		if (!this.mip.isOverlapElement(e.getX(), e.getY(), elementTemp.width, elementTemp.height)) {
-		    this.plan.remplacePositionElements(elementTemp, x, y);
-		}
+		float z =  this.panelMap.getZoom();
+                int x = (int) (e.getX()/z - (elementTemp.width)/2);
+                int y = (int) (e.getY()/z  - (elementTemp.height)/2);
+                System.out.print(" taille : "+elementTemp.width+" et "+elementTemp.height+"\n");
+                if(!this.mip.isOverlapElement((int) (e.getX()/z), (int) (e.getY()/z), (int) (elementTemp.width), (int) (elementTemp.height)))
+                    this.plan.remplacePositionElements(elementTemp,x,y);
 	    }
 	    elementTemp = this.plan.new DataElement();
 	}

@@ -65,13 +65,13 @@ public class ModeleInterfacePrincipal{
     {
         int X = x-(width/2);
         int Y = y-(height/2);
-        int max = this.frame.getPositionElements().size();
+        int max = this.frame.getPositionElements(false).size();
         Rectangle r1 = new Rectangle(X,Y,width,height);
         
         for(int i=0;i<max;i++){
 
-            Rectangle r2 = new Rectangle(this.frame.getPositionElements().get(i).x,this.frame.getPositionElements().get(i).y
-                    ,this.frame.getPositionElements().get(i).width,this.frame.getPositionElements().get(i).height );
+            Rectangle r2 = new Rectangle(this.frame.getPositionElements(false).get(i).x,this.frame.getPositionElements(false).get(i).y
+                    ,this.frame.getPositionElements(false).get(i).width,this.frame.getPositionElements(false).get(i).height );
             if(r2.intersects(r1))
             {
                 this.frame.getDebug().setText("Trouvé");
