@@ -31,7 +31,9 @@ public class ModeleInterfacePrincipal{
     }
 
     public void changeCursor(int id) {
-        if (id >= 0) {
+	if(id == InterfaceOutils.ID_TOOL_ARC){
+	    this.frame.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+	} else if (id >= 0) {
             Toolkit tk = Toolkit.getDefaultToolkit();
             Cursor monCurseur = tk.createCustomCursor(frame.getPanelTools().getImages(id), new Point(16, 16), "Tools");
             this.frame.setCursor(monCurseur);

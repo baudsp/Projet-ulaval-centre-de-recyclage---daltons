@@ -75,6 +75,10 @@ public class InterfaceOutils extends JPanel {
 	this.moveTools = b;
     }
 
+    public void resetTools(){
+	this.idTools = -1;
+    }
+    
     public boolean isMoveTools() {
 	return moveTools;
     }

@@ -142,15 +142,19 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
+	if(this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_ARC){
+	    mip.changeCursor(InterfaceOutils.ID_TOOL_ARC);
+	}
+	
 	if (e.getSource().equals(panelMap)) {
 
 	    log.setText("[" + e.getX() + ";" + e.getY() + "]");
-	    if (this.elementTemp != null && this.elementTemp.id >= 0) {
+	    if (this.elementTemp != null && this.elementTemp.id >= 0 ) {
 		mip.drawImageFromFollowingCursor(this.elementTemp.id, e.getX() + this.panelTools.getWidth(), e.getY());
 		this.panelMap.repaint();
 	    }
 	}
-	if (this.panelTools.isMoveTools()) {
+	if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
 	    mip.drawImageFromFollowingCursor(this.panelTools.getIdTools(), e.getX(), e.getY());
 	    this.panelTools.repaint();
 	}
@@ -185,13 +189,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    } else {
 		if (e.getX() >= this.panelMap.getX() && e.getX() <= this.panelMap.getX() + this.panelMap.getWidth()
 			&& e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getY() + this.panelMap.getHeight()) {
-		     int x = e.getX() - this.panelTools.getWidth() - this.panelTools.getSizeImage() / 2;
-		    int y = e.getY() - this.panelTools.getSizeImage() / 2;
+		     int x = e.getX() - this.panelTools.getWidth();
+		    int y = e.getY();
 		    if (this.panelTools.getIdTools() >= 0 &&
 			    this.plan.findDataElement(x, y).elt != null ) {
 			if (this.plan.isDrawingArc()) {
 			    if (this.plan.createArcEntrance(x, y)) {
 				this.panelTools.setMoveTools(false);
+				this.panelTools.resetTools();
 			    }
 			} else {
 			    this.plan.createArcExit(x, y);
