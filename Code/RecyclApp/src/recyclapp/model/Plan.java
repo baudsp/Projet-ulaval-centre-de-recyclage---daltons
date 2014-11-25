@@ -60,7 +60,7 @@ public class Plan {
     
     public void createElement(int id,int x, int y)
     {
-        //System.out.print("create => "+x+" ; "+y+"\n");
+        
         elements.add(new Station(id,x,y,70,70));
     }
     

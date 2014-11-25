@@ -6,18 +6,19 @@
 package recyclapp.view;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import javax.swing.table.TableModel;
 import recyclapp.model.Arc;
 import recyclapp.model.Element;
 import recyclapp.model.Station;
-
 
 /**
  *
  * @author Baudouin
  */
 public class InterfaceParam extends javax.swing.JPanel {
+
     private Station station;
 
     /**
@@ -25,65 +26,86 @@ public class InterfaceParam extends javax.swing.JPanel {
      */
     public InterfaceParam() {
 	initComponents();
-
+	this.jPanel1.setVisible(false);
     }
 
     private void updateMatrice() {
 
-//	Map<String, Map<Arc, Map<String, Float>>> matrixDeTri = station.getMatrix();
-//	
-//	int nbrDechets = matrixDeTri.size();
-//
-//	int nbrSorties = (Integer) jSpinnerNbrExit.getValue() + 1;
-//
-//	Object[][] a = new Object[nbrDechets][nbrSorties];
-//	
-//	String tabDechets[] = null;
-//	tabDechets = matrixDeTri.keySet().toArray(tabDechets);
-//	
-//	Arrays.sort(tabDechets);
-//	
-//	for (int i = 0; i < nbrDechets; i++) {
-//	    for (int j = 1; j < nbrSorties; j++) {
-//		a[i][j] = i + j;
-//	    }
-//	    a[i][0] = tabDechets[i];
-//	}
-//	
-//
-//	String[] columnNames = new String[nbrSorties];
-//
-//	for (int i = 0; i < nbrSorties; i++) {
-//	    columnNames[i] = "Sortie " + (i + 1);
-//	}
-//
-//	jMatrixTri.setModel(
-//		new javax.swing.table.DefaultTableModel(
-//			a,
-//			columnNames
-//		));
-//		
-//	repaint();
+	Map<String, Map<Arc, Map<String, Float>>> matrixDeTri = station.getMatrix();
+
+	int nbrDechets = matrixDeTri.size();
+
+	int nbrSorties = (Integer) jSpinnerNbrExit.getValue() + 1;
+
+	Object[][] a = new Object[nbrDechets][nbrSorties];
+
+	String tabDechets[] = new String[0];
+	tabDechets = matrixDeTri.keySet().toArray(tabDechets);
+
+	Arrays.sort(tabDechets);
+
+	
+	for (int i = 0; i < nbrDechets; i++) {
+	    Map<Arc, Map<String, Float>> trucTruc;
+	    trucTruc = matrixDeTri.get(tabDechets[i]);
+	    for (int j = 1; j < nbrSorties; j++) {
+		Arc tabArc[] = new Arc[nbrSorties];
+		Arc arcTruc = (Arc) trucTruc.keySet().toArray(tabArc)[i];
+		if (arcTruc == null) {
+		    a[i][j] = 0;
+		} else {
+		    a[i][j] = trucTruc.get(arcTruc);
+		}
+	    }
+	    a[i][0] = tabDechets[i];
+	}
+
+	String[] columnNames = new String[nbrSorties];
+	
+	columnNames[0] = "";
+	for (int i = 1; i < nbrSorties; i++) {
+	    columnNames[i] = "Sortie " + (i);
+	}
+
+	jMatrixTri.setModel(
+		new javax.swing.table.DefaultTableModel(
+			a,
+			columnNames
+		));
+
+	repaint();
     }
-    
+
     public void setInfo(Element elt) {
-	if(elt.getClass().getName().equals(Station.class.getName())) {
+		
+	if (elt.getClass().getName().equals(Station.class.getName())) {
 	    jPanel1.setVisible(true);
 	    station = (Station) elt;
 	    jTextFieldName.setText(station.getName());
 	    jTextFieldDescription.setText(station.getDescription());
 	    jSpinnerNbrExit.setValue(station.getNumberOfExits());
-	    
+
 	    jSpinnerDebitMax.setValue(station.getMaxFlow());
-	    
+
 	    Map<String, Map<Arc, Map<String, Float>>> matrixDeTri = station.getMatrix();
-	    
-//	    for(int i = 0; i < 2; i++){
-//		matrixDeTri.put("Dechet " + (i +1), 
-//	    }
-	    
+	    if (matrixDeTri.isEmpty() || 0 == station.getArcs().size()) {
+		for (int k = 0; k < 2; k++) {
+
+		    Map<Arc, Map<String, Float>> b = new HashMap<>();
+
+		    for (int i = 0; i < station.getArcs().size(); i++) {
+			Map<String, Float> a = new HashMap<>();
+			for (int j = 0; j < 2; j++) {
+			    a.put("Dechet " + (1 + j), 50f);
+			}
+			b.put(station.getArcs().get(i), a);
+		    }
+		    matrixDeTri.put("Dechet " + (k + 1), b);
+		}
+		station.setMatrix(matrixDeTri);
+	    }
 	    updateMatrice();
-	} else{
+	} else {
 	    jPanel1.setVisible(false);
 	    this.station = null;
 	}
@@ -146,7 +168,9 @@ public class InterfaceParam extends javax.swing.JPanel {
 
         jLabel5.setText("Nombre de sorties");
 
-        jSpinnerDebitMax.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jTextFieldName.setText(" ");
+
+        jSpinnerDebitMax.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
 
         jSpinnerNbrExit.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
         jSpinnerNbrExit.setToolTipText("");
@@ -268,16 +292,35 @@ public class InterfaceParam extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+	int nbrSortie = (int) jSpinnerNbrExit.getValue();
+	
 	station.setName(jTextFieldName.getText());
 	station.setDescription(jTextFieldDescription.getText());
-	station.setNumberOfExits((int)jSpinnerNbrExit.getValue());
+	station.setNumberOfExits(nbrSortie);
+	station.setMaxFlow((Float) jSpinnerDebitMax.getValue());
 	
-	station.setMaxFlow((int) jSpinnerDebitMax.getValue());
+	TableModel model = jMatrixTri.getModel();
 	
+	int nbreDechet = jMatrixTri.getRowCount();
+	
+	Map<String, Map<Arc, Map<String, Float>>> matrixTri = station.getMatrix();
+	
+	String [] tabDechets = new String[nbreDechet];
+	for (int i = 0; i < nbreDechet; i++) {
+	    tabDechets[i] = (String) model.getValueAt(i, 0);	    
+	}
+	
+	for (int i = 1; i < nbrSortie+1; i++) {
+	    for (int j = 0; j < nbreDechet; j++) {
+		float data = Float.parseFloat((String)model.getValueAt(j, i));
+		matrixTri.get(tabDechets[j]).keySet().iterator().next();
+		
+	    }	    
+	}
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jSpinnerNbrExitStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerNbrExitStateChanged
-        updateMatrice();
+	updateMatrice();
     }//GEN-LAST:event_jSpinnerNbrExitStateChanged
 
 
@@ -300,4 +343,8 @@ public class InterfaceParam extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldDescription;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
+
+    void hideInfo() {
+	this.jPanel1.setVisible(false);
+    }
 }

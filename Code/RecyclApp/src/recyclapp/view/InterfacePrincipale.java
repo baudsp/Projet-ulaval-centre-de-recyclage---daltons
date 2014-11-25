@@ -1,6 +1,5 @@
 package recyclapp.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -8,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.HashMap;
 import java.util.LinkedList;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -16,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
-import recyclapp.model.Arc;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -159,12 +156,12 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             if(this.elementTemp != null && this.elementTemp.id >= 0)
             {
                 mip.drawImageFromFollowingCursor(this.elementTemp.id,e.getX()+this.panelTools.getWidth(),e.getY()); 
-                
             }
             else
             {
             }
-            this.panelMap.repaint();
+               
+	    this.panelMap.repaint();
         }
 	if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
 	    mip.drawImageFromFollowingCursor(this.panelTools.getIdTools(), e.getX(), e.getY());
@@ -178,9 +175,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	int x = e.getX();
 	int y = e.getY();
 	DataElement dataElement = this.plan.findDataElement(x, y, z);
+	
 	if (dataElement.elt != null) {
 	    this.panelParams.setInfo(dataElement.elt);
+	} else {
+	    this.panelParams.hideInfo();
 	}
+	
     }
 
     @Override
@@ -261,7 +262,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseExited(MouseEvent e) {
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
