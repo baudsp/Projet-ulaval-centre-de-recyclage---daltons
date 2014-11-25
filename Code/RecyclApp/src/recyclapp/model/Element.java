@@ -72,7 +72,7 @@ public abstract class Element extends Component {
         while (iterator.hasNext()) {
             String productEntry = iterator.next();
             float quantityEntry = entranceProducts.get(productEntry);
-            if (matrix.get(productEntry).containsKey(arc)) {
+            if ((matrix.containsKey(productEntry)) && (matrix.get(productEntry)).containsKey(arc)) {
                 Map<String, Float> m = matrix.get(productEntry).get(arc);
                 Set<String> keys = m.keySet();
                 Iterator<String> it = keys.iterator();
