@@ -168,10 +168,6 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 	    yPi = yP - Math.sin(angleAvecHorizontale) * longeurFleche;
 	}
 
-	System.out.println("angle horizontale : " + angleAvecHorizontale);
-
-	
-
 	double xP2 = xPmilieu + Math.cos(angle2) * largeurFleche / 2;
 	double yP2 = yP + Math.sin(angle2) * largeurFleche / 2;
 

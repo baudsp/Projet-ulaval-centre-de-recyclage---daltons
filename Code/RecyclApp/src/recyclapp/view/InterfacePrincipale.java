@@ -196,21 +196,23 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
 		if(e.getX() >= this.jScrollPane1.getX() && e.getX() <= this.jScrollPane1.getX()+this.jScrollPane1.getWidth() 
                     && e.getY() >= this.jScrollPane1.getY() && e.getY() <= this.jScrollPane1.getY()+this.jScrollPane1.getHeight()) {
-		    float z =  this.panelMap.getZoom();
-                    int x = (int) (e.getX()/z - this.panelTools.getWidth()/z - this.panelTools.getSizeImage()/2);
-                    int y = (int) (e.getY()/z  - (this.panelTools.getSizeImage())/2);
+		    float zoom =  this.panelMap.getZoom();
+                    int x = (int) (e.getX()/zoom - this.panelTools.getWidth()/zoom - this.panelTools.getSizeImage()/2);
+                    int y = (int) (e.getY()/zoom  - (this.panelTools.getSizeImage())/2);
 
-                    if (this.panelTools.getIdTools() >= 0 && !this.mip.isOverlapElement((int) (e.getX()/z- this.panelTools.getWidth()), (int) (e.getY()/z), (int) (this.panelTools.getSizeImage()), (int) (this.panelTools.getSizeImage())))
+                    if (this.panelTools.getIdTools() >= 0 &&
+			    !this.mip.isOverlapElement((int) (e.getX()/zoom- this.panelTools.getWidth()), (int) (e.getY()/zoom), (int) (this.panelTools.getSizeImage()), (int) (this.panelTools.getSizeImage())))
                     {
                         this.plan.createElement(this.panelTools.getIdTools(),x, y);
 		    }
 		}
 		this.panelTools.setMoveTools(false);
 	    } else {
+		 float zoom =  this.panelMap.getZoom();
 		if(e.getX() >= this.jScrollPane1.getX() && e.getX() <= this.jScrollPane1.getX()+this.jScrollPane1.getWidth() 
                     && e.getY() >= this.jScrollPane1.getY() && e.getY() <= this.jScrollPane1.getY()+this.jScrollPane1.getHeight())  {
-		     int x = e.getX() - this.panelTools.getWidth();
-		    int y = e.getY();
+		    int x = (int) (e.getX()/zoom - this.panelTools.getWidth()/zoom);
+		    int y = (int) (e.getY()/zoom);
 		    if (this.panelTools.getIdTools() >= 0 &&
 			    this.plan.findDataElement(x, y,1).elt != null ) {
 			if (this.plan.isDrawingArc()) {
