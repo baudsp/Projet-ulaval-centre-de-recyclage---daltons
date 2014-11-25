@@ -61,7 +61,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 	    int w = (int) (this.ip.getPositionElements(isZoom).get(i).width * zoom);
 	    int h = (int) (this.ip.getPositionElements(isZoom).get(i).height * zoom);
 	    g.drawImage(this.ip.getImageType(id), x, y, w, h, this);
-	    List<Arc> arcs = this.ip.getPositionElements(isZoom).get(i).elt.getArcs();
+	    Arc[] arcs = this.ip.getPositionElements(isZoom).get(i).elt.getArcs();
 	    for (Arc arc : arcs) {
 		g.drawLine(x + w/2, y + h/2,
 			(int) ((arc.getEntranceElement().getCoordinate().getX()* zoom + w/2) ),

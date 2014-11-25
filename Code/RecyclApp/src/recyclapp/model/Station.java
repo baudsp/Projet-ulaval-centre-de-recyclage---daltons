@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Station extends Element {
 
-    private int nbExits;
     private String name;
     private String description;
     private Dimension dimension;
@@ -15,28 +14,24 @@ public class Station extends Element {
     public Station(int id, int x, int y, int width, int height) {
         super();
         this.id = id;
-        this.exits = new LinkedList<>();
         this.matrix = new HashMap<>();
         this.height = height;
         this.width = width;
         this.coordinate = new Coordinate(x, y);
 	nbExits = 1;
+        exits = new Arc[nbExits];
     }
     
 
-    public void addExit(Arc arc) {
-        if (exits.size() < nbExits) {
-            exits.add(arc);
-        }
-    }
-
     public void removeExit(Arc arc) {
-        if (exits.contains(arc)) {
-            exits.remove(arc);
+        for (int i = 0; i < nbExits; i++) {
+            if (exits[i].equals(arc)) {
+                exits[i] = null;
+            }
         }
     }
 
-    public List<Arc> getExits() {
+    public Arc[] getExits() {
         return exits;
     }
 

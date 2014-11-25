@@ -14,11 +14,12 @@ public abstract class Element extends Component {
     protected int width, height;
     protected Coordinate coordinate;
     protected Image image;
-    protected List<Arc> exits;
-    protected Map<String, Map<Arc, Map<String, Float>>> matrix;
+    protected int nbExits;
+    protected Arc[] exits;
+    protected Map<String, Map<Integer, Map<String, Float>>> matrix;
 
     public Element() {
-        exits = new LinkedList<>();
+        exits = new Arc[nbExits];
         entranceProducts = new HashMap<>();
         matrix = new HashMap<>();
     }
@@ -30,20 +31,49 @@ public abstract class Element extends Component {
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
-
     
-    public void addExit(Arc arc) {
-        if (!exits.contains(arc)) {
-            exits.add(arc);
+    public int getRankArc(Arc arc) {
+        for (int i = 0; i < nbExits; i++) {
+            if (exits[i].equals(arc)) {
+                return i;
+            }
         }
+        return -1;
+    }
+    
+    public Arc getArc(int i) {
+        return exits[i];
+    }
+    
+    public int getNbArcs() {
+        int nb = 0;
+        for (int i = 0; i < nbExits; i++) {
+            if (exits[i] != null) {
+                nb++;
+            }
+        }
+        return nb;
     }
 
-    public void setMatrix(Map<String, Map<Arc, Map<String, Float>>> matrix) {
+    public int getFirstFreeExit() {
+        for (int i = 0; i < nbExits; i++) {
+            if (exits[i] == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void addExit(int place, Arc arc) {
+        exits[place] = arc;
+    }
+
+    public void setMatrix(Map<String, Map<Integer, Map<String, Float>>> matrix) {
         this.matrix = matrix;
     }
-    
-    public Map<String, Map<Arc, Map<String, Float>>> getMatrix() {
-	return matrix;
+
+    public Map<String, Map<Integer, Map<String, Float>>> getMatrix() {
+        return matrix;
     }
 
     public void pushExitProducts(Map<String, Float> entrance) {
@@ -57,12 +87,14 @@ public abstract class Element extends Component {
             }
             entranceProducts.put(product, quantity);
         }
-        for (Arc arc : exits) {
-            arc.pushExitProducts(exitProductsFromArc(arc));
+        for (int i = 0; i < nbExits; i++) {
+            if (exits[i] != null) {
+                exits[i].pushExitProducts(exitProductsFromArc(i));
+            }
         }
     }
 
-    public Map<String, Float> exitProductsFromArc(Arc arc) {
+    public Map<String, Float> exitProductsFromArc(int arcNumber) {
         Map<String, Float> exit = new HashMap<>();
         if (entranceProducts == null) {
             return exit;
@@ -72,8 +104,8 @@ public abstract class Element extends Component {
         while (iterator.hasNext()) {
             String productEntry = iterator.next();
             float quantityEntry = entranceProducts.get(productEntry);
-            if ((matrix.containsKey(productEntry)) && (matrix.get(productEntry)).containsKey(arc)) {
-                Map<String, Float> m = matrix.get(productEntry).get(arc);
+            if ((matrix.containsKey(productEntry)) && (matrix.get(productEntry)).containsKey(arcNumber)) {
+                Map<String, Float> m = matrix.get(productEntry).get(arcNumber);
                 Set<String> keys = m.keySet();
                 Iterator<String> it = keys.iterator();
                 while (it.hasNext()) {
@@ -88,8 +120,8 @@ public abstract class Element extends Component {
         }
         return exit;
     }
-    
-    public List<Arc> getArcs(){
-	return exits;
+
+    public Arc[] getArcs() {
+        return exits;
     }
 }

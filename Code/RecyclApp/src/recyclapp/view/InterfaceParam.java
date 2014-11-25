@@ -31,7 +31,7 @@ public class InterfaceParam extends javax.swing.JPanel {
 
     private void updateMatrice() {
 
-	Map<String, Map<Arc, Map<String, Float>>> matrixDeTri = station.getMatrix();
+	Map<String, Map<Integer, Map<String, Float>>> matrixDeTri = station.getMatrix();
 
 	int nbrDechets = matrixDeTri.size();
 
@@ -46,7 +46,7 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	
 	for (int i = 0; i < nbrDechets; i++) {
-	    Map<Arc, Map<String, Float>> trucTruc;
+	    Map<Integer, Map<String, Float>> trucTruc;
 	    trucTruc = matrixDeTri.get(tabDechets[i]);
 	    for (int j = 1; j < nbrSorties; j++) {
 		Arc tabArc[] = new Arc[nbrSorties];
@@ -87,18 +87,18 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	    jSpinnerDebitMax.setValue(station.getMaxFlow());
 
-	    Map<String, Map<Arc, Map<String, Float>>> matrixDeTri = station.getMatrix();
-	    if (matrixDeTri.isEmpty() || 0 == station.getArcs().size()) {
+	    Map<String, Map<Integer, Map<String, Float>>> matrixDeTri = station.getMatrix();
+	    if (matrixDeTri.isEmpty() || 0 == station.getNbArcs()) {
 		for (int k = 0; k < 2; k++) {
 
-		    Map<Arc, Map<String, Float>> b = new HashMap<>();
+		    Map<Integer, Map<String, Float>> b = new HashMap<>();
 
-		    for (int i = 0; i < station.getArcs().size(); i++) {
+		    for (int i = 0; i < station.getNbArcs(); i++) {
 			Map<String, Float> a = new HashMap<>();
 			for (int j = 0; j < 2; j++) {
 			    a.put("Dechet " + (1 + j), 50f);
 			}
-			b.put(station.getArcs().get(i), a);
+			b.put(i, a);
 		    }
 		    matrixDeTri.put("Dechet " + (k + 1), b);
 		}
@@ -303,7 +303,7 @@ public class InterfaceParam extends javax.swing.JPanel {
 	
 	int nbreDechet = jMatrixTri.getRowCount();
 	
-	Map<String, Map<Arc, Map<String, Float>>> matrixTri = station.getMatrix();
+	Map<String, Map<Integer, Map<String, Float>>> matrixTri = station.getMatrix();
 	
 	String [] tabDechets = new String[nbreDechet];
 	for (int i = 0; i < nbreDechet; i++) {
