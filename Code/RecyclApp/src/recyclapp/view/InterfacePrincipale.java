@@ -159,11 +159,12 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             if(this.elementTemp != null && this.elementTemp.id >= 0)
             {
                 mip.drawImageFromFollowingCursor(this.elementTemp.id,e.getX()+this.panelTools.getWidth(),e.getY()); 
-                this.panelMap.repaint();
+                
             }
             else
             {
             }
+            this.panelMap.repaint();
         }
 	if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
 	    mip.drawImageFromFollowingCursor(this.panelTools.getIdTools(), e.getX(), e.getY());
