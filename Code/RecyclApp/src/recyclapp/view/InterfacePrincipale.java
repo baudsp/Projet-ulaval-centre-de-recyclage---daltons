@@ -1,6 +1,7 @@
 package recyclapp.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +22,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     private InterfacePlan panelMap;
     private ModeleInterfacePrincipal mip;
-    private JLabel jLabel1;
     private Plan plan;
     private JScrollPane jScrollPane1;
     // NEW
@@ -43,6 +43,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	getContentPane().add(panelMap, java.awt.BorderLayout.CENTER);
 	panelMap.addMouseMotionListener(this);
 	panelMap.addMouseListener(this);
+        panelMap.setPreferredSize(new Dimension(2000,2000));
         jScrollPane1 = new javax.swing.JScrollPane(panelMap);
         jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
         panelMap.setAutoscrolls(true);
@@ -126,7 +127,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseMoved(MouseEvent e) {
 	if (e.getSource().equals(panelMap)) {
-	    log.setText("[" + e.getX() + ";" + e.getY() + "]");
+	    log.setText("[" + mip.convertPixelToMeter(e.getX()) + ";" + mip.convertPixelToMeter(e.getY()) + "]");
 	    // NEW
 	    this.elementTemp = this.plan.findDataElement(e.getX(), e.getY(), this.panelMap.getZoom());
 
@@ -154,7 +155,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	
 	if (e.getSource().equals(panelMap)) {
             
-            log.setText("[" + e.getX() + ";" + e.getY() + "]");
+            log.setText("[" + mip.convertPixelToMeter(e.getX()) + ";" + mip.convertPixelToMeter(e.getY()) + "]");
             if(this.elementTemp != null && this.elementTemp.id >= 0)
             {
                 mip.drawImageFromFollowingCursor(this.elementTemp.id,e.getX()+this.panelTools.getWidth(),e.getY()); 
@@ -198,7 +199,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    float z =  this.panelMap.getZoom();
                     int x = (int) (e.getX()/z - this.panelTools.getWidth()/z - this.panelTools.getSizeImage()/2);
                     int y = (int) (e.getY()/z  - (this.panelTools.getSizeImage())/2);
-                    
+
                     if (this.panelTools.getIdTools() >= 0 && !this.mip.isOverlapElement((int) (e.getX()/z- this.panelTools.getWidth()), (int) (e.getY()/z), (int) (this.panelTools.getSizeImage()), (int) (this.panelTools.getSizeImage())))
                     {
                         this.plan.createElement(this.panelTools.getIdTools(),x, y);
@@ -206,8 +207,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		}
 		this.panelTools.setMoveTools(false);
 	    } else {
-		if (e.getX() >= this.panelMap.getX() && e.getX() <= this.panelMap.getX() + this.panelMap.getWidth()
-			&& e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getY() + this.panelMap.getHeight()) {
+		if(e.getX() >= this.jScrollPane1.getX() && e.getX() <= this.jScrollPane1.getX()+this.jScrollPane1.getWidth() 
+                    && e.getY() >= this.jScrollPane1.getY() && e.getY() <= this.jScrollPane1.getY()+this.jScrollPane1.getHeight())  {
 		     int x = e.getX() - this.panelTools.getWidth();
 		    int y = e.getY();
 		    if (this.panelTools.getIdTools() >= 0 &&
@@ -230,12 +231,12 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    if (this.itemTools.getState()) {
 		marginLeft = this.panelTools.getWidth();
 	    }
-	    if (e.getX() + marginLeft >= this.panelMap.getX() && e.getX() <= this.panelMap.getWidth()
-		    && e.getY() >= this.panelMap.getY() && e.getY() <= this.panelMap.getHeight()) {
+	    if(e.getX()+marginLeft >= this.jScrollPane1.getX() && e.getX() <= this.jScrollPane1.getWidth() 
+                    && e.getY() >= this.jScrollPane1.getY() && e.getY() <= this.jScrollPane1.getHeight()) {
 		float z =  this.panelMap.getZoom();
                 int x = (int) (e.getX()/z - (elementTemp.width)/2);
                 int y = (int) (e.getY()/z  - (elementTemp.height)/2);
-                
+
                 if(!this.mip.isOverlapElement((int) (e.getX()/z), (int) (e.getY()/z), (int) (elementTemp.width), (int) (elementTemp.height)))
                     this.plan.remplacePositionElements(elementTemp,x,y);
 	    }
