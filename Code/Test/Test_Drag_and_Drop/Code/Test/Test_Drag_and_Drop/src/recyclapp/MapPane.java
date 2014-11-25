@@ -142,17 +142,6 @@ public class MapPane extends JPanel {
 	this.repaint();
     }
 
-    private void drawArc(Arc arc, Graphics g) {
-	if (arc.getStatus()) {
-	    int xExit = UI.transformCoordinateFromDomain(arc.getExit())[0];
-	    int yExit = UI.transformCoordinateFromDomain(arc.getExit())[1];
-	    int xEntrance = UI.transformCoordinateFromDomain(arc.getEntrance())[0];
-	    int yEntrance = UI.transformCoordinateFromDomain(arc.getEntrance())[1];
-	    
-	    g.drawLine(xExit, yExit, xEntrance, yEntrance);
-	}
-    }
-
     void addArc(Arc curArc) {
 	this.arcs.add(curArc);
     }

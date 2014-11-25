@@ -41,6 +41,10 @@ public abstract class Element extends Component {
     public void setMatrix(Map<String, Map<Arc, Map<String, Float>>> matrix) {
         this.matrix = matrix;
     }
+    
+    public Map<String, Map<Arc, Map<String, Float>>> getMatrix() {
+	return matrix;
+    }
 
     public void pushExitProducts(Map<String, Float> entrance) {
         Set<String> listKeys = entrance.keySet();

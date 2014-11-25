@@ -1,14 +1,9 @@
 package recyclapp.model;
 
 import java.awt.Dimension;
-import java.awt.Image;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class Station extends Element {
 
@@ -107,9 +102,5 @@ public class Station extends Element {
 
     public void setDimension(int width, int height) {
         dimension = new Dimension(width, height);
-    }
-
-    public Map<String, Map<Arc, Map<String, Float>>> getMatrix() {
-        return matrix;
-    }
+    }    
 }

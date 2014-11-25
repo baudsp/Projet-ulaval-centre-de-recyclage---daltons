@@ -5,6 +5,10 @@
  */
 package recyclapp.view;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import recyclapp.model.Arc;
 import recyclapp.model.Element;
 import recyclapp.model.Station;
 
@@ -26,31 +30,40 @@ public class InterfaceParam extends javax.swing.JPanel {
 
     private void updateMatrice() {
 
-	int nbrDechets = 2;
-
-	int nbrSorties = (Integer) jSpinnerNbrExit.getValue();
-
-	Object[][] a = new Object[nbrDechets][nbrSorties];
-
-	for (int i = 0; i < nbrDechets; i++) {
-	    for (int j = 0; j < nbrSorties; j++) {
-		a[i][j] = i + j;
-	    }
-	}
-
-	String[] columnNames = new String[nbrSorties];
-
-	for (int i = 0; i < nbrSorties; i++) {
-	    columnNames[i] = "Sortie " + (i + 1);
-	}
-
-	jMatrixTri.setModel(
-		new javax.swing.table.DefaultTableModel(
-			a,
-			columnNames
-		));
-		
-	repaint();
+//	Map<String, Map<Arc, Map<String, Float>>> matrixDeTri = station.getMatrix();
+//	
+//	int nbrDechets = matrixDeTri.size();
+//
+//	int nbrSorties = (Integer) jSpinnerNbrExit.getValue() + 1;
+//
+//	Object[][] a = new Object[nbrDechets][nbrSorties];
+//	
+//	String tabDechets[] = null;
+//	tabDechets = matrixDeTri.keySet().toArray(tabDechets);
+//	
+//	Arrays.sort(tabDechets);
+//	
+//	for (int i = 0; i < nbrDechets; i++) {
+//	    for (int j = 1; j < nbrSorties; j++) {
+//		a[i][j] = i + j;
+//	    }
+//	    a[i][0] = tabDechets[i];
+//	}
+//	
+//
+//	String[] columnNames = new String[nbrSorties];
+//
+//	for (int i = 0; i < nbrSorties; i++) {
+//	    columnNames[i] = "Sortie " + (i + 1);
+//	}
+//
+//	jMatrixTri.setModel(
+//		new javax.swing.table.DefaultTableModel(
+//			a,
+//			columnNames
+//		));
+//		
+//	repaint();
     }
     
     public void setInfo(Element elt) {
@@ -60,9 +73,16 @@ public class InterfaceParam extends javax.swing.JPanel {
 	    jTextFieldName.setText(station.getName());
 	    jTextFieldDescription.setText(station.getDescription());
 	    jSpinnerNbrExit.setValue(station.getNumberOfExits());
-	    updateMatrice();
+	    
 	    jSpinnerDebitMax.setValue(station.getMaxFlow());
 	    
+	    Map<String, Map<Arc, Map<String, Float>>> matrixDeTri = station.getMatrix();
+	    
+//	    for(int i = 0; i < 2; i++){
+//		matrixDeTri.put("Dechet " + (i +1), 
+//	    }
+	    
+	    updateMatrice();
 	} else{
 	    jPanel1.setVisible(false);
 	    this.station = null;

@@ -198,7 +198,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    float z =  this.panelMap.getZoom();
                     int x = (int) (e.getX()/z - this.panelTools.getWidth()/z - this.panelTools.getSizeImage()/2);
                     int y = (int) (e.getY()/z  - (this.panelTools.getSizeImage())/2);
-                    System.out.print(" taille : "+this.panelTools.getSizeImage()+"\n");
+                    
                     if (this.panelTools.getIdTools() >= 0 && !this.mip.isOverlapElement((int) (e.getX()/z- this.panelTools.getWidth()), (int) (e.getY()/z), (int) (this.panelTools.getSizeImage()), (int) (this.panelTools.getSizeImage())))
                     {
                         this.plan.createElement(this.panelTools.getIdTools(),x, y);
@@ -235,7 +235,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		float z =  this.panelMap.getZoom();
                 int x = (int) (e.getX()/z - (elementTemp.width)/2);
                 int y = (int) (e.getY()/z  - (elementTemp.height)/2);
-                System.out.print(" taille : "+elementTemp.width+" et "+elementTemp.height+"\n");
+                
                 if(!this.mip.isOverlapElement((int) (e.getX()/z), (int) (e.getY()/z), (int) (elementTemp.width), (int) (elementTemp.height)))
                     this.plan.remplacePositionElements(elementTemp,x,y);
 	    }
