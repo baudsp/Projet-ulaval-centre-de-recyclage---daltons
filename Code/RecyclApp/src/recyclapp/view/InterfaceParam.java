@@ -21,6 +21,8 @@ public class InterfaceParam extends javax.swing.JPanel {
 
     private Station station;
 
+    private int nbDechets = 2;
+
     /**
      * Creates new form InterfaceParamBis
      */
@@ -44,24 +46,23 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	Arrays.sort(tabDechets);
 
-	
 	for (int i = 0; i < nbrDechets; i++) {
-	    Map<Integer, Map<String, Float>> trucTruc;
-	    trucTruc = matrixDeTri.get(tabDechets[i]);
+	    Map<Integer, Map<String, Float>> mapSortieDechets;
+	    mapSortieDechets = matrixDeTri.get(tabDechets[i]);
 	    for (int j = 1; j < nbrSorties; j++) {
-		Arc tabArc[] = new Arc[nbrSorties];
-		Arc arcTruc = (Arc) trucTruc.keySet().toArray(tabArc)[i];
-		if (arcTruc == null) {
-		    a[i][j] = 0;
+		Integer tabNumSortie[] = new Integer[nbrSorties];
+		Integer numSortie = mapSortieDechets.keySet().toArray(tabNumSortie)[i];
+		if (numSortie == null) {
+		    a[i][j] = 0f;
 		} else {
-		    a[i][j] = trucTruc.get(arcTruc);
+		    a[i][j] = mapSortieDechets.get(numSortie).get(tabDechets[i]);
 		}
 	    }
 	    a[i][0] = tabDechets[i];
 	}
 
 	String[] columnNames = new String[nbrSorties];
-	
+
 	columnNames[0] = "";
 	for (int i = 1; i < nbrSorties; i++) {
 	    columnNames[i] = "Sortie " + (i);
@@ -77,7 +78,7 @@ public class InterfaceParam extends javax.swing.JPanel {
     }
 
     public void setInfo(Element elt) {
-		
+
 	if (elt.getClass().getName().equals(Station.class.getName())) {
 	    jPanel1.setVisible(true);
 	    station = (Station) elt;
@@ -88,15 +89,15 @@ public class InterfaceParam extends javax.swing.JPanel {
 	    jSpinnerDebitMax.setValue(station.getMaxFlow());
 
 	    Map<String, Map<Integer, Map<String, Float>>> matrixDeTri = station.getMatrix();
-	    if (matrixDeTri.isEmpty() || 0 == station.getNbArcs()) {
-		for (int k = 0; k < 2; k++) {
+	    if (matrixDeTri.isEmpty() || 0 == station.getNumberOfExits()) {
+		for (int k = 0; k < nbDechets; k++) {
 
 		    Map<Integer, Map<String, Float>> b = new HashMap<>();
 
-		    for (int i = 0; i < station.getNbArcs(); i++) {
+		    for (int i = 0; i < station.getNumberOfExits(); i++) {
 			Map<String, Float> a = new HashMap<>();
-			for (int j = 0; j < 2; j++) {
-			    a.put("Dechet " + (1 + j), 50f);
+			for (int j = 0; j < nbDechets; j++) {
+			    a.put("Dechet " + (1 + j), 0f);
 			}
 			b.put(i, a);
 		    }
@@ -293,30 +294,95 @@ public class InterfaceParam extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 	int nbrSortie = (int) jSpinnerNbrExit.getValue();
-	
+
 	station.setName(jTextFieldName.getText());
 	station.setDescription(jTextFieldDescription.getText());
 	station.setNumberOfExits(nbrSortie);
 	station.setMaxFlow((Float) jSpinnerDebitMax.getValue());
-	
+
 	TableModel model = jMatrixTri.getModel();
-	
+
 	int nbreDechet = jMatrixTri.getRowCount();
-	
+
 	Map<String, Map<Integer, Map<String, Float>>> matrixTri = station.getMatrix();
-	
-	String [] tabDechets = new String[nbreDechet];
+
+	String[] tabDechets = new String[nbreDechet];
 	for (int i = 0; i < nbreDechet; i++) {
-	    tabDechets[i] = (String) model.getValueAt(i, 0);	    
+	    tabDechets[i] = (String) model.getValueAt(i, 0);
 	}
+
 	
-	for (int i = 1; i < nbrSortie+1; i++) {
+
+	    for (int i = 1; i < nbrSortie + 1; i++) {
+		for (int j = 0; j < nbreDechet; j++) {
+
+		    Map<Integer, Map<String, Float>> mapCurExit;
+		    if (matrixTri.containsKey(tabDechets[j])) {
+			mapCurExit = matrixTri.get(tabDechets[j]);
+		    } else {
+			mapCurExit = new HashMap<>();
+		    }
+
+		    Object data = jMatrixTri.getValueAt(j, i);
+
+		    Float value;
+
+		    if (data.getClass().getName().equals(String.class.getName())) {
+			value = Float.parseFloat((String) data);
+		    } else if (data.getClass().getName().equals(Integer.class.getName())) {
+			value = ((Integer) data) * 1.0f;
+		    } else {
+			value = (Float) data;
+		    }
+
+		    Map<String, Float> curMapTri;
+		    if (mapCurExit.containsKey(i)) {
+			curMapTri = mapCurExit.get(i);
+		    } else {
+			curMapTri = new HashMap<>();
+		    }
+		    curMapTri.put(tabDechets[j], value);
+		    mapCurExit.put(i, curMapTri);
+
+		    matrixTri.put(tabDechets[j], mapCurExit);
+		}
+	    }
+	
+	for (int i = 1; i < nbrSortie + 1; i++) {
 	    for (int j = 0; j < nbreDechet; j++) {
-		float data = Float.parseFloat((String)model.getValueAt(j, i));
-		matrixTri.get(tabDechets[j]).keySet().iterator().next();
-		
-	    }	    
+
+		Map<Integer, Map<String, Float>> mapCurExit;
+		if (matrixTri.containsKey(tabDechets[j])) {
+		    mapCurExit = matrixTri.get(tabDechets[j]);
+		} else {
+		    mapCurExit = new HashMap<>();
+		}
+
+		Object data = jMatrixTri.getValueAt(j, i);
+
+		Float value;
+
+		if (data.getClass().getName().equals(String.class.getName())) {
+		    value = Float.parseFloat((String) data);
+		} else if (data.getClass().getName().equals(Integer.class.getName())) {
+		    value = ((Integer) data) * 1.0f;
+		} else {
+		    value = (Float) data;
+		}
+
+		Map<String, Float> curMapTri;
+		if (mapCurExit.containsKey(i)) {
+		    curMapTri = mapCurExit.get(i);
+		} else {
+		    curMapTri = new HashMap<>();
+		}
+		curMapTri.put(tabDechets[j], value);
+		mapCurExit.put(i, curMapTri);
+
+		matrixTri.put(tabDechets[j], mapCurExit);
+	    }
 	}
+	station.setMatrix(matrixTri);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jSpinnerNbrExitStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerNbrExitStateChanged

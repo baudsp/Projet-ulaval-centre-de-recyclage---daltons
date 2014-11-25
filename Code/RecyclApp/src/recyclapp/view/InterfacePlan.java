@@ -63,16 +63,18 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 	    g.drawImage(this.ip.getImageType(id), x, y, w, h, this);
 	    Arc[] arcs = this.ip.getPositionElements(isZoom).get(i).elt.getArcs();
 	    for (Arc arc : arcs) {
-		g.drawLine(x + w/2, y + h/2,
-			(int) ((arc.getEntranceElement().getCoordinate().getX()* zoom + w/2) ),
-			(int) (arc.getEntranceElement().getCoordinate().getY()* zoom + w/2 ));
-		int[][] tabPts = getArrowArc(x + w/2, y + h/2,
-			(int) ((arc.getEntranceElement().getCoordinate().getX()* zoom + w/2)),
-			(int) ((arc.getEntranceElement().getCoordinate().getY()* zoom + w/2) ), zoom);
-		g.fillPolygon(tabPts[0], tabPts[1], 3);
+		if (arc != null) {
+		    g.drawLine(x + w / 2, y + h / 2,
+			    (int) ((arc.getEntranceElement().getCoordinate().getX() * zoom + w / 2)),
+			    (int) (arc.getEntranceElement().getCoordinate().getY() * zoom + w / 2));
+		    int[][] tabPts = getArrowArc(x + w / 2, y + h / 2,
+			    (int) ((arc.getEntranceElement().getCoordinate().getX() * zoom + w / 2)),
+			    (int) ((arc.getEntranceElement().getCoordinate().getY() * zoom + w / 2)), zoom);
+		    g.fillPolygon(tabPts[0], tabPts[1], 3);
+		}
 	    }
 	}
-        isZoom = false;
+	isZoom = false;
     }
 
     public void drawImageFollowingCursor(Image image, int x, int y) {
@@ -100,7 +102,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     }
 
     public int getEcart() {
-        return ecart;
+	return ecart;
     }
 
     public boolean inverseWithGrid() {
@@ -144,10 +146,10 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     }
 
     private int[][] getArrowArc(int xExit, int yExit, int xEntrance, int yEntrance, float zoom) {
-	
+
 	int largeurFleche = (int) (30 * zoom);
 	int longeurFleche = (int) (40 * zoom);
-	
+
 	double a = ((double) yExit - yEntrance) / ((double) xExit - xEntrance);
 
 	double angleAvecHorizontale = Math.atan(a);
