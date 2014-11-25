@@ -15,7 +15,6 @@ public abstract class Element extends Component {
     protected Coordinate coordinate;
     protected Image image;
     protected List<Arc> exits;
-    protected Map<String, Float> entranceProducts;
     protected Map<String, Map<Arc, Map<String, Float>>> matrix;
 
     public Element() {

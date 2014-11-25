@@ -10,7 +10,6 @@ import java.awt.event.MouseWheelListener;
 import java.util.List;
 import javax.swing.JPanel;
 import recyclapp.model.Arc;
-import recyclapp.model.Plan.DataElement;
 
 public class InterfacePlan extends JPanel implements MouseWheelListener,KeyListener{
 

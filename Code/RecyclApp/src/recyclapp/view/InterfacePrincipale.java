@@ -172,7 +172,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+	float z =  this.panelMap.getZoom();
+	int x = e.getX();
+	int y = e.getY();
+	DataElement dataElement = this.plan.findDataElement(x, y, z);
+	if (dataElement.elt != null) {
+	    this.panelParams.setInfo(dataElement.elt);
+	}
     }
 
     @Override
@@ -188,7 +194,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    // NEW
 	    if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
 		if(e.getX() >= this.jScrollPane1.getX() && e.getX() <= this.jScrollPane1.getX()+this.jScrollPane1.getWidth() 
-                    && e.getY() >= this.jScrollPane1.getY() && e.getY() <= this.jScrollPane1.getY()+this.jScrollPane1.getHeight()) {float z =  this.panelMap.getZoom();
+                    && e.getY() >= this.jScrollPane1.getY() && e.getY() <= this.jScrollPane1.getY()+this.jScrollPane1.getHeight()) {
+		    float z =  this.panelMap.getZoom();
                     int x = (int) (e.getX()/z - this.panelTools.getWidth()/z - this.panelTools.getSizeImage()/2);
                     int y = (int) (e.getY()/z  - (this.panelTools.getSizeImage())/2);
                     System.out.print(" taille : "+this.panelTools.getSizeImage()+"\n");
@@ -233,6 +240,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                     this.plan.remplacePositionElements(elementTemp,x,y);
 	    }
 	    elementTemp = this.plan.new DataElement();
+	    
+	    
 	}
 	this.panelMap.repaint();
     }

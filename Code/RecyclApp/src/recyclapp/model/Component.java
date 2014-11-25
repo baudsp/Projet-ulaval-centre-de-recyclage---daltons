@@ -7,4 +7,13 @@ public abstract class Component {
     protected Map<String, Float> entranceProducts;
    
     public void updateValues() {}
+    
+    
+    public float getMaxFlow() {
+	return maxFlow;
+    }
+    
+    public void setMaxFlow(float maxFlow) {
+	this.maxFlow = maxFlow;
+    }
 }
