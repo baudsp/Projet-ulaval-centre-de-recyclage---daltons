@@ -23,7 +23,6 @@ public class InterfacePlan extends JPanel implements MouseWheelListener,KeyListe
     private InterfacePrincipale ip;
 
     public InterfacePlan(InterfacePrincipale ip) {
-
 	withGrid = false;
 	isDrag = false;
 	coordCursor = new int[2];
@@ -71,6 +70,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener,KeyListe
 		g.fillPolygon(tabPts[0], tabPts[1], 3);
 	    }
 	}
+        isZoom = false;
     }
 
     public void drawImageFollowingCursor(Image image, int x, int y) {
@@ -95,6 +95,10 @@ public class InterfacePlan extends JPanel implements MouseWheelListener,KeyListe
 	    y += ecart*zoom;
 	    g.drawLine(0, y, getWidth(), y);
 	}
+    }
+
+    public int getEcart() {
+        return ecart;
     }
 
     public boolean inverseWithGrid() {
@@ -138,9 +142,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener,KeyListe
     }
 
     private int[][] drawTriangle(int xExit, int yExit, int xEntrance, int yEntrance) {
-	
-	
-	
+
 	double a = ((double)yExit - yEntrance)/((double)xExit - xEntrance);
 	
 	

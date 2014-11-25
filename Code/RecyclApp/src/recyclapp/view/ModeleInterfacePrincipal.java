@@ -46,10 +46,10 @@ public class ModeleInterfacePrincipal{
     
     public void drawImageFromFollowingCursor(int id,int x, int y){
         Image img = frame.getPanelTools().getImages(id);
-        x -= frame.getPanelTools().getWidth()+img.getWidth(frame)/2;
-        y -= img.getWidth(frame)/2;
+        x -= frame.getPanelTools().getWidth()+(img.getWidth(frame)*this.frame.getPanelMap().getZoom())/2;
+        y -= (img.getHeight(frame)*this.frame.getPanelMap().getZoom())/2;
         frame.getPanelMap().drawImageFollowingCursor(frame.getPanelTools().getImages(id),x,y);
-    }
+   }
     
     public void setVisiblePaneTools(boolean b)
     {
@@ -79,5 +79,14 @@ public class ModeleInterfacePrincipal{
             }
         }
         return false;
+    }
+    
+    public int convertPixelToMeter(int pixel)
+    {
+        int normeMeter = 5;
+        int normePixel = this.frame.getPanelMap().getEcart();
+        float zoom = this.frame.getPanelMap().getZoom();
+        float meter = (pixel*normeMeter)/(zoom*normePixel);
+        return (int)(meter);   
     }
 }
