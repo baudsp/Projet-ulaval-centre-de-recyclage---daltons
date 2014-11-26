@@ -178,14 +178,16 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	DataElement dataElement = this.plan.findDataElement(x, y, z);
 	
         // affiche ou cache le carré de selection suivant la valeur dans dataElement.elt
-        panelMap.showSelectedElement(dataElement);
+        movableElement = panelMap.showSelectedElement(dataElement);
         
 	if (dataElement.elt != null) {
-            this.panelParams.setInfo(dataElement.elt);   
+            this.panelParams.setInfo(dataElement.elt);
 	} else {
 	    this.panelParams.hideInfo();
 	}
     }
+    
+    private boolean movableElement = false;
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -206,7 +208,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                     int y = (int) (e.getY()/zoom  - (this.panelTools.getSizeImage())/2);
 
                     if (this.panelTools.getIdTools() >= 0 &&
-			    !this.mip.isOverlapElement((int) (e.getX()/zoom- this.panelTools.getWidth()), (int) (e.getY()/zoom), (int) (this.panelTools.getSizeImage()), (int) (this.panelTools.getSizeImage())))
+			    !this.mip.isOverlapElement((int) (e.getX()/zoom- this.panelTools.getWidth()),
+                                    (int) (e.getY()/zoom), (int) (this.panelTools.getSizeImage()), (int) (this.panelTools.getSizeImage())))
                     {
                         this.plan.createElement(this.panelTools.getIdTools(),x, y);
 		    }
@@ -241,15 +244,17 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    if(e.getX()+marginLeft >= this.jScrollPane1.getX() && e.getX() <= this.jScrollPane1.getWidth() 
                     && e.getY() >= this.jScrollPane1.getY() && e.getY() <= this.jScrollPane1.getHeight()) {
 		float z =  this.panelMap.getZoom();
+                
                 int x = (int) (e.getX()/z - (elementTemp.width)/2);
                 int y = (int) (e.getY()/z  - (elementTemp.height)/2);
-
-                if(!this.mip.isOverlapElement((int) (e.getX()/z), (int) (e.getY()/z), (int) (elementTemp.width), (int) (elementTemp.height)))
+                
+                if(!this.mip.isOverlapElement((int) (e.getX()/z), (int) (e.getY()/z), (int) (elementTemp.width), (int) (elementTemp.height)) 
+                        && movableElement)
+                    // TODO A ne mettre que dans le dragAndDrop ? C'est la raison des soucis de déplacement en cas de clic. 
+                    // Ca règlerait le nouveau souci du dragonly qui ne déplace pas
                     this.plan.remplacePositionElements(elementTemp,x,y);
 	    }
 	    elementTemp = this.plan.new DataElement();
-	    
-	    
 	}
 	this.panelMap.repaint();
     }

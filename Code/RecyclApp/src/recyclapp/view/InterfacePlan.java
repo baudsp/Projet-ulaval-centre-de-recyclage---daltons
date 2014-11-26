@@ -23,6 +23,9 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     private float zoom;
     private boolean isZoom;
     private InterfacePrincipale ip;
+    
+    private boolean stationIsSelected = false;
+    private DataElement selectedElement;
 
     public InterfacePlan(InterfacePrincipale ip) {
 	withGrid = false;
@@ -75,7 +78,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 		    g.fillPolygon(tabPts[0], tabPts[1], 3);
 		}
 	    }
-            if(elementIsSelected){
+            if(stationIsSelected){
                 Coordinate coo = selectedElement.elt.getCoordinate();
                 g.drawRect(coo.getX(), coo.getY(), selectedElement.width, selectedElement.height);
             }
@@ -220,17 +223,17 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     public void keyReleased(KeyEvent e) {
     }
     
-    private boolean elementIsSelected = false;
-    private DataElement selectedElement;
-    
-    public void showSelectedElement(Plan.DataElement dataElement){
+    public boolean showSelectedElement(Plan.DataElement dataElement){
         if(dataElement.id == InterfaceOutils.ID_TOOL_STATION){
-            elementIsSelected = true;
+            stationIsSelected = true;
             selectedElement = dataElement;
         }
-        else{
-            elementIsSelected = false;
+        else if(dataElement.id != - 1){
+            return true;
         }
+        else{
+            stationIsSelected = false;
+        }
+        return stationIsSelected;
     }
-
 }
