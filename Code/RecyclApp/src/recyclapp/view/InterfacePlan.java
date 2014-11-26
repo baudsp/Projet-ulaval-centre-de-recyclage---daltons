@@ -7,9 +7,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.List;
 import javax.swing.JPanel;
 import recyclapp.model.Arc;
+import recyclapp.model.Coordinate;
+import recyclapp.model.Plan;
+import recyclapp.model.Plan.DataElement;
 
 public class InterfacePlan extends JPanel implements MouseWheelListener, KeyListener {
 
@@ -73,6 +75,10 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 		    g.fillPolygon(tabPts[0], tabPts[1], 3);
 		}
 	    }
+            if(elementIsSelected){
+                Coordinate coo = selectedElement.elt.getCoordinate();
+                g.drawRect(coo.getX(), coo.getY(), selectedElement.width, selectedElement.height);
+            }
 	}
 	isZoom = false;
     }
@@ -212,6 +218,19 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 
     @Override
     public void keyReleased(KeyEvent e) {
+    }
+    
+    private boolean elementIsSelected = false;
+    private DataElement selectedElement;
+    
+    public void showSelectedElement(Plan.DataElement dataElement){
+        if(dataElement.id == InterfaceOutils.ID_TOOL_STATION){
+            elementIsSelected = true;
+            selectedElement = dataElement;
+        }
+        else{
+            elementIsSelected = false;
+        }
     }
 
 }

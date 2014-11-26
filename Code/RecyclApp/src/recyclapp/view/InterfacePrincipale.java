@@ -169,6 +169,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	}
     }
 
+    
     @Override
     public void mouseClicked(MouseEvent e) {
 	float z =  this.panelMap.getZoom();
@@ -177,11 +178,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	DataElement dataElement = this.plan.findDataElement(x, y, z);
 	
 	if (dataElement.elt != null) {
-	    this.panelParams.setInfo(dataElement.elt);
+            panelMap.showSelectedElement(dataElement);
+            this.panelParams.setInfo(dataElement.elt);   
 	} else {
 	    this.panelParams.hideInfo();
 	}
-	
     }
 
     @Override
