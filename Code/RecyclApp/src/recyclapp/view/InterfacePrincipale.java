@@ -177,8 +177,10 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	int y = e.getY();
 	DataElement dataElement = this.plan.findDataElement(x, y, z);
 	
+        // affiche ou cache le carré de selection suivant la valeur dans dataElement.elt
+        panelMap.showSelectedElement(dataElement);
+        
 	if (dataElement.elt != null) {
-            panelMap.showSelectedElement(dataElement);
             this.panelParams.setInfo(dataElement.elt);   
 	} else {
 	    this.panelParams.hideInfo();
