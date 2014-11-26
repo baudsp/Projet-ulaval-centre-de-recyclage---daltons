@@ -198,7 +198,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-	if (e.getWheelRotation() == 1) {
+	if (e.getWheelRotation() == -1) {
 	    if (zoom <= 2) {
 		isZoom = true;
 		zoom += 0.1;
@@ -209,6 +209,21 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 	    zoom -= 0.1;
 	    repaint();
 	}
+        logZoom();
+        
+    }
+    
+    public void logZoom(){
+        // permet d'arrondir à une décimale
+        float newZoom = Math.round(zoom * 10);
+        
+        if(ip.getLog().getText().contains(" | Zoom : ")){
+            ip.getLog().setText(ip.getLog().getText().
+                    substring(0, ip.getLog().getText().length() - 3) + newZoom/10);
+        }
+        else {
+            ip.getLog().setText(ip.getLog().getText() + " | Zoom : " + newZoom/10);
+        }
     }
 
     @Override

@@ -125,6 +125,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public void mouseMoved(MouseEvent e) {
 	if (e.getSource().equals(panelMap)) {
 	    log.setText("Coordonnées en mètres : [" + mip.convertPixelToMeter(e.getX()) + ";" + mip.convertPixelToMeter(e.getY()) + "]");
+            panelMap.logZoom();
 	    // NEW
 	    this.elementTemp = this.plan.findDataElement(e.getX(), e.getY(), this.panelMap.getZoom());
 
