@@ -287,6 +287,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         itemTools = new javax.swing.JCheckBoxMenuItem();
         itemParam = new javax.swing.JCheckBoxMenuItem();
         itemGrid = new javax.swing.JCheckBoxMenuItem();
+        jMenuItemZoomIn = new javax.swing.JMenuItem();
+        jMenuItemZoomOut = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -346,6 +348,26 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         });
         jMenu3.add(itemGrid);
 
+        jMenuItemZoomIn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemZoomIn.setText("Zoom +");
+        jMenuItemZoomIn.setName("jMenuItemZoomIn"); // NOI18N
+        jMenuItemZoomIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemZoomInActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemZoomIn);
+
+        jMenuItemZoomOut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SUBTRACT, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemZoomOut.setText("Zoom -");
+        jMenuItemZoomOut.setName("jMenuItemZoomOut"); // NOI18N
+        jMenuItemZoomOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemZoomOutActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemZoomOut);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -366,6 +388,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	this.mip.setVisiblePaneTools(this.itemTools.getState());
     }//GEN-LAST:event_itemToolsActionPerformed
 
+    private void jMenuItemZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemZoomInActionPerformed
+        panelMap.zoomIn();
+    }//GEN-LAST:event_jMenuItemZoomInActionPerformed
+
+    private void jMenuItemZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemZoomOutActionPerformed
+        panelMap.zoomOut();
+    }//GEN-LAST:event_jMenuItemZoomOutActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel debug;
@@ -376,6 +406,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItemZoomIn;
+    private javax.swing.JMenuItem jMenuItemZoomOut;
     private javax.swing.JLabel log;
     private javax.swing.JPanel panelInfo;
     private recyclapp.view.InterfaceParam panelParams;
