@@ -2,8 +2,6 @@ package recyclapp.model;
 
 import java.awt.Dimension;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Station extends Element {
 
@@ -18,10 +16,9 @@ public class Station extends Element {
         this.height = height;
         this.width = width;
         this.coordinate = new Coordinate(x, y);
-	nbExits = 1;
+        nbExits = 1;
         exits = new Arc[nbExits];
     }
-    
 
     public void removeExit(Arc arc) {
         for (int i = 0; i < nbExits; i++) {
@@ -40,7 +37,13 @@ public class Station extends Element {
     }
 
     public void setNumberOfExits(int nb) {
+        Arc[] newExits = new Arc[nb];
+        for (int i = 0; (i < nbExits) && (i < nb); i++) {
+            newExits[i] = exits[i];
+        }
         this.nbExits = nb;
+        exits = newExits;
+
     }
 
     public String getDescription() {
@@ -97,5 +100,5 @@ public class Station extends Element {
 
     public void setDimension(int width, int height) {
         dimension = new Dimension(width, height);
-    }    
+    }
 }

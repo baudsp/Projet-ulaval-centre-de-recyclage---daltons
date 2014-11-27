@@ -57,11 +57,10 @@ public class Plan {
     }
 
     public void createElement(int id, int x, int y) {
-
         elements.add(new Station(id, x, y, 70, 70));
     }
 
-    public LinkedList<DataElement> getPositionElement() {
+    public LinkedList<DataElement> getListDataElements() {
         LinkedList<DataElement> dataElements = new LinkedList<DataElement>();
         for (Element e : elements) {
             dataElements.add(new DataElement(e.id, e.coordinate.getX(), e.coordinate.getY(), e.width, e.height, e));
@@ -80,9 +79,10 @@ public class Plan {
         return new DataElement();
     }
 
-    public void remplacePositionElements(DataElement de, int x, int y) {
+    public void moveElement(DataElement de, int x, int y) {
         for (Element e : elements) {
-            if (de.x >= e.coordinate.getX() && de.x <= e.coordinate.getX() + e.width && de.y >= e.coordinate.getY() && de.y <= e.coordinate.getY() + e.height) {
+            if (de.x >= e.coordinate.getX() && de.x <= e.coordinate.getX() + e.width && de.y >= e.coordinate.getY()
+                    && de.y <= e.coordinate.getY() + e.height) {
                 e.setCoordinate(new Coordinate(x, y));
             }
         }
