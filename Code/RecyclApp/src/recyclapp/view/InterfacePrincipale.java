@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import recyclapp.model.Element;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
 
@@ -24,7 +25,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     // NEW
     private DataElement elementTemp;
 
-    private boolean movableElement = false;
+    private boolean movableElement = false; // TODO rendre le movable juste pour l'élément selectionné, pas pour tous
 
     public InterfacePrincipale(Plan plan) {
         initComponents();
@@ -100,7 +101,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     public LinkedList<DataElement> getPositionElements(boolean isZoom) {
         // NEW
-        LinkedList<DataElement> listDataElement = this.plan.getPositionElement();
+        LinkedList<DataElement> listDataElement = this.plan.getListDataElements();
         if (this.elementTemp != null && this.elementTemp.id >= 0 && !isZoom) {
             DataElement currentDataElement = null;
             for (DataElement dataElement : listDataElement) {
@@ -173,7 +174,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         movableElement = panelMap.showSelectedElement(dataElement);
 
         if (dataElement.elt != null) {
-            this.panelParams.setInfo(dataElement.elt);
+            showPanelParameter(dataElement.elt);
         } else {
             this.panelParams.hideInfo();
         }
@@ -200,6 +201,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             && !this.mip.isOverlapElement((int) (e.getX() / zoom - this.panelTools.getWidth()),
                                     (int) (e.getY() / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
                         this.plan.createElement(this.panelTools.getIdTools(), x, y);
+                        
+                        DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1);
+                        panelMap.showSelectedElement(addedDataElement);
+                        showPanelParameter(addedDataElement.elt);
+                        movableElement = true;
                     }
                 }
                 this.panelTools.setMoveTools(false);
@@ -255,6 +261,10 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         int x = e.getX();
         int y = e.getY();
         return this.plan.findDataElement(x, y, zoom);
+    }
+    
+    private void showPanelParameter(Element element){
+        this.panelParams.setInfo(element);
     }
 
     public JLabel getDebug() {

@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import recyclapp.model.Element;
 
 /**
  *

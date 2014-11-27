@@ -60,7 +60,7 @@ public class Plan {
         elements.add(new Station(id, x, y, 70, 70));
     }
 
-    public LinkedList<DataElement> getPositionElement() {
+    public LinkedList<DataElement> getListDataElements() {
         LinkedList<DataElement> dataElements = new LinkedList<DataElement>();
         for (Element e : elements) {
             dataElements.add(new DataElement(e.id, e.coordinate.getX(), e.coordinate.getY(), e.width, e.height, e));
