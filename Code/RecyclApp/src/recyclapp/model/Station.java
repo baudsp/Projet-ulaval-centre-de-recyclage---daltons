@@ -2,8 +2,6 @@ package recyclapp.model;
 
 import java.awt.Dimension;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Station extends Element {
 

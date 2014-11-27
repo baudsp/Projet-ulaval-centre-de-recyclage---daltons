@@ -79,15 +79,14 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
                 }
             }
             if (stationIsSelected) {
-                Coordinate coo = selectedElement.elt.getCoordinate();
-                g.drawRect(coo.getX(), coo.getY(), selectedElement.width, selectedElement.height);
+                Coordinate coo = getSelectedElement().elt.getCoordinate();
+                g.drawRect(coo.getX(), coo.getY(), getSelectedElement().width, getSelectedElement().height);
             }
         }
         isZoom = false;
     }
 
     public void drawImageFollowingCursor(Image image, int x, int y) {
-
         imgCursor = image;
         isDrag = true;
         this.coordCursor[0] = x;
@@ -131,29 +130,6 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         return zoom;
     }
 
-    public void moveElement(int id, int x, int y) {
-        /*for (Element e : elements) {
-         if (e.id == id) {
-         moveElement(e, x, y);
-         return;
-         }
-         }*/
-    }
-
-    /*private void moveElement(Element e, int x, int y) {
-     e.x = x;
-     e.y = y;
-     repaint();
-     }*/
-    public void resizeElement(int id, int width, int height) {
-        /* for (Element e : elements) {
-         if (e.id == id) {
-         resizeElement(e, width, height);
-         return;
-         }
-         }*/
-    }
-
     private int[][] getArrowArc(int xExit, int yExit, int xEntrance, int yEntrance, float zoom) {
 
         int largeurFleche = (int) (30 * zoom);
@@ -165,25 +141,25 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 
         double angle2 = angleAvecHorizontale + Math.PI / 2;
 
-        int xPmilieu = (xEntrance + xExit) / 2;
-        int yP = (yEntrance + yExit) / 2;
+        int xMilieu = (xEntrance + xExit) / 2;
+        int yMilieu = (yEntrance + yExit) / 2;
 
         double xPi;
         double yPi;
 
         if (xExit < xEntrance) {
-            xPi = xPmilieu + Math.cos(angleAvecHorizontale) * longeurFleche;
-            yPi = yP + Math.sin(angleAvecHorizontale) * longeurFleche;
+            xPi = xMilieu + Math.cos(angleAvecHorizontale) * longeurFleche;
+            yPi = yMilieu + Math.sin(angleAvecHorizontale) * longeurFleche;
         } else {
-            xPi = xPmilieu - Math.cos(angleAvecHorizontale) * longeurFleche;
-            yPi = yP - Math.sin(angleAvecHorizontale) * longeurFleche;
+            xPi = xMilieu - Math.cos(angleAvecHorizontale) * longeurFleche;
+            yPi = yMilieu - Math.sin(angleAvecHorizontale) * longeurFleche;
         }
 
-        double xP2 = xPmilieu + Math.cos(angle2) * largeurFleche / 2;
-        double yP2 = yP + Math.sin(angle2) * largeurFleche / 2;
+        double xP2 = xMilieu + Math.cos(angle2) * largeurFleche / 2;
+        double yP2 = yMilieu + Math.sin(angle2) * largeurFleche / 2;
 
-        double xP3 = xPmilieu * 2 - xP2;
-        double yP3 = yP * 2 - yP2;
+        double xP3 = xMilieu * 2 - xP2;
+        double yP3 = yMilieu * 2 - yP2;
 
         int[] tabX = {(int) xP2, (int) xP3, (int) xPi};
         int[] tabY = {(int) yP2, (int) yP3, (int) yPi};
@@ -249,14 +225,26 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     }
 
     public boolean showSelectedElement(Plan.DataElement dataElement) {
-        if (dataElement.id == InterfaceOutils.ID_TOOL_STATION) {
+        if (dataElement.id >= InterfaceOutils.ID_TOOL_STATION) {
+            if (getSelectedElement() != null) {
+                if (getSelectedElement().elt != dataElement.elt) {
+                    // On a changé d'élément selectionné
+                    selectedElement = dataElement;
+                }
+            } else {
+                selectedElement = dataElement;
+            }
+
             stationIsSelected = true;
-            selectedElement = dataElement;
-        } else if (dataElement.id != - 1) {
-            return true;
         } else {
+            selectedElement = dataElement;
             stationIsSelected = false;
         }
+
         return stationIsSelected;
+    }
+
+    public DataElement getSelectedElement() {
+        return selectedElement;
     }
 }

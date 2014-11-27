@@ -3,8 +3,6 @@ package recyclapp.model;
 import java.awt.Image;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,7 +29,7 @@ public abstract class Element extends Component {
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
-    
+
     public int getRankArc(Arc arc) {
         for (int i = 0; i < nbExits; i++) {
             if (exits[i].equals(arc)) {
@@ -40,11 +38,11 @@ public abstract class Element extends Component {
         }
         return -1;
     }
-    
+
     public Arc getArc(int i) {
         return exits[i];
     }
-    
+
     public int getNbArcs() {
         int nb = 0;
         for (int i = 0; i < nbExits; i++) {
