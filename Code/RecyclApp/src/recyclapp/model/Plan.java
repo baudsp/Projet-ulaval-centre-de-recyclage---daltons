@@ -92,4 +92,8 @@ public class Plan {
     public boolean isDrawingArc() {
         return (tempDataElement != null);
     }
+    
+    public void removeFromElements(DataElement dataElement){
+        listElements.remove(dataElement.element);
+    }
 }

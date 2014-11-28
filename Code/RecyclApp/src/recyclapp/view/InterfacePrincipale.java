@@ -24,8 +24,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     // NEW
     private DataElement dataElementTemp;
 
-    private boolean movableElement = false; // TODO rendre le movable juste pour l'élément selectionné, pas pour tous
-
     public InterfacePrincipale(Plan plan) {
         initComponents();
         initialize();
@@ -168,7 +166,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseClicked(MouseEvent e) {
         DataElement dataElement = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
-        movableElement = interfacePlan.showSelectedElement(dataElement);
+        interfacePlan.showSelectedElement(dataElement);
 
         if (dataElement.element != null) {
             this.panelParams.setParametersInformations(dataElement.element);
@@ -202,7 +200,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                         DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1);
                         interfacePlan.showSelectedElement(addedDataElement);
                         this.panelParams.setParametersInformations(addedDataElement.element);
-                        movableElement = true;
                     }
                     this.panelTools.setMoveTools(false);
                 } else {
@@ -225,8 +222,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 int x = (int) (e.getX() / zoom - (dataElementTemp.width) / 2);
                 int y = (int) (e.getY() / zoom - (dataElementTemp.height) / 2);
 
-                if (!this.mip.isOverlapElement((int) (e.getX() / zoom), (int) (e.getY() / zoom), dataElementTemp.width, dataElementTemp.height)
-                        && movableElement) {
+                if (!this.mip.isOverlapElement((int) (e.getX() / zoom), (int) (e.getY() / zoom), dataElementTemp.width, dataElementTemp.height)) {
                     this.plan.moveElement(dataElementTemp, x, y);
                 }
                 dataElementTemp = this.plan.new DataElement();
@@ -267,7 +263,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private void restartPlan() {
         plan = new Plan();
         this.plan.createElement(1, 20, this.getHeight() / 2);
-        interfacePlan.resetInterfacePlan();
+        interfacePlan.setStationIsSelected(false);
         this.panelParams.hideEditionStationInformations();
         interfacePlan.repaint();
     }
@@ -299,6 +295,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("RecyclApp - Daltons");
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         panelInfo.setBackground(java.awt.Color.darkGray);
         panelInfo.setMaximumSize(new java.awt.Dimension(100, 20));
@@ -475,6 +476,20 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private void jMenuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCloseActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItemCloseActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if(evt.getKeyCode() == 127){ // Code pour SUPPR
+            if(interfacePlan.getStationIsSelected()){
+                plan.removeFromElements(interfacePlan.getSelectedDataElement());
+                interfacePlan.setStationIsSelected(false);
+                this.panelParams.hideEditionStationInformations();
+            }
+        } else if(evt.getKeyCode() == 27){ // Code pour ECHAP
+            interfacePlan.setStationIsSelected(false);
+            this.panelParams.hideEditionStationInformations();
+        }
+        interfacePlan.repaint();
+    }//GEN-LAST:event_formKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

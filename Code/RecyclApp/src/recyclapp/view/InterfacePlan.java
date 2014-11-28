@@ -45,10 +45,6 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         this.addKeyListener(this);
         this.addMouseWheelListener(this);
     }
-    
-    public void resetInterfacePlan(){
-        stationIsSelected = false;
-    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -82,9 +78,9 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
                     g.fillPolygon(tabPts[0], tabPts[1], 3);
                 }
             }
-            if (stationIsSelected) {
-                Coordinate coo = selectedDataElement.element.getCoordinate();
-                g.drawRect(coo.getX(), coo.getY(), selectedDataElement.width, selectedDataElement.height);
+            if (getStationIsSelected()) {
+                Coordinate coo = getSelectedDataElement().element.getCoordinate();
+                g.drawRect(coo.getX(), coo.getY(), getSelectedDataElement().width, getSelectedDataElement().height);
             }
         }
         isZoom = false;
@@ -254,23 +250,37 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
      * @param dataElement
      * @return
      */
-    public boolean showSelectedElement(Plan.DataElement dataElement) {
+    public void showSelectedElement(Plan.DataElement dataElement) {
         if (dataElement.type >= InterfaceOutils.ID_TOOL_STATION) {
-            if (selectedDataElement != null) {
-                if (selectedDataElement.element != dataElement.element) {
+            if (getSelectedDataElement() != null) {
+                if (getSelectedDataElement().element != dataElement.element) {
                     // On a changé d'élément selectionné
-                    selectedDataElement = dataElement;
+                    setSelectedDataElement(dataElement);
                 }
             } else {
-                selectedDataElement = dataElement;
+                setSelectedDataElement(dataElement);
             }
 
-            stationIsSelected = true;
+            setStationIsSelected(true);
         } else {
-            selectedDataElement = dataElement;
-            stationIsSelected = false;
+            setSelectedDataElement(dataElement);
+            setStationIsSelected(false);
         }
+    }
 
+    public DataElement getSelectedDataElement() {
+        return selectedDataElement;
+    }
+
+    public void setSelectedDataElement(DataElement selectedDataElement) {
+        this.selectedDataElement = selectedDataElement;
+    }
+
+    public boolean getStationIsSelected() {
         return stationIsSelected;
+    }
+
+    public void setStationIsSelected(boolean stationIsSelected) {
+        this.stationIsSelected = stationIsSelected;
     }
 }
