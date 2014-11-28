@@ -4,29 +4,29 @@ import java.util.LinkedList;
 
 public class Plan {
 
-    private LinkedList<Element> elements;
-    private DataElement tempDataElt = null;
+    private LinkedList<Element> listElements;
+    private DataElement tempDataElement = null;
 
     public class DataElement {
 
-        public int id;
+        public int type;
         public int x;
         public int y;
         public int width;
         public int height;
-        public Element elt;
+        public Element element;
 
-        public DataElement(int id, int x, int y, int width, int height, Element elt) {
-            this.id = id;
+        public DataElement(int type, int x, int y, int width, int height, Element element) {
+            this.type = type;
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
-            this.elt = elt;
+            this.element = element;
         }
 
         public DataElement() {
-            this.id = -1;
+            this.type = -1;
             this.x = 0;
             this.y = 0;
             this.width = 0;
@@ -35,62 +35,61 @@ public class Plan {
     };
 
     public Plan() {
-        elements = new LinkedList<>();
+        listElements = new LinkedList<>();
     }
 
     public void createArcExit(int x, int y) {
-        DataElement de = findDataElement(x, y, 1);
-        if (de.elt != null) {
-            tempDataElt = de;
+        DataElement dataElement = findDataElement(x, y, 1);
+        if (dataElement.element != null) {
+            tempDataElement = dataElement;
         }
     }
 
     public boolean createArcEntrance(int x, int y) {
-        DataElement de = findDataElement(x, y, 1);
-        if ((de.elt != null) && (tempDataElt.elt.getFirstFreeExit() >= 0)) {
-            tempDataElt.elt.addExit(tempDataElt.elt.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).elt));
-            tempDataElt = null;
-            return true;
-        } else {
-            return false;
+        boolean found = false;
+        DataElement dataElement = findDataElement(x, y, 1);
+        if ((dataElement.element != null) && (tempDataElement.element.getFirstFreeExit() >= 0)) {
+            tempDataElement.element.addExit(tempDataElement.element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element));
+            tempDataElement = null;
+            found = true;
         }
+
+        return found;
     }
 
-    public void createElement(int id, int x, int y) {
-        elements.add(new Station(id, x, y, 70, 70));
+    public void createElement(int type, int x, int y) {
+        listElements.add(new Station(type, x, y, 70, 70));
     }
 
     public LinkedList<DataElement> getListDataElements() {
-        LinkedList<DataElement> dataElements = new LinkedList<DataElement>();
-        for (Element e : elements) {
-            dataElements.add(new DataElement(e.id, e.coordinate.getX(), e.coordinate.getY(), e.width, e.height, e));
+        LinkedList<DataElement> listDataElements = new LinkedList<DataElement>();
+        for (Element elt : listElements) {
+            listDataElements.add(new DataElement(elt.type, elt.coordinate.getX(), elt.coordinate.getY(), elt.width, elt.height, elt));
         }
-        return dataElements;
+        return listDataElements;
     }
 
     public DataElement findDataElement(int x, int y, float zoom) {
-        for (Element e : elements) {
-            if (x >= e.coordinate.getX() * zoom && x <= (e.coordinate.getX() + e.width) * zoom && y >= e.coordinate.getY() * zoom && y <= (e.coordinate.getY() + e.height) * zoom) {
+        for (Element elt : listElements) {
+            if (x >= elt.coordinate.getX() * zoom && x <= (elt.coordinate.getX() + elt.width) * zoom && y >= elt.coordinate.getY() * zoom && y <= (elt.coordinate.getY() + elt.height) * zoom) {
 
-                return new DataElement(e.id, e.coordinate.getX(), e.coordinate.getY(), e.width, e.height, e);
+                return new DataElement(elt.type, elt.coordinate.getX(), elt.coordinate.getY(), elt.width, elt.height, elt);
             }
         }
 
         return new DataElement();
     }
 
-    public void moveElement(DataElement de, int x, int y) {
-        for (Element e : elements) {
-            if (de.x >= e.coordinate.getX() && de.x <= e.coordinate.getX() + e.width && de.y >= e.coordinate.getY()
-                    && de.y <= e.coordinate.getY() + e.height) {
-                e.setCoordinate(new Coordinate(x, y));
+    public void moveElement(DataElement dataElement, int x, int y) {
+        for (Element elt : listElements) {
+            if (dataElement.x >= elt.coordinate.getX() && dataElement.x <= elt.coordinate.getX() + elt.width
+                    && dataElement.y >= elt.coordinate.getY() && dataElement.y <= elt.coordinate.getY() + elt.height) {
+                elt.setCoordinate(new Coordinate(x, y));
             }
         }
-
-        System.out.print("Nb elements : " + elements.size() + "\n");
     }
 
     public boolean isDrawingArc() {
-        return (tempDataElt != null);
+        return (tempDataElement != null);
     }
 }

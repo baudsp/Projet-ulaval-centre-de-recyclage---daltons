@@ -7,9 +7,6 @@ public abstract class Component {
     private float maxFlow;
     protected Map<String, Float> entranceProducts;
 
-    public void updateValues() {
-    }
-
     public float getMaxFlow() {
         return maxFlow;
     }

@@ -20,44 +20,45 @@ public class InterfaceParam extends javax.swing.JPanel {
 
     private Station station;
 
-    private int nbDechets = 2;
+    private int nbDechets = 2; // TODO : Permettre à l'utilisateur de modifier cela.
 
     /**
      * Creates new form InterfaceParamBis
      */
     public InterfaceParam() {
         initComponents();
-        this.jPanel1.setVisible(false);
+        this.jPanelEditionStation.setVisible(false);
     }
 
-    private void updateMatrice() {
+    // A mettre dans une classe modelInterfaceParam
+    private void updateMatrix() {
 
-        Map<String, Map<Integer, Map<String, Float>>> matrixDeTri = station.getMatrix();
+        Map<String, Map<Integer, Map<String, Float>>> matriceDeTri = station.getMatrix();
 
-        int nbrDechets = matrixDeTri.size();
+        int nbrDechets = matriceDeTri.size();
 
         int nbrSorties = (Integer) jSpinnerNbrExit.getValue() + 1;
 
-        Object[][] a = new Object[nbrDechets][nbrSorties];
+        Object[][] valeursMatrice = new Object[nbrDechets][nbrSorties];
 
         String tabDechets[] = new String[0];
-        tabDechets = matrixDeTri.keySet().toArray(tabDechets);
+        tabDechets = matriceDeTri.keySet().toArray(tabDechets);
 
         Arrays.sort(tabDechets);
 
         for (int i = 0; i < nbrDechets; i++) {
             Map<Integer, Map<String, Float>> mapSortieDechets;
-            mapSortieDechets = matrixDeTri.get(tabDechets[i]);
+            mapSortieDechets = matriceDeTri.get(tabDechets[i]);
             for (int j = 1; j < nbrSorties; j++) {
                 Integer tabNumSortie[] = new Integer[nbrSorties];
-                Integer numSortie = mapSortieDechets.keySet().toArray(tabNumSortie)[i];
-                if (numSortie == null) {
-                    a[i][j] = 0f;
+                Integer exitNumber = mapSortieDechets.keySet().toArray(tabNumSortie)[i];
+                if (exitNumber == null) {
+                    valeursMatrice[i][j] = 0f;
                 } else {
-                    a[i][j] = mapSortieDechets.get(numSortie).get(tabDechets[i]);
+                    valeursMatrice[i][j] = mapSortieDechets.get(exitNumber).get(tabDechets[i]);
                 }
             }
-            a[i][0] = tabDechets[i];
+            valeursMatrice[i][0] = tabDechets[i];
         }
 
         String[] columnNames = new String[nbrSorties];
@@ -69,18 +70,28 @@ public class InterfaceParam extends javax.swing.JPanel {
 
         jMatrixTri.setModel(
                 new javax.swing.table.DefaultTableModel(
-                        a,
+                        valeursMatrice,
                         columnNames
                 ));
 
         repaint();
     }
+    
+    // A mettre dans une classe modelInterfaceParam
+    public void hideEditionStationInformations() {
+        this.jPanelEditionStation.setVisible(false);
+    }
+    
+    /***
+     * summary : Initialise la matrice à partir d'un élément.
+     * @param element 
+     */
+    // A mettre dans une classe modelInterfaceParam
+    public void setParametersInformations(Element element) {
 
-    public void setInfo(Element elt) {
-
-        if (elt.getClass().getName().equals(Station.class.getName())) {
-            jPanel1.setVisible(true);
-            station = (Station) elt;
+        if (element.getClass().getName().equals(Station.class.getName())) {
+            jPanelEditionStation.setVisible(true);
+            station = (Station) element;
             jTextFieldName.setText(station.getName());
             jTextFieldDescription.setText(station.getDescription());
             jSpinnerNbrExit.setValue(station.getNumberOfExits());
@@ -104,11 +115,103 @@ public class InterfaceParam extends javax.swing.JPanel {
                 }
                 station.setMatrix(matrixDeTri);
             }
-            updateMatrice();
+            updateMatrix();
         } else {
-            jPanel1.setVisible(false);
+            jPanelEditionStation.setVisible(false);
             this.station = null;
         }
+    }
+    
+    // A mettre dans une classe modelInterfaceParam
+    private void saveInformations() {
+        int nbrSorties = (int) jSpinnerNbrExit.getValue();
+
+        station.setName(jTextFieldName.getText());
+        station.setDescription(jTextFieldDescription.getText());
+        station.setNumberOfExits(nbrSorties);
+        station.setMaxFlow((Float) jSpinnerDebitMax.getValue());
+
+        TableModel model = jMatrixTri.getModel();
+
+        int nbreDechets = jMatrixTri.getRowCount();
+
+        Map<String, Map<Integer, Map<String, Float>>> matriceDeTri = station.getMatrix();
+
+        String[] tabDechets = new String[nbreDechets];
+        for (int i = 0; i < nbreDechets; i++) {
+            tabDechets[i] = (String) model.getValueAt(i, 0);
+        }
+
+        for (int i = 1; i < nbrSorties + 1; i++) {
+            for (int j = 0; j < nbreDechets; j++) {
+
+                Map<Integer, Map<String, Float>> mapCurExit;
+                if (matriceDeTri.containsKey(tabDechets[j])) {
+                    mapCurExit = matriceDeTri.get(tabDechets[j]);
+                } else {
+                    mapCurExit = new HashMap<>();
+                }
+
+                Object data = jMatrixTri.getValueAt(j, i);
+
+                Float value;
+
+                if (data.getClass().getName().equals(String.class.getName())) {
+                    value = Float.parseFloat((String) data);
+                } else if (data.getClass().getName().equals(Integer.class.getName())) {
+                    value = ((Integer) data) * 1.0f;
+                } else {
+                    value = (Float) data;
+                }
+
+                Map<String, Float> curMapTri;
+                if (mapCurExit.containsKey(i)) {
+                    curMapTri = mapCurExit.get(i);
+                } else {
+                    curMapTri = new HashMap<>();
+                }
+                curMapTri.put(tabDechets[j], value);
+                mapCurExit.put(i, curMapTri);
+
+                matriceDeTri.put(tabDechets[j], mapCurExit);
+            }
+        }
+
+        for (int i = 1; i < nbrSorties + 1; i++) {
+            for (int j = 0; j < nbreDechets; j++) {
+
+                Map<Integer, Map<String, Float>> mapCurExit;
+                if (matriceDeTri.containsKey(tabDechets[j])) {
+                    mapCurExit = matriceDeTri.get(tabDechets[j]);
+                } else {
+                    mapCurExit = new HashMap<>();
+                }
+
+                Object data = jMatrixTri.getValueAt(j, i);
+
+                Float currentValue;
+
+                if (data.getClass().getName().equals(String.class.getName())) {
+                    currentValue = Float.parseFloat((String) data);
+                } else if (data.getClass().getName().equals(Integer.class.getName())) {
+                    currentValue = ((Integer) data) * 1.0f;
+                } else {
+                    currentValue = (Float) data;
+                }
+
+                Map<String, Float> curMapTri;
+                if (mapCurExit.containsKey(i)) {
+                    curMapTri = mapCurExit.get(i);
+                } else {
+                    curMapTri = new HashMap<>();
+                }
+                curMapTri.put(tabDechets[j], currentValue);
+                mapCurExit.put(i, curMapTri);
+
+                matriceDeTri.put(tabDechets[j], mapCurExit);
+            }
+        }
+        station.setMatrix(matriceDeTri);
     }
 
     /**
@@ -122,8 +225,8 @@ public class InterfaceParam extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        jLabelParameters = new javax.swing.JLabel();
+        jPanelEditionStation = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -145,13 +248,13 @@ public class InterfaceParam extends javax.swing.JPanel {
         setBackground(new java.awt.Color(164, 183, 145));
         setMaximumSize(new java.awt.Dimension(300, 32767));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Paramètres");
-        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabelParameters.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelParameters.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelParameters.setText("Paramètres");
+        jLabelParameters.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabelParameters.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jPanel1.setBackground(new java.awt.Color(164, 183, 145));
+        jPanelEditionStation.setBackground(new java.awt.Color(164, 183, 145));
 
         jButton1.setText("Valider");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -199,66 +302,66 @@ public class InterfaceParam extends javax.swing.JPanel {
     );
     jScrollPane2.setViewportView(jMatrixTri);
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(jPanel1Layout.createSequentialGroup()
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
+    javax.swing.GroupLayout jPanelEditionStationLayout = new javax.swing.GroupLayout(jPanelEditionStation);
+    jPanelEditionStation.setLayout(jPanelEditionStationLayout);
+    jPanelEditionStationLayout.setHorizontalGroup(
+        jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+            .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                    .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelEditionStationLayout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(jButton1))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanelEditionStationLayout.createSequentialGroup()
                             .addGap(30, 30, 30)
                             .addComponent(jLabel6)))
                     .addGap(0, 73, Short.MAX_VALUE))
-                .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanelEditionStationLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelEditionStationLayout.createSequentialGroup()
                             .addComponent(jLabel4)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSpinnerDebitMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                            .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jLabel7)
                                 .addComponent(jLabel5))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSpinnerNbrExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEditionStationLayout.createSequentialGroup()
+                            .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel3)
                                 .addComponent(jLabel2))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                                 .addComponent(jTextFieldDescription))))))
             .addContainerGap())
-        .addGroup(jPanel1Layout.createSequentialGroup()
+        .addGroup(jPanelEditionStationLayout.createSequentialGroup()
             .addContainerGap()
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
-    jPanel1Layout.setVerticalGroup(
-        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+    jPanelEditionStationLayout.setVerticalGroup(
+        jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEditionStationLayout.createSequentialGroup()
             .addComponent(jLabel6)
             .addGap(10, 10, 10)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel2)
                 .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel3)
                 .addComponent(jTextFieldDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel4)
                 .addComponent(jSpinnerDebitMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel5)
                 .addComponent(jSpinnerNbrExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -276,128 +379,41 @@ public class InterfaceParam extends javax.swing.JPanel {
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addGap(29, 29, 29)
-            .addComponent(jLabel1)
+            .addComponent(jLabelParameters)
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jPanelEditionStation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(jLabel1)
+            .addComponent(jLabelParameters)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelEditionStation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGap(19, 19, 19))
     );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int nbrSortie = (int) jSpinnerNbrExit.getValue();
-
-        station.setName(jTextFieldName.getText());
-        station.setDescription(jTextFieldDescription.getText());
-        station.setNumberOfExits(nbrSortie);
-        station.setMaxFlow((Float) jSpinnerDebitMax.getValue());
-
-        TableModel model = jMatrixTri.getModel();
-
-        int nbreDechet = jMatrixTri.getRowCount();
-
-        Map<String, Map<Integer, Map<String, Float>>> matrixTri = station.getMatrix();
-
-        String[] tabDechets = new String[nbreDechet];
-        for (int i = 0; i < nbreDechet; i++) {
-            tabDechets[i] = (String) model.getValueAt(i, 0);
-        }
-
-        for (int i = 1; i < nbrSortie + 1; i++) {
-            for (int j = 0; j < nbreDechet; j++) {
-
-                Map<Integer, Map<String, Float>> mapCurExit;
-                if (matrixTri.containsKey(tabDechets[j])) {
-                    mapCurExit = matrixTri.get(tabDechets[j]);
-                } else {
-                    mapCurExit = new HashMap<>();
-                }
-
-                Object data = jMatrixTri.getValueAt(j, i);
-
-                Float value;
-
-                if (data.getClass().getName().equals(String.class.getName())) {
-                    value = Float.parseFloat((String) data);
-                } else if (data.getClass().getName().equals(Integer.class.getName())) {
-                    value = ((Integer) data) * 1.0f;
-                } else {
-                    value = (Float) data;
-                }
-
-                Map<String, Float> curMapTri;
-                if (mapCurExit.containsKey(i)) {
-                    curMapTri = mapCurExit.get(i);
-                } else {
-                    curMapTri = new HashMap<>();
-                }
-                curMapTri.put(tabDechets[j], value);
-                mapCurExit.put(i, curMapTri);
-
-                matrixTri.put(tabDechets[j], mapCurExit);
-            }
-        }
-
-        for (int i = 1; i < nbrSortie + 1; i++) {
-            for (int j = 0; j < nbreDechet; j++) {
-
-                Map<Integer, Map<String, Float>> mapCurExit;
-                if (matrixTri.containsKey(tabDechets[j])) {
-                    mapCurExit = matrixTri.get(tabDechets[j]);
-                } else {
-                    mapCurExit = new HashMap<>();
-                }
-
-                Object data = jMatrixTri.getValueAt(j, i);
-
-                Float value;
-
-                if (data.getClass().getName().equals(String.class.getName())) {
-                    value = Float.parseFloat((String) data);
-                } else if (data.getClass().getName().equals(Integer.class.getName())) {
-                    value = ((Integer) data) * 1.0f;
-                } else {
-                    value = (Float) data;
-                }
-
-                Map<String, Float> curMapTri;
-                if (mapCurExit.containsKey(i)) {
-                    curMapTri = mapCurExit.get(i);
-                } else {
-                    curMapTri = new HashMap<>();
-                }
-                curMapTri.put(tabDechets[j], value);
-                mapCurExit.put(i, curMapTri);
-
-                matrixTri.put(tabDechets[j], mapCurExit);
-            }
-        }
-        station.setMatrix(matrixTri);
+        saveInformations();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jSpinnerNbrExitStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerNbrExitStateChanged
-        updateMatrice();
+        updateMatrix();
     }//GEN-LAST:event_jSpinnerNbrExitStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelParameters;
     private javax.swing.JTable jMatrixTri;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelEditionStation;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinnerDebitMax;
@@ -406,8 +422,4 @@ public class InterfaceParam extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldDescription;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
-
-    void hideInfo() {
-        this.jPanel1.setVisible(false);
-    }
 }

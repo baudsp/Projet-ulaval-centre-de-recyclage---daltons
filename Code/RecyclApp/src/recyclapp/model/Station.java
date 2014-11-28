@@ -11,7 +11,7 @@ public class Station extends Element {
 
     public Station(int id, int x, int y, int width, int height) {
         super();
-        this.id = id;
+        this.type = id;
         this.matrix = new HashMap<>();
         this.height = height;
         this.width = width;
@@ -36,12 +36,12 @@ public class Station extends Element {
         return nbExits;
     }
 
-    public void setNumberOfExits(int nb) {
-        Arc[] newExits = new Arc[nb];
-        for (int i = 0; (i < nbExits) && (i < nb); i++) {
+    public void setNumberOfExits(int numberOfExits) {
+        Arc[] newExits = new Arc[numberOfExits];
+        for (int i = 0; (i < nbExits) && (i < numberOfExits); i++) {
             newExits[i] = exits[i];
         }
-        this.nbExits = nb;
+        this.nbExits = numberOfExits;
         exits = newExits;
 
     }
@@ -50,8 +50,8 @@ public class Station extends Element {
         return description;
     }
 
-    public void setDescription(String descr) {
-        description = descr;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {
@@ -67,11 +67,11 @@ public class Station extends Element {
     }
 
     public void setCoordinates(int x, int y) {
-        coordinate = new Coordinate(x, y);
+        this.coordinate = new Coordinate(x, y);
     }
 
-    public void setCoordinates(Coordinate c) {
-        coordinate = c;
+    public void setCoordinates(Coordinate coordinates) {
+        this.coordinate = coordinates;
     }
 
     public Dimension getDimension() {
@@ -83,7 +83,7 @@ public class Station extends Element {
     }
 
     public void setHeight(int height) {
-        dimension.height = height;
+        this.dimension.height = height;
     }
 
     public int getWidth() {
@@ -91,11 +91,11 @@ public class Station extends Element {
     }
 
     public void setWidth(int width) {
-        dimension.width = width;
+        this.dimension.width = width;
     }
 
-    public void setDimension(Dimension d) {
-        dimension = d;
+    public void setDimension(Dimension dimension) {
+        this.dimension = dimension;
     }
 
     public void setDimension(int width, int height) {

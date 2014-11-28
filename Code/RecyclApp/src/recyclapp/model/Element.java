@@ -8,7 +8,7 @@ import java.util.Set;
 
 public abstract class Element extends Component {
 
-    protected int id;
+    protected int type;
     protected int width, height;
     protected Coordinate coordinate;
     protected Image image;
@@ -54,12 +54,15 @@ public abstract class Element extends Component {
     }
 
     public int getFirstFreeExit() {
+        int exit = -1;
+
         for (int i = 0; i < nbExits; i++) {
             if (exits[i] == null) {
-                return i;
+                exit = i;
+                break;
             }
         }
-        return -1;
+        return exit;
     }
 
     public void addExit(int place, Arc arc) {
@@ -75,48 +78,48 @@ public abstract class Element extends Component {
     }
 
     public void pushExitProducts(Map<String, Float> entrance) {
-        Set<String> listKeys = entrance.keySet();
-        Iterator<String> iterator = listKeys.iterator();
-        while (iterator.hasNext()) {
-            String product = iterator.next();
+        Set<String> listProducts = entrance.keySet();
+        Iterator<String> productsIterator = listProducts.iterator();
+        while (productsIterator.hasNext()) {
+            String product = productsIterator.next();
             Float quantity = entrance.get(product);
             if (entranceProducts.containsKey(product)) {
                 quantity += entranceProducts.get(product);
             }
             entranceProducts.put(product, quantity);
         }
-        for (int i = 0; i < nbExits; i++) {
-            if (exits[i] != null) {
-                exits[i].pushExitProducts(exitProductsFromArc(i));
+        for (int exitNumber = 0; exitNumber < nbExits; exitNumber++) {
+            if (exits[exitNumber] != null) {
+                exits[exitNumber].pushExitProducts(exitProductsFromArc(exitNumber));
             }
         }
     }
 
-    public Map<String, Float> exitProductsFromArc(int arcNumber) {
-        Map<String, Float> exit = new HashMap<>();
+    public Map<String, Float> exitProductsFromArc(int exitNumber) {
+        Map<String, Float> result = new HashMap<>();
         if (entranceProducts == null) {
-            return exit;
+            return result;
         }
-        Set<String> listKeys = entranceProducts.keySet();
-        Iterator<String> iterator = listKeys.iterator();
-        while (iterator.hasNext()) {
-            String productEntry = iterator.next();
-            float quantityEntry = entranceProducts.get(productEntry);
-            if ((matrix.containsKey(productEntry)) && (matrix.get(productEntry)).containsKey(arcNumber)) {
-                Map<String, Float> m = matrix.get(productEntry).get(arcNumber);
-                Set<String> keys = m.keySet();
-                Iterator<String> it = keys.iterator();
-                while (it.hasNext()) {
-                    String productExit = it.next();
-                    Float quantityExit = quantityEntry * m.get(productExit) / 100;
-                    if (exit.containsKey(productExit)) {
-                        quantityExit += exit.get(productExit);
+        Set<String> listProducts = entranceProducts.keySet();
+        Iterator<String> listProductsIterator = listProducts.iterator();
+        while (listProductsIterator.hasNext()) {
+            String entranceProduct = listProductsIterator.next();
+            float entranceQuantity = entranceProducts.get(entranceProduct);
+            if ((matrix.containsKey(entranceProduct)) && (matrix.get(entranceProduct)).containsKey(exitNumber)) {
+                Map<String, Float> currentArc = matrix.get(entranceProduct).get(exitNumber);
+                Set<String> exitProducts = currentArc.keySet();
+                Iterator<String> exitProductIterator = exitProducts.iterator();
+                while (exitProductIterator.hasNext()) {
+                    String exitProduct = exitProductIterator.next();
+                    Float exitQuantity = entranceQuantity * currentArc.get(exitProduct) / 100;
+                    if (result.containsKey(exitProduct)) {
+                        exitQuantity += result.get(exitProduct);
                     }
-                    exit.put(productExit, quantityExit);
+                    result.put(exitProduct, exitQuantity);
                 }
             }
         }
-        return exit;
+        return result;
     }
 
     public Arc[] getArcs() {

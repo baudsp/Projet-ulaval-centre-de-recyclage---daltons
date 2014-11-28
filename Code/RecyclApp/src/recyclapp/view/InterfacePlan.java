@@ -22,10 +22,10 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     private int ecart;
     private float zoom;
     private boolean isZoom;
-    private InterfacePrincipale ip;
+    private InterfacePrincipale interfacePrincipale;
 
     private boolean stationIsSelected = false;
-    private DataElement selectedElement;
+    private DataElement selectedDataElement;
 
     public InterfacePlan(InterfacePrincipale ip) {
         withGrid = false;
@@ -41,7 +41,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         this.setBackground(java.awt.Color.white);
         javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(this);
         this.setLayout(panelMapLayout);
-        this.ip = ip;
+        this.interfacePrincipale = ip;
         this.addKeyListener(this);
         this.addMouseWheelListener(this);
     }
@@ -58,15 +58,15 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             isDrag = false;
         }
 
-        for (int i = 0; i < this.ip.getPositionElements(isZoom).size(); i++) {
+        for (int i = 0; i < this.interfacePrincipale.getListDataElements(isZoom).size(); i++) {
 
-            int id = this.ip.getPositionElements(isZoom).get(i).id;
-            int x = (int) (this.ip.getPositionElements(isZoom).get(i).x * zoom);
-            int y = (int) (this.ip.getPositionElements(isZoom).get(i).y * zoom);
-            int w = (int) (this.ip.getPositionElements(isZoom).get(i).width * zoom);
-            int h = (int) (this.ip.getPositionElements(isZoom).get(i).height * zoom);
-            g.drawImage(this.ip.getImageType(id), x, y, w, h, this);
-            Arc[] arcs = this.ip.getPositionElements(isZoom).get(i).elt.getArcs();
+            int id = this.interfacePrincipale.getListDataElements(isZoom).get(i).type;
+            int x = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).x * zoom);
+            int y = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).y * zoom);
+            int w = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).width * zoom);
+            int h = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).height * zoom);
+            g.drawImage(this.interfacePrincipale.getImageType(id), x, y, w, h, this);
+            Arc[] arcs = this.interfacePrincipale.getListDataElements(isZoom).get(i).element.getArcs();
             for (Arc arc : arcs) {
                 if (arc != null) {
                     g.drawLine(x + w / 2, y + h / 2,
@@ -79,8 +79,8 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
                 }
             }
             if (stationIsSelected) {
-                Coordinate coo = getSelectedElement().elt.getCoordinate();
-                g.drawRect(coo.getX(), coo.getY(), getSelectedElement().width, getSelectedElement().height);
+                Coordinate coo = selectedDataElement.element.getCoordinate();
+                g.drawRect(coo.getX(), coo.getY(), selectedDataElement.width, selectedDataElement.height);
             }
         }
         isZoom = false;
@@ -109,6 +109,12 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         }
     }
 
+    /**
+     * *
+     * summary : Ecart est le nombre de pixel entre chaque trait de la grille.
+     *
+     * @return
+     */
     public int getEcart() {
         return ecart;
     }
@@ -122,10 +128,6 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         return withGrid;
     }
 
-    public void addElement(int id, int x, int y, int width, int height, Image image) {
-        repaint();
-    }
-
     public float getZoom() {
         return zoom;
     }
@@ -135,12 +137,18 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         int largeurFleche = (int) (30 * zoom);
         int longeurFleche = (int) (40 * zoom);
 
-        double a = ((double) yExit - yEntrance) / ((double) xExit - xEntrance);
+        double opposeSurAdjacent = ((double) yExit - yEntrance) / ((double) xExit - xEntrance);
 
-        double angleAvecHorizontale = Math.atan(a);
+        double angleAvecHorizontale = Math.atan(opposeSurAdjacent);
 
         double angle2 = angleAvecHorizontale + Math.PI / 2;
 
+        // Equation de droite y = ax + b
+        //trouver le coef de la droite : a
+//        double coefDroite = (yEntrance - yExit) / (xEntrance - xExit);
+        // trouver l'ordonnée à l'origine b = y - a * x
+//        double ordonneeOrigine = yExit - (coefDroite * xExit);
+//      // distance entre deux points RAC((x2 - x1)² + (y2 - y1)²)
         int xMilieu = (xEntrance + xExit) / 2;
         int yMilieu = (yEntrance + yExit) / 2;
 
@@ -199,17 +207,27 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         logZoom();
     }
 
-    public void logZoom() {
+    /**
+     * **
+     * summary : prends en paramètres les coordonées X et Y en mètres. Le zoom
+     * est calculé ensuite.
+     *
+     * @param x, coordonnées X
+     * @param y, coordonées Y
+     */
+    public void logZoomAndCoordinates(int x, int y) {
+        logCoordinates(x, y);
+        logZoom();
+    }
+
+    private void logCoordinates(int x, int y) {
+        interfacePrincipale.getLogCoordinates().setText("[" + x + ";" + y + "]");
+    }
+
+    private void logZoom() {
         // permet d'arrondir à une décimale
         float newZoom = Math.round(zoom * 10);
-
-        if (ip.getLog().getText().contains(" | Zoom : ")) {
-            ip.getLog().setText(ip.getLog().getText().
-                    substring(0, ip.getLog().getText().length() - 3) + newZoom / 10);
-        } else {
-            // première fois
-            ip.getLog().setText(ip.getLog().getText() + " | Zoom : " + newZoom / 10);
-        }
+        interfacePrincipale.getLogZoom().setText("    |    Zoom : " + newZoom / 10);
     }
 
     @Override
@@ -224,27 +242,31 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     public void keyReleased(KeyEvent e) {
     }
 
+    /**
+     * *
+     * summary : Affiche le carré de sélection si le dataElement a un élément,
+     * sinon cache l'ancien carré.
+     *
+     * @param dataElement
+     * @return
+     */
     public boolean showSelectedElement(Plan.DataElement dataElement) {
-        if (dataElement.id >= InterfaceOutils.ID_TOOL_STATION) {
-            if (getSelectedElement() != null) {
-                if (getSelectedElement().elt != dataElement.elt) {
+        if (dataElement.type >= InterfaceOutils.ID_TOOL_STATION) {
+            if (selectedDataElement != null) {
+                if (selectedDataElement.element != dataElement.element) {
                     // On a changé d'élément selectionné
-                    selectedElement = dataElement;
+                    selectedDataElement = dataElement;
                 }
             } else {
-                selectedElement = dataElement;
+                selectedDataElement = dataElement;
             }
 
             stationIsSelected = true;
         } else {
-            selectedElement = dataElement;
+            selectedDataElement = dataElement;
             stationIsSelected = false;
         }
 
         return stationIsSelected;
-    }
-
-    public DataElement getSelectedElement() {
-        return selectedElement;
     }
 }

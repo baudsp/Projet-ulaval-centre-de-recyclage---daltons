@@ -8,26 +8,26 @@ public class Arc extends Component {
     private Coordinate coordinateEntrance = null;
     private Element entranceElement;
 
-    public Arc(Element entElement) {
-        this.entranceElement = entElement;
+    public Arc(Element entranceElement) {
+        this.entranceElement = entranceElement;
     }
 
     public void setEntranceElement(Element element) {
         entranceElement = element;
     }
 
-    public void pushExitProducts(Map<String, Float> entrance) {
-        entranceProducts = entrance;
+    public void pushExitProducts(Map<String, Float> listEntranceProducts) {
+        entranceProducts = listEntranceProducts;
         if (entranceElement != null) {
             entranceElement.pushExitProducts(entranceProducts);
         }
     }
 
-    public void setCoordinateEntrance(Coordinate entrance) {
-        this.coordinateEntrance = entrance;
+    public void setEntranceCoordinate(Coordinate coordinateEntrance) {
+        this.coordinateEntrance = coordinateEntrance;
     }
 
-    public boolean getStatus() {
+    public boolean getEntranceCoordinateStatus() {
         return (coordinateEntrance != null);
     }
 
@@ -41,7 +41,7 @@ public class Arc extends Component {
     /**
      * @return the entrance
      */
-    public Coordinate getEntrance() {
+    public Coordinate getEntranceCoordinate() {
         return coordinateEntrance;
     }
 

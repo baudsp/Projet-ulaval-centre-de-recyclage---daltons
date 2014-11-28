@@ -16,13 +16,14 @@ public class InterfaceOutils extends JPanel {
     private LinkedList<Image> images;
     private int sizeImage;
 
+    public static final int ID_NOTHING = -1;
     public static final int ID_TOOL_STATION = 0;
     public static final int ID_TOOL_ENTREE = 1;
     public static final int ID_TOOL_SORTIE = 2;
     public static final int ID_TOOL_ARC = 3;
 
     public InterfaceOutils() {
-        this.idTools = -1;
+        this.idTools = ID_NOTHING;
         this.moveTools = false;
         this.setLayout(new java.awt.BorderLayout());
         coord = new int[2];
@@ -46,23 +47,43 @@ public class InterfaceOutils extends JPanel {
         this.add(jLabel1, java.awt.BorderLayout.PAGE_START);
     }
 
-    private int searchTool(int x, int y) {
+    /**
+     * *
+     * summary : Retourne l'ID de l'élément aux coordonées indiquées.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    private int searchIdTool(int x, int y) {
+        int result = ID_NOTHING;
+
         for (int i = 0; i < images.size(); i++) {
-            if (x >= coordImage[i][0] && x <= coordImage[i][0] + sizeImage && y >= coordImage[i][1] && y <= coordImage[i][1] + sizeImage) {
+            if (x >= coordImage[i][0] && x <= coordImage[i][0] + sizeImage
+                    && y >= coordImage[i][1] && y <= coordImage[i][1] + sizeImage) {
                 coord[0] = coordImage[i][0];
                 coord[1] = coordImage[i][1];
-                return i;
+                result = i;
+                break;
             }
         }
-        return -1;
+        return result;
     }
 
+    /**
+     * *
+     * summary : Permet de définir si l'outil aux coordonnées cliquées est
+     * déplacable.
+     *
+     * @param x
+     * @param y
+     */
     public void moveTool(int x, int y) {
-        this.idTools = this.searchTool(x, y);
+        this.idTools = this.searchIdTool(x, y);
         if (idTools >= 0) {
             this.moveTools = true;
         } else {
-            this.idTools = -1;
+            this.idTools = ID_NOTHING;
             this.moveTools = false;
         }
     }
@@ -71,28 +92,28 @@ public class InterfaceOutils extends JPanel {
         return idTools;
     }
 
-    public void setMoveTools(boolean b) {
-        this.moveTools = b;
+    public void setMoveTools(boolean isMoveable) {
+        this.moveTools = isMoveable;
     }
 
     public void resetTools() {
-        this.idTools = -1;
+        this.idTools = ID_NOTHING;
     }
 
     public boolean isMoveTools() {
         return moveTools;
     }
 
-    public int getCoordW(int i) {
+    public int getCoordWidth(int i) {
         return coordImage[i][0] + sizeImage;
     }
 
-    public int getCoordH(int i) {
+    public int getCoordHeigth(int i) {
         return coordImage[i][1] + sizeImage;
     }
 
-    public Image getImages(int i) {
-        return images.get(i);
+    public Image getImages(int imageId) {
+        return images.get(imageId);
     }
 
     public int getSizeImage() {
@@ -100,20 +121,18 @@ public class InterfaceOutils extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        int h = 100;
+    public void paintComponent(Graphics graphic) {
+        super.paintComponent(graphic);
+        int height = 100;
 
         for (int i = 0; i < images.size(); i++) {
             coordImage[i][0] = this.getWidth() / 2 - (sizeImage / 2);
-            coordImage[i][1] = h * (i + 1);
-            g.drawImage(images.get(i), coordImage[i][0], coordImage[i][1], sizeImage, sizeImage, this);
+            coordImage[i][1] = height * (i + 1);
+            graphic.drawImage(images.get(i), coordImage[i][0], coordImage[i][1], sizeImage, sizeImage, this);
         }
-        g.setColor(Color.red);
+        graphic.setColor(Color.red);
         if (this.moveTools) {
-            g.drawRect(coord[0], coord[1], sizeImage, sizeImage);
-        } else {
-            g.drawRect(0, 0, 0, 0);
+            graphic.drawRect(coord[0], coord[1], sizeImage, sizeImage);
         }
     }
 
