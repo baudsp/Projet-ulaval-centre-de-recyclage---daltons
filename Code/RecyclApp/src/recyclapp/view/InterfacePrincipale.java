@@ -322,7 +322,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         panelInfo.add(debug, java.awt.BorderLayout.EAST);
 
         getContentPane().add(panelInfo, java.awt.BorderLayout.PAGE_END);
-        getContentPane().add(panelParams, java.awt.BorderLayout.EAST);
+        getContentPane().add(panelParams, java.awt.BorderLayout.LINE_END);
         getContentPane().add(panelTools, java.awt.BorderLayout.LINE_START);
 
         jMenuBar1.setBackground(new java.awt.Color(164, 183, 145));

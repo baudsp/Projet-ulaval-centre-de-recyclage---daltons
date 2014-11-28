@@ -246,16 +246,18 @@
     <Component class="recyclapp.view.InterfaceParam" name="panelParams">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-          <BorderConstraints direction="East"/>
+          <BorderConstraints direction="After"/>
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="recyclapp.view.InterfaceOutils" name="panelTools">
+    <Container class="recyclapp.view.InterfaceOutils" name="panelTools">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
           <BorderConstraints direction="Before"/>
         </Constraint>
       </Constraints>
-    </Component>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+    </Container>
   </SubComponents>
 </Form>
