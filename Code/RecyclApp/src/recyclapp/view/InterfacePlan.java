@@ -45,6 +45,10 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         this.addKeyListener(this);
         this.addMouseWheelListener(this);
     }
+    
+    public void resetInterfacePlan(){
+        stationIsSelected = false;
+    }
 
     @Override
     public void paintComponent(Graphics g) {

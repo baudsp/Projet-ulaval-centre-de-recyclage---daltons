@@ -263,6 +263,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseExited(MouseEvent e) {
     }
+    
+    private void restartPlan() {
+        plan = new Plan();
+        this.plan.createElement(1, 20, this.getHeight() / 2);
+        interfacePlan.resetInterfacePlan();
+        this.panelParams.hideEditionStationInformations();
+        interfacePlan.repaint();
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -320,7 +328,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         jMenu1.setText("File");
 
         jMenuItemNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
-        jMenuItemNew.setText("New");
+        jMenuItemNew.setText("Nouveau");
         jMenuItemNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemNewActionPerformed(evt);
@@ -451,7 +459,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemExportActionPerformed
 
     private void jMenuItemNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewActionPerformed
-        // TODO add your handling code here:
+        restartPlan();
     }//GEN-LAST:event_jMenuItemNewActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
@@ -489,5 +497,4 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private recyclapp.view.InterfaceParam panelParams;
     private recyclapp.view.InterfaceOutils panelTools;
     // End of variables declaration//GEN-END:variables
-
 }
