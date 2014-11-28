@@ -298,6 +298,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         jMenuItemZoomOut = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("RecyclApp - Daltons");
 
         panelInfo.setBackground(java.awt.Color.darkGray);
         panelInfo.setMaximumSize(new java.awt.Dimension(100, 20));
