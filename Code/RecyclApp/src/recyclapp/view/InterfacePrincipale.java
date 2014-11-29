@@ -259,7 +259,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseExited(MouseEvent e) {
     }
-    
+
     private void restartPlan() {
         plan = new Plan();
         this.plan.createElement(1, 20, this.getHeight() / 2);
@@ -458,7 +458,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemZoomOutActionPerformed
 
     private void jMenuItemExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExportActionPerformed
-        // TODO add your handling code here:
+        mip.exportImageAsPng();
     }//GEN-LAST:event_jMenuItemExportActionPerformed
 
     private void jMenuItemNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewActionPerformed
@@ -466,7 +466,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemNewActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
-        // TODO add your handling code here:
+
+
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
@@ -478,13 +479,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemCloseActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if(evt.getKeyCode() == 127){ // Code pour SUPPR
-            if(interfacePlan.getStationIsSelected()){
+        if (evt.getKeyCode() == 127) { // Code pour SUPPR
+            if (interfacePlan.getStationIsSelected()) {
                 plan.removeFromElements(interfacePlan.getSelectedDataElement());
                 interfacePlan.setStationIsSelected(false);
                 this.panelParams.hideEditionStationInformations();
             }
-        } else if(evt.getKeyCode() == 27){ // Code pour ECHAP
+        } else if (evt.getKeyCode() == 27) { // Code pour ECHAP
             interfacePlan.setStationIsSelected(false);
             this.panelParams.hideEditionStationInformations();
         }

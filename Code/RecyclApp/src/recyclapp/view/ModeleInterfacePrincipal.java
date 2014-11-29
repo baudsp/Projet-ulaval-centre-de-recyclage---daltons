@@ -6,10 +6,19 @@
 package recyclapp.view;
 
 import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -115,5 +124,49 @@ public class ModeleInterfacePrincipal {
         float zoom = this.frame.getPanelMap().getZoom();
         float meter = (pixel * normeMeter) / (zoom * normePixel);
         return (int) (meter);
+    }
+    
+    public void exportImageAsPng(){
+        BufferedImage bufferedImage = new BufferedImage(frame.getSize().width, frame.getSize().height, BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = bufferedImage.createGraphics();
+        frame.paint(graphics);
+        graphics.dispose();
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        int option = chooser.showSaveDialog(null);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            // TODO : Verifier que l'on écrase pas un fichier existant
+            
+            File selectedPfile = chooser.getSelectedFile();
+            String path = selectedPfile.getAbsolutePath() + ".png";
+            
+            try {
+                // Enregistrer le fichier
+                if (ImageIO.write(bufferedImage, "png", new File(path))) {
+                    String question = "Voulez vous ouvrir l'image nouvellement créée ?";
+                    Object[] optionsReponse = {"Oui", "Non, merci",};
+
+                    int n = JOptionPane.showOptionDialog(null,
+                            question,
+                            "Ouvrir l'image ?",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            optionsReponse,
+                            optionsReponse[1]);
+
+                    // Réponse oui
+                    if (n == 0) {
+                        // Ouvrir l'image
+                        Process p = new ProcessBuilder("explorer.exe", "/open," + path).start();
+                    }
+                } else{
+                    // Problème lors de l'écriture
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(InterfacePrincipale.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }
