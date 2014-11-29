@@ -2,10 +2,11 @@ package recyclapp.model;
 
 import java.util.LinkedList;
 
-public class Plan {
+public class Plan{
 
     private LinkedList<Element> listElements;
     private DataElement tempDataElement = null;
+    private ChangeManager changeManager = new ChangeManager();
 
     public class DataElement {
 
@@ -57,10 +58,6 @@ public class Plan {
         return found;
     }
 
-    public void createElement(int type, int x, int y) {
-        listElements.add(new Station(type, x, y, 70, 70));
-    }
-
     public LinkedList<DataElement> getListDataElements() {
         LinkedList<DataElement> listDataElements = new LinkedList<DataElement>();
         for (Element elt : listElements) {
@@ -92,8 +89,22 @@ public class Plan {
     public boolean isDrawingArc() {
         return (tempDataElement != null);
     }
-    
-    public void removeFromElements(DataElement dataElement){
+
+    public void removeElement(DataElement dataElement) {
         listElements.remove(dataElement.element);
+        getChangeManager().addChange(listElements);
+    }
+
+    public void createElement(int type, int x, int y) {
+        listElements.add(new Station(type, x, y, 70, 70));
+        getChangeManager().addChange(listElements);
+    }
+    
+    public void resetElements(LinkedList<Element> elements){
+        listElements = elements;
+    }
+    
+    public ChangeManager getChangeManager() {
+        return changeManager;
     }
 }

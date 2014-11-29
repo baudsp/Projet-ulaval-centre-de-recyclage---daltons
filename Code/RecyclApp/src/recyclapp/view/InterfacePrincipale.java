@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import recyclapp.model.Element;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
 
@@ -21,7 +22,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private ModeleInterfacePrincipal mip;
     private Plan plan;
     private JScrollPane jScrollPane1;
-    // NEW
+
     private DataElement dataElementTemp;
 
     public InterfacePrincipale(Plan plan) {
@@ -268,6 +269,18 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         interfacePlan.repaint();
     }
 
+    public void undo() {
+        LinkedList<Element> listElements = plan.getChangeManager().undo();
+        plan.resetElements(listElements);
+        interfacePlan.repaint();
+    }
+
+    public void redo() {
+        LinkedList<Element> listElements = plan.getChangeManager().redo();
+        plan.resetElements(listElements);
+        interfacePlan.repaint();
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -279,14 +292,16 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         panelParams = new recyclapp.view.InterfaceParam();
         panelTools = new recyclapp.view.InterfaceOutils();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        jMenuFile = new javax.swing.JMenu();
         jMenuItemNew = new javax.swing.JMenuItem();
         jMenuItemOpen = new javax.swing.JMenuItem();
         jMenuItemSave = new javax.swing.JMenuItem();
         jMenuItemExport = new javax.swing.JMenuItem();
         jMenuItemClose = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        jMenuEdit = new javax.swing.JMenu();
+        jMenuItemUndo = new javax.swing.JMenuItem();
+        jMenuItemRedo = new javax.swing.JMenuItem();
+        jMenuVue = new javax.swing.JMenu();
         itemTools = new javax.swing.JCheckBoxMenuItem();
         itemParam = new javax.swing.JCheckBoxMenuItem();
         itemGrid = new javax.swing.JCheckBoxMenuItem();
@@ -327,7 +342,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
         jMenuBar1.setBackground(new java.awt.Color(164, 183, 145));
 
-        jMenu1.setText("File");
+        jMenuFile.setText("File");
 
         jMenuItemNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         jMenuItemNew.setText("Nouveau");
@@ -336,7 +351,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 jMenuItemNewActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemNew);
+        jMenuFile.add(jMenuItemNew);
 
         jMenuItemOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemOpen.setText("Ouvrir");
@@ -345,7 +360,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 jMenuItemOpenActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemOpen);
+        jMenuFile.add(jMenuItemOpen);
 
         jMenuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemSave.setText("Sauvegarder");
@@ -354,7 +369,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 jMenuItemSaveActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemSave);
+        jMenuFile.add(jMenuItemSave);
 
         jMenuItemExport.setText("Exporter en image");
         jMenuItemExport.addActionListener(new java.awt.event.ActionListener() {
@@ -362,7 +377,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 jMenuItemExportActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemExport);
+        jMenuFile.add(jMenuItemExport);
 
         jMenuItemClose.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         jMenuItemClose.setText("Fermer");
@@ -371,14 +386,33 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 jMenuItemCloseActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemClose);
+        jMenuFile.add(jMenuItemClose);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jMenuFile);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jMenuEdit.setText("Edit");
 
-        jMenu3.setText("vue");
+        jMenuItemUndo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemUndo.setText("Undo");
+        jMenuItemUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemUndoActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemUndo);
+
+        jMenuItemRedo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemRedo.setText("Redo");
+        jMenuItemRedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRedoActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemRedo);
+
+        jMenuBar1.add(jMenuEdit);
+
+        jMenuVue.setText("Vue");
 
         itemTools.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         itemTools.setSelected(true);
@@ -388,7 +422,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 itemToolsActionPerformed(evt);
             }
         });
-        jMenu3.add(itemTools);
+        jMenuVue.add(itemTools);
 
         itemParam.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         itemParam.setSelected(true);
@@ -398,7 +432,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 itemParamActionPerformed(evt);
             }
         });
-        jMenu3.add(itemParam);
+        jMenuVue.add(itemParam);
 
         itemGrid.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         itemGrid.setText("Afficher la grille");
@@ -407,7 +441,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 itemGridActionPerformed(evt);
             }
         });
-        jMenu3.add(itemGrid);
+        jMenuVue.add(itemGrid);
 
         jMenuItemZoomIn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemZoomIn.setText("Zoom +");
@@ -417,7 +451,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 jMenuItemZoomInActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItemZoomIn);
+        jMenuVue.add(jMenuItemZoomIn);
 
         jMenuItemZoomOut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SUBTRACT, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemZoomOut.setText("Zoom -");
@@ -427,9 +461,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 jMenuItemZoomOutActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItemZoomOut);
+        jMenuVue.add(jMenuItemZoomOut);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(jMenuVue);
 
         setJMenuBar(jMenuBar1);
 
@@ -481,7 +515,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         if (evt.getKeyCode() == 127) { // Code pour SUPPR
             if (interfacePlan.getStationIsSelected()) {
-                plan.removeFromElements(interfacePlan.getSelectedDataElement());
+                plan.removeElement(interfacePlan.getSelectedDataElement());
                 interfacePlan.setStationIsSelected(false);
                 this.panelParams.hideEditionStationInformations();
             }
@@ -492,23 +526,33 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         interfacePlan.repaint();
     }//GEN-LAST:event_formKeyPressed
 
+    private void jMenuItemUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUndoActionPerformed
+        undo();
+    }//GEN-LAST:event_jMenuItemUndoActionPerformed
+
+    private void jMenuItemRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRedoActionPerformed
+        redo();
+    }//GEN-LAST:event_jMenuItemRedoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel debug;
     private javax.swing.JCheckBoxMenuItem itemGrid;
     private javax.swing.JCheckBoxMenuItem itemParam;
     private javax.swing.JCheckBoxMenuItem itemTools;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuEdit;
+    private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenuItem jMenuItemClose;
     private javax.swing.JMenuItem jMenuItemExport;
     private javax.swing.JMenuItem jMenuItemNew;
     private javax.swing.JMenuItem jMenuItemOpen;
+    private javax.swing.JMenuItem jMenuItemRedo;
     private javax.swing.JMenuItem jMenuItemSave;
+    private javax.swing.JMenuItem jMenuItemUndo;
     private javax.swing.JMenuItem jMenuItemZoomIn;
     private javax.swing.JMenuItem jMenuItemZoomOut;
+    private javax.swing.JMenu jMenuVue;
     private javax.swing.JLabel logCoordinates;
     private javax.swing.JLabel logZoom;
     private javax.swing.JPanel panelInfo;
