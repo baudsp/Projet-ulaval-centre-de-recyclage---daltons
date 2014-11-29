@@ -4,7 +4,7 @@ import java.util.Map;
 
 public abstract class Component {
 
-    private float maxFlow;
+    protected float maxFlow;
     protected Map<String, Float> entranceProducts;
 
     public float getMaxFlow() {

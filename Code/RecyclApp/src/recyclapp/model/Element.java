@@ -12,11 +12,14 @@ public abstract class Element extends Component {
     protected int width, height;
     protected Coordinate coordinate;
     protected Image image;
+    protected int nbEntrances;
     protected int nbExits;
     protected Arc[] exits;
     protected Map<String, Map<Integer, Map<String, Float>>> matrix;
 
     public Element() {
+        nbEntrances = 1;
+        nbExits = 1;
         exits = new Arc[nbExits];
         entranceProducts = new HashMap<>();
         matrix = new HashMap<>();
@@ -58,11 +61,27 @@ public abstract class Element extends Component {
 
         for (int i = 0; i < nbExits; i++) {
             if (exits[i] == null) {
-                exit = i;
-                break;
+                return i;
             }
         }
         return exit;
+    }
+
+    public void addExit(Arc arc) {
+        for (int i = 0; i < exits.length; i++) {
+            if (exits[i] == null) {
+                exits[i] = arc;
+            }
+        }
+    }
+
+    public boolean isPossibleToAddExit() {
+        for (int i = 0; i < exits.length; i++) {
+            if (exits[i] == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addExit(int place, Arc arc) {
@@ -95,31 +114,77 @@ public abstract class Element extends Component {
         }
     }
 
-    public Map<String, Float> exitProductsFromArc(int exitNumber) {
-        Map<String, Float> result = new HashMap<>();
-        if (entranceProducts == null) {
-            return result;
-        }
+    public float getActualFlow() {
+        float flow = 0;
         Set<String> listProducts = entranceProducts.keySet();
         Iterator<String> listProductsIterator = listProducts.iterator();
         while (listProductsIterator.hasNext()) {
             String entranceProduct = listProductsIterator.next();
-            float entranceQuantity = entranceProducts.get(entranceProduct);
-            if ((matrix.containsKey(entranceProduct)) && (matrix.get(entranceProduct)).containsKey(exitNumber)) {
-                Map<String, Float> currentArc = matrix.get(entranceProduct).get(exitNumber);
-                Set<String> exitProducts = currentArc.keySet();
-                Iterator<String> exitProductIterator = exitProducts.iterator();
-                while (exitProductIterator.hasNext()) {
-                    String exitProduct = exitProductIterator.next();
-                    Float exitQuantity = entranceQuantity * currentArc.get(exitProduct) / 100;
-                    if (result.containsKey(exitProduct)) {
-                        exitQuantity += result.get(exitProduct);
+            flow += entranceProducts.get(entranceProduct);
+        }
+        return flow;
+    }
+
+    public Map<String, Float> exitProducts() {
+        Map<String, Float> exitProducts = new HashMap<>();
+        Map<String, Float> exitProductsFromArc = new HashMap<>();
+        for (int i = 0; i < exits.length; i++) {
+            exitProductsFromArc = exitProductsFromArc(i);
+            Set<String> listProducts = exitProductsFromArc.keySet();
+            Iterator<String> listProductsIterator = listProducts.iterator();
+            while (listProductsIterator.hasNext()) {
+                String entranceProduct = listProductsIterator.next();
+                float entranceQuantity = entranceProducts.get(entranceProduct);
+                if (exitProducts.containsKey(entranceProduct)) {
+                    entranceQuantity += exitProducts.get(entranceProducts);
+                }
+                exitProducts.put(entranceProduct, entranceQuantity);
+            }
+        }
+        return exitProducts;
+    }
+
+    // Récupère le dictionnaire de données Produit/Quantité pour un Arc en sortie (numéro de sortie)
+    public Map<String, Float> exitProductsFromArc(int exitNumber) {
+        Map<String, Float> result = new HashMap<>();
+        // Verifie la Map des produits en entree est instanciee
+        if (entranceProducts != null) {
+            Set<String> listProducts = entranceProducts.keySet();
+            Iterator<String> listProductsIterator = listProducts.iterator();
+            //Pour chaque produit en entree de l'element
+            while (listProductsIterator.hasNext()) {
+                String entranceProduct = listProductsIterator.next();
+                float entranceQuantity = entranceProducts.get(entranceProduct);
+                // Si Produit en entree present dans la matrice && Si Arc est une sortie de la transformation du produit
+                if ((matrix.containsKey(entranceProduct)) && (matrix.get(entranceProduct)).containsKey(exitNumber)) {
+                    Map<String, Float> currentArc = matrix.get(entranceProduct).get(exitNumber);
+                    Set<String> exitProducts = currentArc.keySet();
+                    Iterator<String> exitProductIterator = exitProducts.iterator();
+                    // Si le produit en sortie est deja dans la matrice, on ajoute la quantite produite par le produit en entree
+                    while (exitProductIterator.hasNext()) {
+                        String exitProduct = exitProductIterator.next();
+                        Float exitQuantity = entranceQuantity * currentArc.get(exitProduct) / 100;
+                        if (result.containsKey(exitProduct)) {
+                            exitQuantity += result.get(exitProduct);
+                        }
+                        result.put(exitProduct, exitQuantity);
                     }
-                    result.put(exitProduct, exitQuantity);
                 }
             }
         }
         return result;
+    }
+
+    public boolean isValid() {
+        for (int i = 0; i < exits.length; i++) {
+            if (exits[i] == null) {
+                return false;
+            }
+        }
+        if (getActualFlow() > maxFlow) {
+            return false;
+        }
+        return true;
     }
 
     public Arc[] getArcs() {
