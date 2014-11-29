@@ -1,7 +1,6 @@
 package recyclapp.model;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class EntreeUsine extends Element {
 
@@ -21,5 +20,10 @@ public class EntreeUsine extends Element {
         if (entranceProducts.containsKey(product)) {
             entranceProducts.remove(product);
         }
+    }
+
+    @Override
+    public boolean isPossibleToAddEntrance() {
+        return false;
     }
 }

@@ -3,6 +3,8 @@ package recyclapp.model;
 import java.awt.Image;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ public abstract class Element extends Component {
     protected int nbEntrances;
     protected int nbExits;
     protected Arc[] exits;
+    protected List<Arc> entrances;
     protected Map<String, Map<Integer, Map<String, Float>>> matrix;
 
     public Element() {
@@ -23,6 +26,7 @@ public abstract class Element extends Component {
         exits = new Arc[nbExits];
         entranceProducts = new HashMap<>();
         matrix = new HashMap<>();
+        entrances = new LinkedList<>();
     }
 
     public Coordinate getCoordinate() {
@@ -75,9 +79,13 @@ public abstract class Element extends Component {
         }
     }
 
+    public boolean isPossibleToAddEntrance() {
+        return true;
+    }
+
     public boolean isPossibleToAddExit() {
-        for (int i = 0; i < exits.length; i++) {
-            if (exits[i] == null) {
+        for (Arc exit : exits) {
+            if (exit == null) {
                 return true;
             }
         }
@@ -127,7 +135,7 @@ public abstract class Element extends Component {
 
     public Map<String, Float> exitProducts() {
         Map<String, Float> exitProducts = new HashMap<>();
-        Map<String, Float> exitProductsFromArc = new HashMap<>();
+        Map<String, Float> exitProductsFromArc;
         for (int i = 0; i < exits.length; i++) {
             exitProductsFromArc = exitProductsFromArc(i);
             Set<String> listProducts = exitProductsFromArc.keySet();
@@ -136,7 +144,7 @@ public abstract class Element extends Component {
                 String entranceProduct = listProductsIterator.next();
                 float entranceQuantity = entranceProducts.get(entranceProduct);
                 if (exitProducts.containsKey(entranceProduct)) {
-                    entranceQuantity += exitProducts.get(entranceProducts);
+                    entranceQuantity += exitProducts.get(entranceProduct);
                 }
                 exitProducts.put(entranceProduct, entranceQuantity);
             }
@@ -176,18 +184,28 @@ public abstract class Element extends Component {
     }
 
     public boolean isValid() {
-        for (int i = 0; i < exits.length; i++) {
-            if (exits[i] == null) {
-                return false;
-            }
-        }
         if (getActualFlow() > maxFlow) {
             return false;
+        }
+        for (Arc exit : exits) {
+            if (exit == null) {
+                return false;
+            }
         }
         return true;
     }
 
     public Arc[] getArcs() {
         return exits;
+    }
+
+    public void addEntrance(Arc entrance) {
+        entrances.add(entrance);
+    }
+
+    public void removeEntrance(Arc entrance) {
+        if (entrances.contains(entrance)) {
+            entrances.remove(entrance);
+        }
     }
 }

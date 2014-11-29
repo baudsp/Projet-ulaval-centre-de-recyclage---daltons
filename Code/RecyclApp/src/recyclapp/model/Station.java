@@ -28,6 +28,11 @@ public class Station extends Element {
         }
     }
 
+    @Override
+    public boolean isPossibleToAddEntrance() {
+        return entrances.isEmpty();
+    }
+
     public Arc[] getExits() {
         return exits;
     }
