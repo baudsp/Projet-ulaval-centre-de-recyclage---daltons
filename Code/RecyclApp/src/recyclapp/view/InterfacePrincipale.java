@@ -16,6 +16,7 @@ import recyclapp.model.Coordinate;
 import recyclapp.model.Element;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
+import recyclapp.model.Station;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -183,8 +184,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         DataElement dataElement = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
         interfacePlan.showSelectedElement(dataElement);
 
-        if (dataElement.element != null) {
-            this.panelParams.setParametersInformations(dataElement.element);
+        if (dataElement.element != null && dataElement.element.getClass().getName().equals(Station.class.getName())) {
+            this.panelParams.setParametersInformations((Station)dataElement.element);
         } else {
             this.panelParams.hideEditionStationInformations();
         }
@@ -219,7 +220,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
                         DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
                         interfacePlan.showSelectedElement(addedDataElement);
-                        this.panelParams.setParametersInformations(addedDataElement.element);
+			if (addedDataElement.element.getClass().getName().equals(Station.class.getName())) {
+			    this.panelParams.setParametersInformations((Station) addedDataElement.element);
+			}
                     }
                     this.panelTools.setMoveTools(false);
                 } else {
@@ -468,7 +471,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         });
         jMenuVue.add(itemGrid);
 
-        jCheckBoxMenuItemMagnetique.setSelected(true);
         jCheckBoxMenuItemMagnetique.setText("Grille magnétique");
         jMenuVue.add(jCheckBoxMenuItemMagnetique);
 

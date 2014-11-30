@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public class EntreeUsine extends Element {
 
-    public EntreeUsine() {
-        super();
+    public EntreeUsine(int x, int y, int width, int height) {
+        super(new Coordinate(x, y), 0,1, width, height);
         nbEntrances = 0;
         entranceProducts = new HashMap<>();
     }
@@ -25,5 +25,10 @@ public class EntreeUsine extends Element {
     @Override
     public boolean isPossibleToAddEntrance() {
         return false;
+    }
+
+    @Override
+    public int getType() {
+	return 1;
     }
 }

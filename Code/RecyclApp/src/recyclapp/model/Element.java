@@ -10,7 +10,7 @@ import java.util.Set;
 
 public abstract class Element extends Component {
 
-    protected int type;
+    protected int id;
     protected int width, height;
     protected Coordinate coordinate;
     protected Image image;
@@ -20,13 +20,16 @@ public abstract class Element extends Component {
     protected List<Arc> entrances;
     protected Map<String, Map<Integer, Map<String, Float>>> matrix;
 
-    public Element() {
-        nbEntrances = 1;
-        nbExits = 1;
+    public Element(Coordinate coordinate, int nbEntrances, int nbExits, int width, int height) {
+	this.coordinate = coordinate;
+        this.nbEntrances = nbEntrances;
+        this.nbExits = nbExits;
         exits = new Arc[nbExits];
         entranceProducts = new HashMap<>();
         matrix = new HashMap<>();
         entrances = new LinkedList<>();
+	this.width = width;
+	this.height = height;
     }
 
     public Coordinate getCoordinate() {
@@ -208,4 +211,6 @@ public abstract class Element extends Component {
             entrances.remove(entrance);
         }
     }
+
+    public abstract int getType();
 }

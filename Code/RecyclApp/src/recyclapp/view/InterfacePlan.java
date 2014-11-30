@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
 import recyclapp.model.Arc;
 import recyclapp.model.Coordinate;
+import recyclapp.model.Element;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
 
@@ -60,12 +61,18 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 
         for (int i = 0; i < this.interfacePrincipale.getListDataElements(isZoom).size(); i++) {
 
-            int id = this.interfacePrincipale.getListDataElements(isZoom).get(i).type;
+            int id = this.interfacePrincipale.getListDataElements(isZoom).get(i).element.getType();
             int x = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).x * zoom);
             int y = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).y * zoom);
             int w = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).width * zoom);
             int h = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).height * zoom);
-            g.drawImage(this.interfacePrincipale.getImageType(id), x, y, w, h, this);
+            
+	    Element a = this.interfacePrincipale.getListDataElements(isZoom).get(i).element;
+	    
+	    Image curImage = this.interfacePrincipale.getImageType(id);
+	    
+	    
+	    g.drawImage(curImage, x, y, w, h, this);
             Arc[] arcs = this.interfacePrincipale.getListDataElements(isZoom).get(i).element.getArcs();
             for (Arc arc : arcs) {
                 if (arc != null) {

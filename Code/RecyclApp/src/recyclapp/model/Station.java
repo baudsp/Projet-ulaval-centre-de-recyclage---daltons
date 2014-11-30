@@ -10,13 +10,9 @@ public class Station extends Element {
     private Dimension dimension;
 
     public Station(int id, int x, int y, int width, int height) {
-        super();
-        this.type = id;
+        super(new Coordinate(x, y), 1,1, width, height);
+        this.id = id;
         this.matrix = new HashMap<>();
-        this.height = height;
-        this.width = width;
-        this.coordinate = new Coordinate(x, y);
-        nbExits = 1;
         exits = new Arc[nbExits];
     }
 
@@ -105,5 +101,10 @@ public class Station extends Element {
 
     public void setDimension(int width, int height) {
         dimension = new Dimension(width, height);
+    }
+
+    @Override
+    public int getType() {
+	return 0;
     }
 }
