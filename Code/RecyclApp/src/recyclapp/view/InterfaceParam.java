@@ -5,6 +5,7 @@
  */
 package recyclapp.view;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,7 +35,6 @@ public class InterfaceParam extends javax.swing.JPanel {
         this.jPanelEditionStation.setVisible(false);
 	element = null;
     }
-  
     
     /**
      * Affichage des paramètres commun à tout les types d'element

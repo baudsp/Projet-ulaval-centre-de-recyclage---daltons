@@ -2,6 +2,7 @@ package recyclapp.view;
 
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -50,16 +51,28 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
         panelTools.addMouseMotionListener(this);
         panelTools.addMouseListener(this);
-
+        
         mip = new ModeleInterfacePrincipal(this);
         plan = new Plan();
         // NEW
         this.dataElementTemp = plan.new DataElement();
         this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
-	
-	
     }
 
+    public void updateInterfacePlan(float zoom){
+        interfacePlan.setPreferredSize(new Dimension((int) (2000 * zoom), (int) (2000 * zoom)));
+        
+        int value = jScrollPane1.getVerticalScrollBar().getValue();
+        int value2 = jScrollPane1.getHorizontalScrollBar().getValue();
+        
+        jScrollPane1.getVerticalScrollBar().setValue(value + 1);
+        jScrollPane1.getHorizontalScrollBar().setValue(value2 + 1);
+        
+        jScrollPane1.getVerticalScrollBar().setValue(value);
+        jScrollPane1.getHorizontalScrollBar().setValue(value2);
+        
+    }
+    
     public JLabel getLogCoordinates() {
         return logCoordinates;
     }

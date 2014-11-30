@@ -197,6 +197,8 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         } else {
             zoomOut();
         }
+        
+        interfacePrincipale.updateInterfacePlan(zoom);
     }
 
     public void zoomIn() {
