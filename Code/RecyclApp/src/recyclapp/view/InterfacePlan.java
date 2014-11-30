@@ -80,7 +80,8 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             }
             if (getStationIsSelected()) {
                 Coordinate coo = getSelectedDataElement().element.getCoordinate();
-                g.drawRect(coo.getX(), coo.getY(), getSelectedDataElement().width, getSelectedDataElement().height);
+                g.drawRect((int) (coo.getX() * zoom), (int) (coo.getY() * zoom), 
+                        (int) (getSelectedDataElement().width * zoom), (int) (getSelectedDataElement().height * zoom));
             }
         }
         isZoom = false;
