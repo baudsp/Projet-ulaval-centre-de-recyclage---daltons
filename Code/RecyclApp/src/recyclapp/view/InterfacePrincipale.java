@@ -55,8 +55,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         plan = new Plan();
         // NEW
         this.dataElementTemp = plan.new DataElement();
-        this.plan.createElement(1, 20, this.getHeight() / 2);
-
+        this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
+	
+	
     }
 
     public JLabel getLogCoordinates() {
@@ -184,8 +185,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         DataElement dataElement = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
         interfacePlan.showSelectedElement(dataElement);
 
-        if (dataElement.element != null && dataElement.element.getClass().getName().equals(Station.class.getName())) {
-            this.panelParams.setParametersInformations((Station)dataElement.element);
+        if (dataElement.element != null) {
+            this.panelParams.setParametersInformations(dataElement.element);
         } else {
             this.panelParams.hideEditionStationInformations();
         }
@@ -220,9 +221,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
                         DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
                         interfacePlan.showSelectedElement(addedDataElement);
-			if (addedDataElement.element.getClass().getName().equals(Station.class.getName())) {
-			    this.panelParams.setParametersInformations((Station) addedDataElement.element);
-			}
+			
+			this.panelParams.setParametersInformations(addedDataElement.element);
+			
                     }
                     this.panelTools.setMoveTools(false);
                 } else {
@@ -290,7 +291,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     private void restartPlan() {
         plan = new Plan();
-        this.plan.createElement(1, 20, this.getHeight() / 2);
+        this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
         interfacePlan.setStationIsSelected(false);
         this.panelParams.hideEditionStationInformations();
         interfacePlan.repaint();

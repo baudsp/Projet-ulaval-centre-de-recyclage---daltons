@@ -1,19 +1,19 @@
 package recyclapp.model;
 
 import java.awt.Dimension;
-import java.util.HashMap;
+import recyclapp.view.InterfaceOutils;
 
 public class Station extends Element {
 
-    private String name;
-    private String description;
-    private Dimension dimension;
 
-    public Station(int id, int x, int y, int width, int height) {
+    private Dimension dimension;
+    
+    public Station(int x, int y, int width, int height) {
         super(new Coordinate(x, y), 1,1, width, height);
-        this.id = id;
-        this.matrix = new HashMap<>();
+        
         exits = new Arc[nbExits];
+	
+	name = "Station " + this.id;
     }
 
     public void removeExit(Arc arc) {
@@ -45,22 +45,6 @@ public class Station extends Element {
         this.nbExits = numberOfExits;
         exits = newExits;
 
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Coordinate getCoordinates() {
@@ -105,6 +89,6 @@ public class Station extends Element {
 
     @Override
     public int getType() {
-	return 0;
+	return InterfaceOutils.ID_TOOL_STATION;
     }
 }

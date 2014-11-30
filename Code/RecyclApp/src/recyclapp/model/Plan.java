@@ -2,6 +2,7 @@ package recyclapp.model;
 
 import java.util.LinkedList;
 import java.util.Random;
+import recyclapp.view.InterfaceOutils;
 
 public class Plan {
 
@@ -101,16 +102,16 @@ public class Plan {
 	Element elt = null;
 
 	switch (type) {
-	    case 0:
-		elt = new Station(new Random().nextInt(40), x, y, 70, 70);
+	    case InterfaceOutils.ID_TOOL_STATION:
+		elt = new Station( x, y, 70, 70);
 		break;
-	    case 1:
+	    case InterfaceOutils.ID_TOOL_ENTREE:
 		elt = new EntreeUsine(x, y, 70, 70);
 		break;
-	    case 2:
+	    case InterfaceOutils.ID_TOOL_SORTIE:
 		elt = new SortieUsine(x, y, 70, 70);
 		break;
-	    case 3:
+	    case InterfaceOutils.ID_TOOL_JONCTION:
 		elt = new Jonction(x, y, 70, 70);
 		break;
 	    default:

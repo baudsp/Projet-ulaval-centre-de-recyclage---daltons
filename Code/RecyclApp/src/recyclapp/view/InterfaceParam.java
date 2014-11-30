@@ -5,12 +5,13 @@
  */
 package recyclapp.view;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.awt.FlowLayout;
+import java.util.Iterator;
 import java.util.Map;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import javax.swing.table.TableModel;
 import recyclapp.model.Element;
+import recyclapp.model.EntreeUsine;
 import recyclapp.model.Station;
 
 /**
@@ -19,7 +20,7 @@ import recyclapp.model.Station;
  */
 public class InterfaceParam extends javax.swing.JPanel {
 
-    
+    Element element = null;
 
      /**
      * Creates new form InterfaceParamBis
@@ -31,27 +32,55 @@ public class InterfaceParam extends javax.swing.JPanel {
        
     public void hideEditionStationInformations() {
         this.jPanelEditionStation.setVisible(false);
+	element = null;
     }
   
-   
-
-    void setParametersInformations(Station station) {
+    
+    /**
+     * Affichage des paramètres commun à tout les types d'element
+     * @param element 
+     */
+    public void setParametersInformations(Element element) {
+	this.element = element;
+	
 	jPanelEditionStation.setVisible(true);
 	
-	this.jTextFieldName.setText(station.getName());
-	this.jTextFieldDescription.setText(station.getDescription());
+	this.jTextFieldName.setText(element.getName());
+	this.jTextFieldDescription.setText(element.getDescription());
 	
-	this.jSpinnerDebitMax.setValue(station.getMaxFlow());
+	this.jSpinnerDebitMax.setValue(element.getMaxFlow());
 	
 	this.jValeursSorties.removeAll();
 	
-	for (int i = 0; i<station.getNumberOfExits(); i++) {
+	
+	// On ecrit le contenu de la matrice de transformation
+	Map<String, Map<Integer, Map<String, Float>>> matrix = element.getMatrix();
+	
+	Iterator<String> iteratorProduits = matrix.keySet().iterator();
+	
+	while (iteratorProduits.hasNext()) {
 	    
-	    this.jValeursSorties.add(new JLabel("sortie "+i));
+	    String produit = iteratorProduits.next();
+	    jValeursSorties.add(new JLabel(produit));
+	    Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);	    
+	    Iterator<Integer>iteratorSorties= matriceProduit.keySet().iterator();
+	    while (iteratorSorties.hasNext()) {
+		int numsortie = iteratorSorties.next();
+		
+		jValeursSorties.add(new JLabel("Sortie " + numsortie +" :"));
+		
+		float pourcentage = (float) matriceProduit.get(numsortie).values().toArray()[0];
+		// A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
+		
+		jValeursSorties.add(new JLabel(pourcentage + " %"));
+	    }
 	}
+	
 	jValeursSorties.repaint();
 	repaint();
     }
+    
+  
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -109,11 +138,12 @@ public class InterfaceParam extends javax.swing.JPanel {
 
         jSpinnerDebitMax.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
 
-        jLabel6.setText("Edition de la station");
+        jLabel6.setText("Essai");
 
         jLabel7.setText("Sorties de la station");
 
         jValeursSorties.setBackground(new java.awt.Color(164, 183, 145));
+        jValeursSorties.setLayout(new javax.swing.BoxLayout(jValeursSorties, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout jPanelEditionStationLayout = new javax.swing.GroupLayout(jPanelEditionStation);
         jPanelEditionStation.setLayout(jPanelEditionStationLayout);
@@ -173,7 +203,7 @@ public class InterfaceParam extends javax.swing.JPanel {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jValeursSorties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
