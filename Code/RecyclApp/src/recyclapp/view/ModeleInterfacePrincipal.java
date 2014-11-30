@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import recyclapp.model.Coordinate;
 
 /**
  *
@@ -49,13 +50,6 @@ public class ModeleInterfacePrincipal {
         } else {
             this.frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
-    }
-
-    public void drawImageFollowingCursor(int imageId, int x, int y) {
-        Image img = frame.getPanelTools().getImages(imageId);
-        x -= frame.getPanelTools().getWidth() + (img.getWidth(frame) * this.frame.getPanelMap().getZoom()) / 2;
-        y -= (img.getHeight(frame) * this.frame.getPanelMap().getZoom()) / 2;
-        frame.getPanelMap().drawImageFollowingCursor(frame.getPanelTools().getImages(imageId), x, y);
     }
 
     public void setVisiblePaneTools(boolean visible) {
@@ -168,5 +162,9 @@ public class ModeleInterfacePrincipal {
                 Logger.getLogger(InterfacePrincipale.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public Coordinate findCooMagnetique(int x, int y) {
+        return new Coordinate((x - x%70) + 35, (y - y%70) + 35);
     }
 }

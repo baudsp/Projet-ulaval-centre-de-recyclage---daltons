@@ -21,7 +21,6 @@ public class ChangeManager {
         lklkElement.add(currentIndex, lkElement);
         
         currentIndex = lklkElement.size();
-        System.out.println("SIZE : " + lklkElement.size());
     }
 
     public LinkedList<Element> undo() {

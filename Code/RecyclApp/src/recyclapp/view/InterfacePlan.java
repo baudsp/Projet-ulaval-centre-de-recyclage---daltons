@@ -31,7 +31,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         withGrid = false;
         isDrag = false;
         coordCursor = new int[2];
-        ecart = 50;
+        ecart = 70;
         zoom = 1;
         isZoom = false;
         //arcs = new LinkedList<>();
@@ -87,6 +87,8 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     }
 
     public void drawImageFollowingCursor(Image image, int x, int y) {
+        
+        x -= interfacePrincipale.getPanelTools().getWidth() / getZoom();
         imgCursor = image;
         isDrag = true;
         this.coordCursor[0] = x;

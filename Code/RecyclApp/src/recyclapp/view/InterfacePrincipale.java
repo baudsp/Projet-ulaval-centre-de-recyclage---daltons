@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import recyclapp.model.Coordinate;
 import recyclapp.model.Element;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
@@ -153,13 +154,26 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
         if (e.getSource().equals(interfacePlan)) {
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
-            if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
-                mip.drawImageFollowingCursor(this.dataElementTemp.type, e.getX() + this.panelTools.getWidth(), e.getY());
+
+            if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
+                double margin = this.panelTools.getWidth() / this.interfacePlan.getZoom();
+                if (jCheckBoxMenuItemMagnetique.isSelected()) { // interfacePlan.isWithGrid() ?
+                    Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
+                    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX() + margin), coo.getY());
+                } else {
+                    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (e.getX() + margin), e.getY());
+                }
             }
             this.interfacePlan.repaint();
         }
-        if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
-            mip.drawImageFollowingCursor(this.panelTools.getIdTools(), e.getX(), e.getY());
+        if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
+            if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
+                Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
+                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), (int) (coo.getX()), coo.getY());
+            } else {
+                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), (int) (e.getX()), e.getY());
+            }
+
             this.panelTools.repaint();
         }
     }
@@ -190,15 +204,20 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 mip.changeCursor(-1);
                 // NEW
                 if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
-                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth() / zoom - this.panelTools.getSizeImage() / 2);
-                    int y = (int) (e.getY() / zoom - (this.panelTools.getSizeImage()) / 2);
+                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth() / zoom);
+                    int y = (int) (e.getY() / zoom);
 
                     if (this.panelTools.getIdTools() >= 0
                             && !this.mip.isOverlapElement((int) (e.getX() / zoom - this.panelTools.getWidth()),
                                     (int) (e.getY() / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
+                        if (jCheckBoxMenuItemMagnetique.isSelected()) {
+                            Coordinate coo = mip.findCooMagnetique(x, y);
+                            x = coo.getX();
+                            y = coo.getY();
+                        }
                         this.plan.createElement(this.panelTools.getIdTools(), x, y);
 
-                        DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1);
+                        DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
                         interfacePlan.showSelectedElement(addedDataElement);
                         this.panelParams.setParametersInformations(addedDataElement.element);
                     }
@@ -224,6 +243,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 int y = (int) (e.getY() / zoom - (dataElementTemp.height) / 2);
 
                 if (!this.mip.isOverlapElement((int) (e.getX() / zoom), (int) (e.getY() / zoom), dataElementTemp.width, dataElementTemp.height)) {
+                    if (jCheckBoxMenuItemMagnetique.isSelected()) {
+                        Coordinate coo = mip.findCooMagnetique(x, y);
+                        x = coo.getX();
+                        y = coo.getY();
+                    }
                     this.plan.moveElement(dataElementTemp, x, y);
                 }
                 dataElementTemp = this.plan.new DataElement();
@@ -305,6 +329,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         itemTools = new javax.swing.JCheckBoxMenuItem();
         itemParam = new javax.swing.JCheckBoxMenuItem();
         itemGrid = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItemMagnetique = new javax.swing.JCheckBoxMenuItem();
         jMenuItemZoomIn = new javax.swing.JMenuItem();
         jMenuItemZoomOut = new javax.swing.JMenuItem();
 
@@ -443,6 +468,10 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         });
         jMenuVue.add(itemGrid);
 
+        jCheckBoxMenuItemMagnetique.setSelected(true);
+        jCheckBoxMenuItemMagnetique.setText("Grille magnétique");
+        jMenuVue.add(jCheckBoxMenuItemMagnetique);
+
         jMenuItemZoomIn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemZoomIn.setText("Zoom +");
         jMenuItemZoomIn.setName("jMenuItemZoomIn"); // NOI18N
@@ -534,12 +563,12 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         redo();
     }//GEN-LAST:event_jMenuItemRedoActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel debug;
     private javax.swing.JCheckBoxMenuItem itemGrid;
     private javax.swing.JCheckBoxMenuItem itemParam;
     private javax.swing.JCheckBoxMenuItem itemTools;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemMagnetique;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
