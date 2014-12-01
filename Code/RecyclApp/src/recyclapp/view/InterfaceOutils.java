@@ -37,10 +37,11 @@ public class InterfaceOutils extends JPanel {
         coord[1] = 0;
         images = new LinkedList<>();
         coordImage = new int[4][2];
-        images.add(ID_TOOL_STATION, getToolkit().getImage("resources/Station.png"));
-        images.add(ID_TOOL_ENTREE, getToolkit().getImage("resources/Entree.png"));
-        images.add(ID_TOOL_SORTIE, getToolkit().getImage("resources/Sortie.png"));
-        images.add(ID_TOOL_ARC, getToolkit().getImage("resources/Arc.png"));
+        images.add(ID_TOOL_STATION, getToolkit().getImage("src/recyclapp/resources/Station.png"));
+        images.add(ID_TOOL_ENTREE, getToolkit().getImage("src/recyclapp/resources/Entree.png"));
+        images.add(ID_TOOL_SORTIE, getToolkit().getImage("src/recyclapp/resources/Sortie.png"));
+        images.add(ID_TOOL_ARC, getToolkit().getImage("src/recyclapp/resources/Arc.png"));
+        //images.add(ID_TOOL_JONCTION, getToolkit().getImage("src/recyclapp/resources/Jonction.png"));
         sizeImage = 70;
 
         this.setBackground(new Color(164, 183, 145));
