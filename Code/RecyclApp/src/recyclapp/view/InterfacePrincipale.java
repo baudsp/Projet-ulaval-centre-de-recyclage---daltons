@@ -171,7 +171,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
             if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
-                double margin = this.panelTools.getWidth() / this.interfacePlan.getZoom();
+                double margin = this.panelTools.getWidth();
                 if (jCheckBoxMenuItemMagnetique.isSelected()) { // interfacePlan.isWithGrid() ?
                     Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                     interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX() + margin), coo.getY());
@@ -184,9 +184,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
             if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
-                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), (int) (coo.getX()), coo.getY());
+                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX(), coo.getY());
             } else {
-                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), (int) (e.getX()), e.getY());
+                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
             }
 
             this.panelTools.repaint();
@@ -219,14 +219,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 mip.changeCursor(-1);
                 // NEW
                 if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
-                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth() / zoom);
+                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
                     int y = (int) (e.getY() / zoom);
 
                     if (this.panelTools.getIdTools() >= 0
                             && !this.mip.isOverlapElement((int) (e.getX() / zoom - this.panelTools.getWidth()),
                                     (int) (e.getY() / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
                         if (jCheckBoxMenuItemMagnetique.isSelected()) {
-                            Coordinate coo = mip.findCooMagnetique(x, y);
+                            Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                             x = coo.getX();
                             y = coo.getY();
                         }
@@ -240,7 +240,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                     }
                     this.panelTools.setMoveTools(false);
                 } else {
-                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth() / zoom);
+                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
                     int y = (int) (e.getY() / zoom);
                     if (this.panelTools.getIdTools() >= 0
                             && this.plan.findDataElement(x, y, 1).element != null) { // 1 de findDataElement, n'est ce pas bizzare ?
@@ -261,7 +261,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
                 if (!this.mip.isOverlapElement((int) (e.getX() / zoom), (int) (e.getY() / zoom), dataElementTemp.width, dataElementTemp.height)) {
                     if (jCheckBoxMenuItemMagnetique.isSelected()) {
-                        Coordinate coo = mip.findCooMagnetique(x, y);
+                        Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                         x = coo.getX();
                         y = coo.getY();
                     }
