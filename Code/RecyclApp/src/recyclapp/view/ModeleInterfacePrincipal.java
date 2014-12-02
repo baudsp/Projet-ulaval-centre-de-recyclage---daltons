@@ -168,8 +168,8 @@ public class ModeleInterfacePrincipal {
         int ecart = frame.getPanelMap().getEcart();
         float zoom = frame.getPanelMap().getZoom();
         
-        int newX = (int)((x - x%(ecart * zoom)) + (ecart/2)*zoom);
-        int newY = (int)((y - y%(ecart * zoom)) + (ecart/2)*zoom);
+        int newX = (int)((x - x%(ecart * zoom)));
+        int newY = (int)((y - y%(ecart * zoom)));
         
         return new Coordinate(newX, newY);
     }

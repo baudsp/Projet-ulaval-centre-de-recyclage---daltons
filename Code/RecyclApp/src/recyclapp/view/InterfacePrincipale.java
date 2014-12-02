@@ -183,6 +183,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                 // TODO Décaler de (- imageWidth / 2) pour centrer la souris
+                
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX() - margin, coo.getY());
             } else {
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX() - margin, e.getY());
@@ -228,7 +229,12 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             y = coo.getY();
                         }
                         
-                        this.plan.createElement(this.panelTools.getIdTools(), (int) ((x - this.panelTools.getWidth())/zoom), (int) (y/zoom));
+                        int halfImageSize = panelTools.getSizeImage() / 2; // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
+                        
+                        int createX = (int) ((x - this.panelTools.getWidth())/zoom) - halfImageSize;
+                        int createY = (int) (y/zoom) - halfImageSize;
+                        
+                        this.plan.createElement(this.panelTools.getIdTools(), createX, createY);
 
                         DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
                         interfacePlan.showSelectedElement(addedDataElement);
@@ -263,7 +269,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                         x = coo.getX();
                         y = coo.getY();
                     }
-                    this.plan.moveElement(dataElementTemp, (int) (x/zoom), (int) (y/zoom));
+                    
+                    int halfImageSize = panelTools.getSizeImage() / 2;
+
+                    int moveX = (int) (x/zoom) - halfImageSize;
+                    int moveY = (int) (y/zoom) - halfImageSize;
+                    
+                    this.plan.moveElement(dataElementTemp, moveX, moveY);
                 }
                 dataElementTemp = this.plan.new DataElement();
             }
