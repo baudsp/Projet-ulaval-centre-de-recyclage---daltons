@@ -10,7 +10,6 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
 import recyclapp.model.Arc;
 import recyclapp.model.Coordinate;
-import recyclapp.model.Element;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
 
@@ -35,9 +34,6 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         ecart = 70;
         zoom = 1;
         isZoom = false;
-        //arcs = new LinkedList<>();
-        //setBackground(new java.awt.Color(255, 255, 255));
-        //eltCursor = null;
 
         this.setBackground(java.awt.Color.white);
         javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(this);
@@ -61,19 +57,19 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 
         for (int i = 0; i < this.interfacePrincipale.getListDataElements(isZoom).size(); i++) {
 
-            int id = this.interfacePrincipale.getListDataElements(isZoom).get(i).element.getType();
-            int x = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).x * zoom);
-            int y = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).y * zoom);
-            int w = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).width * zoom);
-            int h = (int) (this.interfacePrincipale.getListDataElements(isZoom).get(i).height * zoom);
+            DataElement dataElement = this.interfacePrincipale.getListDataElements(isZoom).get(i);
             
-	    Element a = this.interfacePrincipale.getListDataElements(isZoom).get(i).element;
-	    
+            int id = dataElement.element.getType();
+            int x = (int) (dataElement.x * zoom);
+            int y = (int) (dataElement.y * zoom);
+            int w = (int) (dataElement.width * zoom);
+            int h = (int) (dataElement.height * zoom);
+            
+            g.drawString(dataElement.element.getName(), x, y + h + 15);
+            
 	    Image curImage = this.interfacePrincipale.getImageType(id);
-	    
-	    
 	    g.drawImage(curImage, x, y, w, h, this);
-            Arc[] arcs = this.interfacePrincipale.getListDataElements(isZoom).get(i).element.getArcs();
+            Arc[] arcs = dataElement.element.getArcs();
             for (Arc arc : arcs) {
                 if (arc != null) {
                     g.drawLine(x + w / 2, y + h / 2,

@@ -2,7 +2,6 @@ package recyclapp.view;
 
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -17,7 +16,6 @@ import recyclapp.model.Coordinate;
 import recyclapp.model.Element;
 import recyclapp.model.Plan;
 import recyclapp.model.Plan.DataElement;
-import recyclapp.model.Station;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -545,12 +543,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemNewActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
-
-
+        // TODO : CHARGER
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        // TODO add your handling code here:
+        // TODO : SAUVEGARDER
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCloseActionPerformed
