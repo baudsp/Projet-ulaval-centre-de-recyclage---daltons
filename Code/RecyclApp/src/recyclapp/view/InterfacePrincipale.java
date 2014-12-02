@@ -169,26 +169,23 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
             if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
-                int margin = this.panelTools.getWidth();
+                
                 if (jCheckBoxMenuItemMagnetique.isSelected()) { // interfacePlan.isWithGrid() ?
                     Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
-                    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX() + margin), coo.getY());
+                    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX()), coo.getY());
                 } else {
-                    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (e.getX() + margin), e.getY());
+                    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (e.getX()), e.getY());
                 }
             }
             this.interfacePlan.repaint();
-        }
-        if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
-            
+        } else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
+            int margin = this.panelTools.getWidth();
             if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
-                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX(), coo.getY());
+                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX() - margin, coo.getY());
             } else {
-                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
+                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX() - margin, e.getY());
             }
-
-            this.panelTools.repaint();
         }
     }
 
@@ -230,7 +227,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             y = coo.getY();
                         }
                         
-                        this.plan.createElement(this.panelTools.getIdTools(), x - this.panelTools.getWidth(), y);
+                        this.plan.createElement(this.panelTools.getIdTools(), (int) ((x - this.panelTools.getWidth())/zoom), (int) (y/zoom));
 
                         DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
                         interfacePlan.showSelectedElement(addedDataElement);
@@ -265,7 +262,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                         x = coo.getX();
                         y = coo.getY();
                     }
-                    this.plan.moveElement(dataElementTemp, x, y);
+                    this.plan.moveElement(dataElementTemp, (int) (x/zoom), (int) (y/zoom));
                 }
                 dataElementTemp = this.plan.new DataElement();
             }
