@@ -42,18 +42,16 @@ public class InterfaceOutils extends JPanel {
         images.add(ID_TOOL_JONCTION, getToolkit().getImage("src/recyclapp/resources/Jonction.png"));
         sizeImage = 70;
         
-        this.setBackground(new Color(164, 183, 145));
-        this.setPreferredSize(new java.awt.Dimension(150, 588));
-        this.setLayout(new java.awt.BorderLayout());
-        
         initComponents();
         
         imagePanelStation.setImage(getToolkit().getImage("src/recyclapp/resources/Station.png"));
+        coordImage[ID_TOOL_STATION][0] = imagePanelStation.getX();
+        coordImage[ID_TOOL_STATION][1] = imagePanelStation.getY();
+                
         imagePanelEntree.setImage(getToolkit().getImage("src/recyclapp/resources/Entree.png"));
         imagePanelSortie.setImage(getToolkit().getImage("src/recyclapp/resources/Sortie.png"));
         imagePanelJonction.setImage(getToolkit().getImage("src/recyclapp/resources/Jonction.png"));
         imagePanelArc.setImage(getToolkit().getImage("src/recyclapp/resources/Arc.png"));
-        
     }
 
     /**
@@ -132,11 +130,28 @@ public class InterfaceOutils extends JPanel {
     @Override
     public void paintComponent(Graphics graphic) {
         super.paintComponent(graphic);
-        int height = 80;
+        int decalageX = 10;
+        int decalageY = 53;
+        
         
         for (int imageId = 0; imageId < images.size(); imageId++) {
-            coordImage[imageId][0] = this.getWidth() / 2 - (sizeImage / 2);
-            coordImage[imageId][1] = height * (imageId + 1);
+            if(imageId == ID_TOOL_STATION){
+                coordImage[imageId][0] = imagePanelStation.getX() + decalageX;
+                coordImage[imageId][1] = imagePanelStation.getY() + decalageY;
+            } else if(imageId == ID_TOOL_ENTREE){
+                coordImage[imageId][0] = imagePanelEntree.getX() + decalageX;
+                coordImage[imageId][1] = imagePanelEntree.getY() + decalageY;
+            } else if(imageId == ID_TOOL_SORTIE){
+                coordImage[imageId][0] = imagePanelSortie.getX() + decalageX;
+                coordImage[imageId][1] = imagePanelSortie.getY() + decalageY;
+            } else if(imageId == ID_TOOL_ARC){
+                coordImage[imageId][0] = imagePanelArc.getX() + decalageX;
+                coordImage[imageId][1] = imagePanelArc.getY() + decalageY;
+            } else if(imageId == ID_TOOL_JONCTION){
+                coordImage[imageId][0] = imagePanelJonction.getX() + decalageX;
+                coordImage[imageId][1] = imagePanelJonction.getY() + decalageY;
+            }
+            
             graphic.drawImage(images.get(imageId), coordImage[imageId][0], coordImage[imageId][1], sizeImage, sizeImage, this);
         }
         graphic.setColor(Color.red);
@@ -169,13 +184,16 @@ public class InterfaceOutils extends JPanel {
         imagePanelJonction = new recyclapp.view.ImagePanel();
 
         jPanelOutils.setBackground(new java.awt.Color(164, 183, 145));
+        jPanelOutils.setPreferredSize(new java.awt.Dimension(190, 555));
 
         jLabelOutils.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabelOutils.setText("Outils");
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(140, 70));
-        jPanel1.setPreferredSize(new java.awt.Dimension(140, 100));
-        jPanel1.setLayout(new java.awt.GridLayout(5, 2, 5, 5));
+        jPanel1.setBackground(new java.awt.Color(164, 183, 145));
+        jPanel1.setMinimumSize(new java.awt.Dimension(150, 70));
+        jPanel1.setName(""); // NOI18N
+        jPanel1.setPreferredSize(new java.awt.Dimension(150, 100));
+        jPanel1.setLayout(new java.awt.GridLayout(5, 2, 5, 20));
 
         jLabelStation.setText("  Station");
         jPanel1.add(jLabelStation);
@@ -204,14 +222,10 @@ public class InterfaceOutils extends JPanel {
         jPanelOutilsLayout.setHorizontalGroup(
             jPanelOutilsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelOutilsLayout.createSequentialGroup()
-                .addGroup(jPanelOutilsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelOutilsLayout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(jLabelOutils))
-                    .addGroup(jPanelOutilsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGap(61, 61, 61)
+                .addComponent(jLabelOutils)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelOutilsLayout.setVerticalGroup(
             jPanelOutilsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,10 +241,9 @@ public class InterfaceOutils extends JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanelOutils, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanelOutils, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
