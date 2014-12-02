@@ -233,9 +233,8 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     }
 
     private void logZoom() {
-        // permet d'arrondir à une décimale
-        float newZoom = Math.round(zoom * 10);
-        interfacePrincipale.getLogZoom().setText("    |    Zoom : " + newZoom / 10);
+        int newZoom = Math.round(zoom * 100);
+        interfacePrincipale.getLogZoom().setText("    |    Zoom : " + newZoom + "%");
     }
 
     @Override
