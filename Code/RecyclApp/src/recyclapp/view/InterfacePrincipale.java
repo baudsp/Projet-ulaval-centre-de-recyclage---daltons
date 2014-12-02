@@ -182,6 +182,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             int margin = this.panelTools.getWidth();
             if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
+                // TODO Décaler de (- imageWidth / 2) pour centrer la souris
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX() - margin, coo.getY());
             } else {
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX() - margin, e.getY());
@@ -253,12 +254,12 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 }
                 this.panelTools.repaint();
             } else if (e.getSource().equals(interfacePlan)) {
-                int x = (int) (e.getX() / zoom);
-                int y = (int) (e.getY() / zoom);
+                int x = e.getX();
+                int y = e.getY();
 
-                if (!this.mip.isOverlapElement((int) (e.getX() / zoom), (int) (e.getY() / zoom), dataElementTemp.width, dataElementTemp.height)) {
+                if (!this.mip.isOverlapElement((int) (x / zoom), (int) (y / zoom), dataElementTemp.width, dataElementTemp.height)) {
                     if (jCheckBoxMenuItemMagnetique.isSelected()) {
-                        Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
+                        Coordinate coo = mip.findCooMagnetique(x, y);
                         x = coo.getX();
                         y = coo.getY();
                     }

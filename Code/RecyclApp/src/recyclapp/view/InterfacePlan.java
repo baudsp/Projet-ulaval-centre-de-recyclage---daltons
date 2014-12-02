@@ -91,7 +91,6 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     }
 
     public void drawImageFollowingCursor(Image image, int x, int y) {
-        x -= interfacePrincipale.getPanelTools().getWidth();
         imgCursor = image;
         isDrag = true;
         this.coordCursor[0] = x;
