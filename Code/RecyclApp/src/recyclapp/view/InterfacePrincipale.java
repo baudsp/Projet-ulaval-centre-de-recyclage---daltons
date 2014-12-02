@@ -483,7 +483,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         });
         jMenuVue.add(itemGrid);
 
-        jCheckBoxMenuItemMagnetique.setSelected(true);
         jCheckBoxMenuItemMagnetique.setText("Grille magnétique");
         jMenuVue.add(jCheckBoxMenuItemMagnetique);
 
