@@ -137,6 +137,12 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     public float getZoom() {
         return zoom;
     }
+    
+    public void setZoom(float zoom){
+        this.zoom = zoom;
+        interfacePrincipale.updateInterfacePlan(zoom);
+        logZoom();
+    }
 
     private int[][] getArrowArc(int xExit, int yExit, int xEntrance, int yEntrance, float zoom) {
 

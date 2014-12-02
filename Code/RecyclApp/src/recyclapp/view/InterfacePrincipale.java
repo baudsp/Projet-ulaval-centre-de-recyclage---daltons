@@ -316,6 +316,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         plan = new Plan();
         this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
         interfacePlan.setStationIsSelected(false);
+        interfacePlan.setZoom(1);
         this.panelParams.hideEditionStationInformations();
         interfacePlan.repaint();
     }
