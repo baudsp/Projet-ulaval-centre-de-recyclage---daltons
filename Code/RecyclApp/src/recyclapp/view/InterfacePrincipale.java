@@ -169,7 +169,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
             if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
-                double margin = this.panelTools.getWidth();
+                int margin = this.panelTools.getWidth();
                 if (jCheckBoxMenuItemMagnetique.isSelected()) { // interfacePlan.isWithGrid() ?
                     Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                     interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX() + margin), coo.getY());
@@ -180,6 +180,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             this.interfacePlan.repaint();
         }
         if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
+            
             if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX(), coo.getY());
@@ -217,18 +218,19 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 mip.changeCursor(-1);
                 // NEW
                 if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
-                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
-                    int y = (int) (e.getY() / zoom);
+                    int x = e.getX();
+                    int y = e.getY();
 
                     if (this.panelTools.getIdTools() >= 0
-                            && !this.mip.isOverlapElement((int) (e.getX() / zoom - this.panelTools.getWidth()),
-                                    (int) (e.getY() / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
+                            && !this.mip.isOverlapElement((int) (x / zoom - this.panelTools.getWidth()),
+                                    (int) (y / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
                         if (jCheckBoxMenuItemMagnetique.isSelected()) {
-                            Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
+                            Coordinate coo = mip.findCooMagnetique(x, y);
                             x = coo.getX();
                             y = coo.getY();
                         }
-                        this.plan.createElement(this.panelTools.getIdTools(), x, y);
+                        
+                        this.plan.createElement(this.panelTools.getIdTools(), x - this.panelTools.getWidth(), y);
 
                         DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
                         interfacePlan.showSelectedElement(addedDataElement);
@@ -254,8 +256,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 }
                 this.panelTools.repaint();
             } else if (e.getSource().equals(interfacePlan)) {
-                int x = (int) (e.getX() / zoom - (dataElementTemp.width) / 2);
-                int y = (int) (e.getY() / zoom - (dataElementTemp.height) / 2);
+                int x = (int) (e.getX() / zoom);
+                int y = (int) (e.getY() / zoom);
 
                 if (!this.mip.isOverlapElement((int) (e.getX() / zoom), (int) (e.getY() / zoom), dataElementTemp.width, dataElementTemp.height)) {
                     if (jCheckBoxMenuItemMagnetique.isSelected()) {
@@ -483,6 +485,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         });
         jMenuVue.add(itemGrid);
 
+        jCheckBoxMenuItemMagnetique.setSelected(true);
         jCheckBoxMenuItemMagnetique.setText("Grille magnétique");
         jMenuVue.add(jCheckBoxMenuItemMagnetique);
 

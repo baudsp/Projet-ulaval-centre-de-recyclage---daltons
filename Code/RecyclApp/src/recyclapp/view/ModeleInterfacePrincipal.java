@@ -165,6 +165,9 @@ public class ModeleInterfacePrincipal {
     }
 
     public Coordinate findCooMagnetique(int x, int y) {
-        return new Coordinate((x - x%70) + 35, (y - y%70) + 35);
+        int ecart = frame.getPanelMap().getEcart();
+        int newX = (x - x%ecart) + ecart/2;
+        int newY = (y - y%ecart) + ecart/2;
+        return new Coordinate(newX, newY);
     }
 }
