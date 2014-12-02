@@ -1,8 +1,9 @@
 package recyclapp.model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class ChangeManager {
+public class ChangeManager implements Serializable{
 
     private int currentIndex = 0;
     private LinkedList<LinkedList<Element>> lklkElement = new LinkedList<>();

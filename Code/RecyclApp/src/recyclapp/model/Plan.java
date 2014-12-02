@@ -1,10 +1,10 @@
 package recyclapp.model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.Random;
 import recyclapp.view.InterfaceOutils;
 
-public class Plan {
+public class Plan implements Serializable{
 
     private LinkedList<Element> listElements;
     private DataElement tempDataElement = null;

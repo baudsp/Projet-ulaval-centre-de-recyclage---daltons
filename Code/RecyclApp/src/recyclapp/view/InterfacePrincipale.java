@@ -7,9 +7,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import recyclapp.model.Coordinate;
@@ -49,7 +60,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
         panelTools.addMouseMotionListener(this);
         panelTools.addMouseListener(this);
-        
+
         mip = new ModeleInterfacePrincipal(this);
         plan = new Plan();
         // NEW
@@ -57,20 +68,20 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
     }
 
-    public void updateInterfacePlan(float zoom){
+    public void updateInterfacePlan(float zoom) {
         interfacePlan.setPreferredSize(new Dimension((int) (2000 * zoom), (int) (2000 * zoom)));
-        
+
         int value = jScrollPane1.getVerticalScrollBar().getValue();
         int value2 = jScrollPane1.getHorizontalScrollBar().getValue();
-        
+
         jScrollPane1.getVerticalScrollBar().setValue(value + 1);
         jScrollPane1.getHorizontalScrollBar().setValue(value2 + 1);
-        
+
         jScrollPane1.getVerticalScrollBar().setValue(value);
         jScrollPane1.getHorizontalScrollBar().setValue(value2);
-        
+
     }
-    
+
     public JLabel getLogCoordinates() {
         return logCoordinates;
     }
@@ -169,7 +180,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
             if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
-                
+
                 if (jCheckBoxMenuItemMagnetique.isSelected()) { // interfacePlan.isWithGrid() ?
                     Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                     interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX()), coo.getY());
@@ -183,7 +194,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                 // TODO Décaler de (- imageWidth / 2) pour centrer la souris
-                
+
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX() - margin, coo.getY());
             } else {
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX() - margin, e.getY());
@@ -228,19 +239,19 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             x = coo.getX();
                             y = coo.getY();
                         }
-                        
+
                         int halfImageSize = panelTools.getSizeImage() / 2; // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
-                        
-                        int createX = (int) ((x - this.panelTools.getWidth())/zoom) - halfImageSize;
-                        int createY = (int) (y/zoom) - halfImageSize;
-                        
+
+                        int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
+                        int createY = (int) (y / zoom) - halfImageSize;
+
                         this.plan.createElement(this.panelTools.getIdTools(), createX, createY);
 
                         DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
                         interfacePlan.showSelectedElement(addedDataElement);
-			
-			this.panelParams.setParametersInformations(addedDataElement.element);
-			
+
+                        this.panelParams.setParametersInformations(addedDataElement.element);
+
                     }
                     this.panelTools.setMoveTools(false);
                 } else {
@@ -269,12 +280,12 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                         x = coo.getX();
                         y = coo.getY();
                     }
-                    
+
                     int halfImageSize = panelTools.getSizeImage() / 2;
 
-                    int moveX = (int) (x/zoom) - halfImageSize;
-                    int moveY = (int) (y/zoom) - halfImageSize;
-                    
+                    int moveX = (int) (x / zoom) - halfImageSize;
+                    int moveY = (int) (y / zoom) - halfImageSize;
+
                     this.plan.moveElement(dataElementTemp, moveX, moveY);
                 }
                 dataElementTemp = this.plan.new DataElement();
@@ -315,10 +326,83 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private void restartPlan() {
         plan = new Plan();
         this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
+        openPlan();
+    }
+
+    private void openPlan() {
         interfacePlan.setStationIsSelected(false);
         interfacePlan.setZoom(1);
         this.panelParams.hideEditionStationInformations();
         interfacePlan.repaint();
+    }
+
+    private void savePlan() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        int option = chooser.showSaveDialog(null);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            // TODO : Verifier que l'on écrase pas un fichier existant
+
+            File selectedPfile = chooser.getSelectedFile();
+            String path = selectedPfile.getAbsolutePath() + ".ser";
+
+            try {
+                FileOutputStream fout = new FileOutputStream(path);
+                ObjectOutputStream oos = new ObjectOutputStream(fout);
+                oos.writeObject(plan);
+                oos.close();
+            } catch (Exception ex) {
+                String questionEr = "Erreur : " + ex.getMessage();
+
+                JOptionPane.showMessageDialog(null,
+                        questionEr,
+                        "Erreur lors de la sauvegarde",
+                        JOptionPane.OK_OPTION,
+                        null);
+            }
+        }
+    }
+
+    private void chargePlan() {
+        String question = "Voulez vous sauvegarder le plan en cours d'abord ?";
+        Object[] optionsReponse = {"Oui, bien sûr !", "Non, merci"};
+        int n = JOptionPane.showOptionDialog(null,
+                question,
+                "Sauvegarder le plan en cours ?",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                optionsReponse,
+                optionsReponse[1]);
+
+        if (n == 0) {
+            savePlan(); // Gérer le cas où l'enregistrement se passe mal pour pas perdre les infos à sauvegarder
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        int option = chooser.showOpenDialog(null);
+        if (option == JFileChooser.APPROVE_OPTION) {
+
+            File selectedPfile = chooser.getSelectedFile();
+            String path = selectedPfile.getAbsolutePath();
+            try {
+                FileInputStream fin = new FileInputStream(path);
+                ObjectInputStream ois = new ObjectInputStream(fin);
+                plan = new Plan();
+                plan = (Plan) ois.readObject();
+                ois.close();
+                openPlan();
+            } catch (IOException | ClassNotFoundException ex) {
+                String questionEr = "Erreur : " + ex.getMessage();
+
+                JOptionPane.showMessageDialog(null,
+                        questionEr,
+                        "Erreur lors du chargement",
+                        JOptionPane.OK_OPTION,
+                        null);
+            }
+        }
     }
 
     public void undo() {
@@ -556,11 +640,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemNewActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
-        // TODO : CHARGER
+        chargePlan();
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        // TODO : SAUVEGARDER
+        savePlan();
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCloseActionPerformed

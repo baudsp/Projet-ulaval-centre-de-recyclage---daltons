@@ -1,8 +1,9 @@
 package recyclapp.model;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public abstract class Component {
+public abstract class Component  implements Serializable{
 
     protected float maxFlow;
     protected Map<String, Float> entranceProducts;
