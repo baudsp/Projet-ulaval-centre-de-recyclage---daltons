@@ -5,12 +5,17 @@
  */
 package recyclapp.view;
 
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.util.Iterator;
 import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 import recyclapp.model.Element;
 import recyclapp.model.EntreeUsine;
 import recyclapp.model.Station;
@@ -23,65 +28,82 @@ public class InterfaceParam extends javax.swing.JPanel {
 
     Element element = null;
 
-     /**
+    /**
      * Creates new form InterfaceParamBis
      */
     public InterfaceParam() {
-        initComponents();
-        this.jPanelEditionStation.setVisible(false);
+	initComponents();
+	this.jPanelEditionStation.setVisible(false);
     }
-       
+
     public void hideEditionStationInformations() {
-        this.jPanelEditionStation.setVisible(false);
+	this.jPanelEditionStation.setVisible(false);
 	element = null;
     }
-    
+
     /**
      * Affichage des paramètres commun à tout les types d'element
-     * @param element 
+     *
+     * @param element
      */
     public void setParametersInformations(Element element) {
 	this.element = element;
-	
+
 	jPanelEditionStation.setVisible(true);
-	
+
 	this.jTextFieldName.setText(element.getName());
 	this.jTextFieldDescription.setText(element.getDescription());
-	
+
 	this.jSpinnerDebitMax.setValue(element.getMaxFlow());
-	
+
 	this.jValeursSorties.removeAll();
-	
-	
+
 	// On ecrit le contenu de la matrice de transformation
 	Map<String, Map<Integer, Map<String, Float>>> matrix = element.getMatrix();
-	
+
 	Iterator<String> iteratorProduits = matrix.keySet().iterator();
+
+	GridBagConstraints c = new GridBagConstraints();
 	
+	int i = 0;
 	while (iteratorProduits.hasNext()) {
-	    
+
 	    String produit = iteratorProduits.next();
-	    jValeursSorties.add(new JLabel(produit));
-	    Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);	    
-	    Iterator<Integer>iteratorSorties= matriceProduit.keySet().iterator();
+
+	    c.gridx = 0;
+	    c.gridy = i;
+	    jValeursSorties.add(new JLabel(produit), c);
+
+	    Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);
+	    Iterator<Integer> iteratorSorties = matriceProduit.keySet().iterator();
 	    while (iteratorSorties.hasNext()) {
+		i++;
+
 		int numsortie = iteratorSorties.next();
-		
-		jValeursSorties.add(new JLabel("Sortie " + numsortie +" :"));
-		
+
+		c.gridx = 0;
+		c.gridy = i;
+		jValeursSorties.add(new JLabel("Sortie " + numsortie + " :"), c);
+
 		float pourcentage = (float) matriceProduit.get(numsortie).values().toArray()[0];
 		// A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
 		
-		jValeursSorties.add(new JLabel(pourcentage + " %"));
+		c.gridx = 1;
+		c.gridy = i;
+		jValeursSorties.add(new JTextField(pourcentage + ""), c);
+		
+		c.gridx = 2;
+		c.gridy = i;
+		jValeursSorties.add(new JLabel(" %"), c);
 	    }
+	    
+	    i++;
 	}
-	
+
 	jValeursSorties.repaint();
 	repaint();
     }
-    
-  
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -143,7 +165,7 @@ public class InterfaceParam extends javax.swing.JPanel {
         jLabel7.setText("Sorties de la station");
 
         jValeursSorties.setBackground(new java.awt.Color(164, 183, 145));
-        jValeursSorties.setLayout(new javax.swing.BoxLayout(jValeursSorties, javax.swing.BoxLayout.LINE_AXIS));
+        jValeursSorties.setLayout(new java.awt.GridBagLayout());
 
         javax.swing.GroupLayout jPanelEditionStationLayout = new javax.swing.GroupLayout(jPanelEditionStation);
         jPanelEditionStation.setLayout(jPanelEditionStationLayout);
@@ -230,7 +252,11 @@ public class InterfaceParam extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+	element.setName(jTextFieldName.getText());
+	element.setDescription(jTextFieldDescription.getText());
+	element.setMaxFlow((Float) jSpinnerDebitMax.getValue());
+	
+	
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

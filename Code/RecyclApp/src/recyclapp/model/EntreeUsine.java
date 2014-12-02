@@ -55,7 +55,7 @@ public class EntreeUsine extends Element {
 	    Map <Integer, Map<String, Float>> mapEntrances =  new HashMap<>();
 	    
 	    Map<String, Float> mapProduits = new HashMap<>();
-	    mapProduits.put(product, value);
+	    mapProduits.put(product, 100f);
 	    
 	    mapEntrances.put(1, mapProduits);
 	    	    
