@@ -16,7 +16,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanelOutils" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanelOutils" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -36,40 +40,18 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="jLabelJonction" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="4" max="32767" attributes="0"/>
-                          <Component id="jButtonJonction" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                          <Component id="jLabelOutils" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabelArc" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabelSortieUsine" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabelStation" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabelEntreeUsine" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jButtonStation" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jButtonEntree" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jButtonSortie" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="jButtonArc" alignment="1" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jPanel1" min="-2" pref="140" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                  <Component id="jLabelOutils" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -78,32 +60,9 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="jLabelOutils" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelStation" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonStation" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelEntreeUsine" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonEntree" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButtonSortie" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabelSortieUsine" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelArc" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonArc" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabelJonction" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonJonction" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="312" max="32767" attributes="0"/>
+                  <Component id="jPanel1" min="-2" pref="484" max="-2" attributes="0"/>
+                  <EmptySpace pref="20" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -117,56 +76,82 @@
             <Property name="text" type="java.lang.String" value="Outils"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabelStation">
+        <Container class="javax.swing.JPanel" name="jPanel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Station :"/>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[140, 70]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[140, 100]"/>
+            </Property>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabelEntreeUsine">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Entr&#xe9;e usine :"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabelSortieUsine">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Sortie usine :"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabelArc">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Arc :"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabelJonction">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Jonction :"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButtonStation">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton1"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButtonEntree">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton2"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButtonSortie">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton3"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButtonArc">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton4"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButtonJonction">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton5"/>
-          </Properties>
-        </Component>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="2"/>
+            <Property name="horizontalGap" type="int" value="5"/>
+            <Property name="rows" type="int" value="5"/>
+            <Property name="verticalGap" type="int" value="5"/>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="jLabelStation">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="  Station"/>
+              </Properties>
+            </Component>
+            <Container class="recyclapp.view.ImagePanel" name="imagePanelStation">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+                <Property name="useNullLayout" type="boolean" value="true"/>
+              </Layout>
+            </Container>
+            <Component class="javax.swing.JLabel" name="jLabelEntreeUsine">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="  Entr&#xe9;e usine"/>
+              </Properties>
+            </Component>
+            <Container class="recyclapp.view.ImagePanel" name="imagePanelEntree">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+                <Property name="useNullLayout" type="boolean" value="true"/>
+              </Layout>
+            </Container>
+            <Component class="javax.swing.JLabel" name="jLabelSortieUsine">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="  Sortie usine"/>
+              </Properties>
+            </Component>
+            <Container class="recyclapp.view.ImagePanel" name="imagePanelSortie">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+                <Property name="useNullLayout" type="boolean" value="true"/>
+              </Layout>
+            </Container>
+            <Component class="javax.swing.JLabel" name="jLabelArc">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="  Arc"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
+              </Properties>
+            </Component>
+            <Container class="recyclapp.view.ImagePanel" name="imagePanelArc">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+                <Property name="useNullLayout" type="boolean" value="true"/>
+              </Layout>
+            </Container>
+            <Component class="javax.swing.JLabel" name="jLabelJonction">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="  Jonction"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
+              </Properties>
+            </Component>
+            <Container class="recyclapp.view.ImagePanel" name="imagePanelJonction">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+                <Property name="useNullLayout" type="boolean" value="true"/>
+              </Layout>
+            </Container>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
   </SubComponents>
