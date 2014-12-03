@@ -77,8 +77,8 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             for (Arc arc : arcs) {
                 if (arc != null) {
                     g.setColor(Color.BLUE);
-                    drawArrow(g, x, y, (int) ((arc.getEntranceElement().getCoordinate().getX() * zoom)),
-                            (int) ((arc.getEntranceElement().getCoordinate().getY() * zoom)));
+                    drawArrow(g, x, y, arc.getEntranceElement().getCoordinate().getX(),
+                            arc.getEntranceElement().getCoordinate().getY());
                     g.setColor(Color.BLACK);
                 }
             }
@@ -93,31 +93,37 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
 
     private void drawArrow(Graphics g1, int xExit, int yExit, int xEntrance, int yEntrance) {
         int TAILLE_FLECHE = 20;
+        int sizeImage = (int) (interfacePrincipale.getPanelTools().getSizeImage() * zoom);
 
-        int sizeImage = interfacePrincipale.getPanelTools().getSizeImage();
+        // ATTENTION : Le zoom s'applique déjà sur Exit grâce à la méthode appelante
+        xExit = (int) (xExit);
+        yExit = (int) (yExit);
+
+        xEntrance = (int) (xEntrance * zoom);
+        yEntrance = (int) (yEntrance * zoom);
+
         // Modifie la position de départ
         if (xExit < xEntrance && yExit < yEntrance) {
-            xExit = xExit + sizeImage;
-            yExit = yExit + sizeImage;
+            xExit = (int) (xExit + sizeImage);
+            yExit = (int) (yExit + sizeImage);
         } else if (xExit < xEntrance && yExit > yEntrance) {
-            xExit = xExit + sizeImage;
+            xExit = (int) (xExit + sizeImage);
         } else if (xExit > xEntrance && yExit < yEntrance) {
-            yExit = yExit + sizeImage;
+            yExit = (int) (yExit + sizeImage);
         } else if (xExit > xEntrance && yExit > yEntrance) {
             // Rien à changer (xExit vaut xExit et yExit vaut yExit)
-        
         }
         // Modifie la position d'arrivée
         if (yExit > yEntrance) {
-            yEntrance = yEntrance + sizeImage;
+            yEntrance = (int) (yEntrance + sizeImage);
         }
-        if(xExit > xEntrance){
-            xEntrance = xEntrance + sizeImage;
+        if (xExit > xEntrance) {
+            xEntrance = (int) (xEntrance + sizeImage);
         }
 
         double dx = (xEntrance - xExit);
         double dy = (yEntrance - yExit);
-        
+
         Graphics2D g = (Graphics2D) g1.create();
 
         double angle = Math.atan2(dy, dx);
