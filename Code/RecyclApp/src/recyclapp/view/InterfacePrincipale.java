@@ -89,6 +89,10 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public JLabel getLogZoom() {
         return logZoom;
     }
+    
+    public JLabel getLogDebug(){
+        return logDebug;
+    }
 
     public void setLogCoordinates(JLabel logCoordinates) {
         this.logCoordinates = logCoordinates;
@@ -263,9 +267,15 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             if (this.plan.createArcEntrance(x, y)) {
                                 this.panelTools.setMoveTools(false);
                                 this.panelTools.resetTools();
+                                logDebug.setText("");
                             }
                         } else {
-                            this.plan.createArcExit(x, y);
+                            DataElement dataElement = this.plan.createArcExit(x, y);
+                            if(dataElement != null){
+                                logDebug.setText("Selectionner l'élément à relier à " + dataElement.element.getName());
+                            } else {
+                                logDebug.setText("");
+                            }
                         }
                     }
                 }
@@ -312,7 +322,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }
 
     public JLabel getDebug() {
-        return debug;
+        return logDebug;
     }
 
     @Override
@@ -424,7 +434,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         panelInfo = new javax.swing.JPanel();
         logCoordinates = new javax.swing.JLabel();
         logZoom = new javax.swing.JLabel();
-        debug = new javax.swing.JLabel();
+        logDebug = new javax.swing.JLabel();
         panelParams = new recyclapp.view.InterfaceParam();
         panelTools = new recyclapp.view.InterfaceOutils();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -470,8 +480,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         logZoom.setPreferredSize(new java.awt.Dimension(0, 0));
         panelInfo.add(logZoom, java.awt.BorderLayout.CENTER);
 
-        debug.setForeground(new java.awt.Color(254, 254, 254));
-        panelInfo.add(debug, java.awt.BorderLayout.EAST);
+        logDebug.setForeground(new java.awt.Color(254, 254, 254));
+        panelInfo.add(logDebug, java.awt.BorderLayout.EAST);
 
         getContentPane().add(panelInfo, java.awt.BorderLayout.PAGE_END);
         getContentPane().add(panelParams, java.awt.BorderLayout.LINE_END);
@@ -674,7 +684,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemRedoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel debug;
     private javax.swing.JCheckBoxMenuItem itemGrid;
     private javax.swing.JCheckBoxMenuItem itemParam;
     private javax.swing.JCheckBoxMenuItem itemTools;
@@ -693,6 +702,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private javax.swing.JMenuItem jMenuItemZoomOut;
     private javax.swing.JMenu jMenuVue;
     private javax.swing.JLabel logCoordinates;
+    private javax.swing.JLabel logDebug;
     private javax.swing.JLabel logZoom;
     private javax.swing.JPanel panelInfo;
     private recyclapp.view.InterfaceParam panelParams;

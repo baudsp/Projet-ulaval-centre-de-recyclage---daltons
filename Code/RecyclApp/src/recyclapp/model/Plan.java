@@ -42,7 +42,7 @@ public class Plan implements Serializable {
         listElements = new LinkedList<>();
     }
 
-    public void createArcExit(int x, int y) {
+    public DataElement createArcExit(int x, int y) {
         DataElement dataElement = findDataElement(x, y, 1);
         if (dataElement.element != null && (dataElement.element.getFirstFreeExit() >= 0)) {
             tempDataElement = dataElement;
@@ -53,7 +53,7 @@ public class Plan implements Serializable {
                 message = "Rien ne peut partir d'une sortie, tout doit y arriver.";
             } else {
                 if(dataElement.type == InterfaceOutils.ID_TOOL_ENTREE){
-                    message = "Ajoutez une autre entrée, une entrée n'a qu'une sortie possible";
+                    message = "Ajoutez une autre entrée d'usine.";
                 } else {
                     message = "Plus de sorties disponibles pour l'élément. Augmentez ce nombre.";
                 }
@@ -65,6 +65,7 @@ public class Plan implements Serializable {
                     JOptionPane.OK_OPTION,
                     null);
         }
+        return tempDataElement;
     }
 
     public boolean createArcEntrance(int x, int y) {
