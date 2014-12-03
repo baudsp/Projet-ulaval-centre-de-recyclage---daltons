@@ -52,7 +52,11 @@ public class Plan implements Serializable {
             if (dataElement.type == InterfaceOutils.ID_TOOL_SORTIE) {
                 message = "Rien ne peut partir d'une sortie, tout doit y arriver.";
             } else {
-                message = "Plus de sorties disponibles pour l'élément. Augmentez ce nombre.";
+                if(dataElement.type == InterfaceOutils.ID_TOOL_ENTREE){
+                    message = "Ajoutez une autre entrée, une entrée n'a qu'une sortie possible";
+                } else {
+                    message = "Plus de sorties disponibles pour l'élément. Augmentez ce nombre.";
+                }
             }
 
             JOptionPane.showMessageDialog(null,
@@ -69,7 +73,7 @@ public class Plan implements Serializable {
 
         if (dataElement.element != null) {
             String message = "Erreur lors de l'ajout de l'arc.";
-            if (dataElement.type != InterfaceOutils.ID_TOOL_SORTIE && tempDataElement.type != InterfaceOutils.ID_TOOL_ENTREE) {
+            if (dataElement.type != InterfaceOutils.ID_TOOL_SORTIE || tempDataElement.type != InterfaceOutils.ID_TOOL_ENTREE) {
                 if (dataElement.element.getFirstFreeEntrance() >= 0) {
                     if (!dataElement.element.equals(tempDataElement.element)) { // si les éléments sont différents on enregistre
                         tempDataElement.element.addExit(tempDataElement.element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element));
