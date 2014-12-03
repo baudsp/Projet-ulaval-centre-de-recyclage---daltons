@@ -2,6 +2,7 @@ package recyclapp.model;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 import recyclapp.view.InterfaceOutils;
 
 public class Plan implements Serializable {
@@ -45,8 +46,12 @@ public class Plan implements Serializable {
         DataElement dataElement = findDataElement(x, y, 1);
         if (dataElement.element != null && (dataElement.element.getFirstFreeExit() >= 0)) {
             tempDataElement = dataElement;
-        } else{
-            // Afficher erreur
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Plus de sorties disponibles pour l'élément. Augmentez ce nombre.",
+                    "Erreur lors de l'ajout de l'arc",
+                    JOptionPane.OK_OPTION,
+                    null);
         }
     }
 
@@ -54,24 +59,32 @@ public class Plan implements Serializable {
         boolean found = false;
         DataElement dataElement = findDataElement(x, y, 1);
         if (dataElement.element != null) {
-            if (tempDataElement.element.getFirstFreeEntrance() >= 0) {
+            if (dataElement.element.getFirstFreeEntrance() >= 0) {
                 if (!dataElement.element.equals(tempDataElement.element)) { // si les éléments sont différents on enregistre
                     tempDataElement.element.addExit(tempDataElement.element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element));
                     dataElement.element.addEntrance();
                     tempDataElement = null;
                     found = true;
                 } else {
-                    // Afficher erreur
+                    JOptionPane.showMessageDialog(null,
+                            "Selectionnez un élément différent la deuxième fois.",
+                            "Erreur lors de l'ajout de l'arc",
+                            JOptionPane.OK_OPTION,
+                            null);
                 }
-            } else{
-                // Afficher erreur
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Plus d'entrées disponibles pour l'élément. Utilisez une jonction.",
+                        "Erreur lors de l'ajout de l'arc",
+                        JOptionPane.OK_OPTION,
+                        null);
+            }
         }
+
+        return found;
     }
 
-    return found ;
-}
-
-public LinkedList<DataElement> getListDataElements() {
+    public LinkedList<DataElement> getListDataElements() {
         LinkedList<DataElement> listDataElements = new LinkedList<DataElement>();
         for (Element elt : listElements) {
             listDataElements.add(new DataElement(elt));

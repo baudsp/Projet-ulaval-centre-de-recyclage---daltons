@@ -7,6 +7,7 @@ public class Jonction extends Element {
     public Jonction(int x, int y, int width, int height) {
         super(new Coordinate(x, y),1,1, width, height);
 	name = "Jonction " + this.id;
+        nbEntrancesAvailable = 10;
     }
 
     @Override
