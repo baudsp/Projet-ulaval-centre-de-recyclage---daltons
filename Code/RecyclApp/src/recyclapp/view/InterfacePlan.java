@@ -67,12 +67,14 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             
             g.setColor(dataElement.element.getColor());
             g.drawString(dataElement.element.getName(), x, y + h + 15);
+            g.setColor(Color.BLACK);
             
 	    Image curImage = this.interfacePrincipale.getImageType(id);
 	    g.drawImage(curImage, x, y, w, h, this);
             Arc[] arcs = dataElement.element.getArcs();
             for (Arc arc : arcs) {
                 if (arc != null) {
+                    g.setColor(Color.BLUE);
                     g.drawLine(x + w / 2, y + h / 2,
                             (int) ((arc.getEntranceElement().getCoordinate().getX() * zoom + w / 2)),
                             (int) (arc.getEntranceElement().getCoordinate().getY() * zoom + w / 2));
@@ -80,6 +82,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
                             (int) ((arc.getEntranceElement().getCoordinate().getX() * zoom + w / 2)),
                             (int) ((arc.getEntranceElement().getCoordinate().getY() * zoom + w / 2)), zoom);
                     g.fillPolygon(tabPts[0], tabPts[1], 3);
+                    g.setColor(Color.BLACK);
                 }
             }
             if (getStationIsSelected()) {
