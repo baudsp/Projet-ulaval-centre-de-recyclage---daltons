@@ -121,9 +121,9 @@ public class ModeleInterfacePrincipal {
     }
     
     public void exportImageAsPng(){
-        BufferedImage bufferedImage = new BufferedImage(frame.getSize().width, frame.getSize().height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bufferedImage = new BufferedImage(frame.getPanelMap().getSize().width, frame.getPanelMap().getSize().height, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = bufferedImage.createGraphics();
-        frame.paint(graphics);
+        frame.getPanelMap().paint(graphics);
         graphics.dispose();
 
         JFileChooser chooser = new JFileChooser();
