@@ -2,11 +2,13 @@ package recyclapp.view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.AffineTransform;
 import javax.swing.JPanel;
 import recyclapp.model.Arc;
 import recyclapp.model.Coordinate;
@@ -58,45 +60,81 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         for (int i = 0; i < this.interfacePrincipale.getListDataElements(isZoom).size(); i++) {
 
             DataElement dataElement = this.interfacePrincipale.getListDataElements(isZoom).get(i);
-            
+
             int id = dataElement.element.getType();
             int x = (int) (dataElement.x * zoom);
             int y = (int) (dataElement.y * zoom);
             int w = (int) (dataElement.width * zoom);
             int h = (int) (dataElement.height * zoom);
-            
+
             g.setColor(dataElement.element.getColor());
             g.drawString(dataElement.element.getName(), x, y + h + 15);
             g.setColor(Color.BLACK);
-            
-	    Image curImage = this.interfacePrincipale.getImageType(id);
-	    g.drawImage(curImage, x, y, w, h, this);
+
+            Image curImage = this.interfacePrincipale.getImageType(id);
+            g.drawImage(curImage, x, y, w, h, this);
             Arc[] arcs = dataElement.element.getArcs();
             for (Arc arc : arcs) {
                 if (arc != null) {
                     g.setColor(Color.BLUE);
-                    g.drawLine(x + w / 2, y + h / 2,
-                            (int) ((arc.getEntranceElement().getCoordinate().getX() * zoom + w / 2)),
-                            (int) (arc.getEntranceElement().getCoordinate().getY() * zoom + w / 2));
-                    int[][] tabPts = getArrowArc(x + w / 2, y + h / 2,
-                            (int) ((arc.getEntranceElement().getCoordinate().getX() * zoom + w / 2)),
-                            (int) ((arc.getEntranceElement().getCoordinate().getY() * zoom + w / 2)), zoom);
-                    g.fillPolygon(tabPts[0], tabPts[1], 3);
+                    drawArrow(g, x, y, (int) ((arc.getEntranceElement().getCoordinate().getX() * zoom)),
+                            (int) ((arc.getEntranceElement().getCoordinate().getY() * zoom)));
                     g.setColor(Color.BLACK);
                 }
             }
             if (getStationIsSelected()) {
                 Coordinate coo = getSelectedDataElement().element.getCoordinate();
-                g.drawRect((int) (coo.getX() * zoom), (int) (coo.getY() * zoom), 
+                g.drawRect((int) (coo.getX() * zoom), (int) (coo.getY() * zoom),
                         (int) (getSelectedDataElement().width * zoom), (int) (getSelectedDataElement().height * zoom));
             }
         }
         isZoom = false;
     }
 
+    private void drawArrow(Graphics g1, int xExit, int yExit, int xEntrance, int yEntrance) {
+        int TAILLE_FLECHE = 20;
+
+        int sizeImage = interfacePrincipale.getPanelTools().getSizeImage();
+        // Modifie la position de départ
+        if (xExit < xEntrance && yExit < yEntrance) {
+            xExit = xExit + sizeImage;
+            yExit = yExit + sizeImage;
+        } else if (xExit < xEntrance && yExit > yEntrance) {
+            xExit = xExit + sizeImage;
+        } else if (xExit > xEntrance && yExit < yEntrance) {
+            yExit = yExit + sizeImage;
+        } else if (xExit > xEntrance && yExit > yEntrance) {
+            // Rien à changer (xExit vaut xExit et yExit vaut yExit)
+        
+        }
+        // Modifie la position d'arrivée
+        if (yExit > yEntrance) {
+            yEntrance = yEntrance + sizeImage;
+        }
+        if(xExit > xEntrance){
+            xEntrance = xEntrance + sizeImage;
+        }
+
+        double dx = (xEntrance - xExit);
+        double dy = (yEntrance - yExit);
+        
+        Graphics2D g = (Graphics2D) g1.create();
+
+        double angle = Math.atan2(dy, dx);
+
+        int distance = (int) Math.sqrt(dx * dx + dy * dy);
+        AffineTransform at = AffineTransform.getTranslateInstance(xExit, yExit);
+        at.concatenate(AffineTransform.getRotateInstance(angle));
+        g.transform(at);
+
+        g.drawLine(0, 0, distance, 0);
+        g.fillPolygon(new int[]{distance, distance - TAILLE_FLECHE, distance - TAILLE_FLECHE, distance},
+                new int[]{0, -TAILLE_FLECHE, TAILLE_FLECHE, 0}, 4);
+    }
+
     public void drawImageFollowingCursor(Image image, int x, int y) {
         int halfImageSize = (int) ((interfacePrincipale.getPanelTools().getSizeImage() / 2) * zoom);
-        
+
         imgCursor = image;
         isDrag = true;
         this.coordCursor[0] = x - halfImageSize;
@@ -141,59 +179,11 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     public float getZoom() {
         return zoom;
     }
-    
-    public void setZoom(float zoom){
+
+    public void setZoom(float zoom) {
         this.zoom = zoom;
         interfacePrincipale.updateInterfacePlan(zoom);
         logZoom();
-    }
-
-    private int[][] getArrowArc(int xExit, int yExit, int xEntrance, int yEntrance, float zoom) {
-
-        int largeurFleche = (int) (30 * zoom);
-        int longeurFleche = (int) (40 * zoom);
-
-        double opposeSurAdjacent = ((double) yExit - yEntrance) / ((double) xExit - xEntrance);
-
-        double angleAvecHorizontale = Math.atan(opposeSurAdjacent);
-
-        double angle2 = angleAvecHorizontale + Math.PI / 2;
-
-        // Equation de droite y = ax + b
-        //trouver le coef de la droite : a
-//        double coefDroite = (yEntrance - yExit) / (xEntrance - xExit);
-        // trouver l'ordonnée à l'origine b = y - a * x
-//        double ordonneeOrigine = yExit - (coefDroite * xExit);
-//      // distance entre deux points RAC((x2 - x1)² + (y2 - y1)²)
-        int xMilieu = (xEntrance + xExit) / 2;
-        int yMilieu = (yEntrance + yExit) / 2;
-
-        double xPi;
-        double yPi;
-
-        if (xExit < xEntrance) {
-            xPi = xMilieu + Math.cos(angleAvecHorizontale) * longeurFleche;
-            yPi = yMilieu + Math.sin(angleAvecHorizontale) * longeurFleche;
-        } else {
-            xPi = xMilieu - Math.cos(angleAvecHorizontale) * longeurFleche;
-            yPi = yMilieu - Math.sin(angleAvecHorizontale) * longeurFleche;
-        }
-
-        double xP2 = xMilieu + Math.cos(angle2) * largeurFleche / 2;
-        double yP2 = yMilieu + Math.sin(angle2) * largeurFleche / 2;
-
-        double xP3 = xMilieu * 2 - xP2;
-        double yP3 = yMilieu * 2 - yP2;
-
-        int[] tabX = {(int) xP2, (int) xP3, (int) xPi};
-        int[] tabY = {(int) yP2, (int) yP3, (int) yPi};
-
-        int[][] tabPts = new int[2][3];
-
-        tabPts[0] = tabX;
-        tabPts[1] = tabY;
-
-        return tabPts;
     }
 
     @Override
@@ -203,7 +193,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         } else {
             zoomOut();
         }
-        
+
         interfacePrincipale.updateInterfacePlan(zoom);
     }
 
