@@ -5,20 +5,15 @@
  */
 package recyclapp.view;
 
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.util.Iterator;
 import java.util.Map;
-import javax.swing.BoxLayout;
+import javax.swing.JColorChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import recyclapp.model.Element;
-import recyclapp.model.EntreeUsine;
-import recyclapp.model.Station;
 
 /**
  *
@@ -27,6 +22,7 @@ import recyclapp.model.Station;
 public class InterfaceParam extends javax.swing.JPanel {
 
     Element element = null;
+    Color selectedColor;
 
     /**
      * Creates new form InterfaceParamBis
@@ -117,7 +113,7 @@ public class InterfaceParam extends javax.swing.JPanel {
         jTextArea1 = new javax.swing.JTextArea();
         jLabelParameters = new javax.swing.JLabel();
         jPanelEditionStation = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jButtonValidate = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -127,6 +123,7 @@ public class InterfaceParam extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jValeursSorties = new javax.swing.JPanel();
+        jButtonChoseColor = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -143,10 +140,10 @@ public class InterfaceParam extends javax.swing.JPanel {
 
         jPanelEditionStation.setBackground(new java.awt.Color(164, 183, 145));
 
-        jButton1.setText("Valider");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonValidate.setText("Valider");
+        jButtonValidate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonValidateActionPerformed(evt);
             }
         });
 
@@ -167,13 +164,20 @@ public class InterfaceParam extends javax.swing.JPanel {
         jValeursSorties.setBackground(new java.awt.Color(164, 183, 145));
         jValeursSorties.setLayout(new java.awt.GridBagLayout());
 
+        jButtonChoseColor.setText("Choisir couleur");
+        jButtonChoseColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonChoseColorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelEditionStationLayout = new javax.swing.GroupLayout(jPanelEditionStation);
         jPanelEditionStation.setLayout(jPanelEditionStationLayout);
         jPanelEditionStationLayout.setHorizontalGroup(
             jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelEditionStationLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelEditionStationLayout.createSequentialGroup()
@@ -188,11 +192,11 @@ public class InterfaceParam extends javax.swing.JPanel {
                                 .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                                     .addComponent(jTextFieldDescription)))))
-                    .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelEditionStationLayout.createSequentialGroup()
                         .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelEditionStationLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jButton1))
+                                .addComponent(jButtonValidate))
                             .addGroup(jPanelEditionStationLayout.createSequentialGroup()
                                 .addGap(30, 30, 30)
                                 .addComponent(jLabel6))
@@ -204,6 +208,10 @@ public class InterfaceParam extends javax.swing.JPanel {
                                 .addComponent(jValeursSorties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonChoseColor)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelEditionStationLayout.setVerticalGroup(
             jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,8 +233,10 @@ public class InterfaceParam extends javax.swing.JPanel {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jValeursSorties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonChoseColor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                .addComponent(jButtonValidate)
                 .addContainerGap())
         );
 
@@ -251,17 +261,22 @@ public class InterfaceParam extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValidateActionPerformed
 	element.setName(jTextFieldName.getText());
 	element.setDescription(jTextFieldDescription.getText());
 	element.setMaxFlow((Float) jSpinnerDebitMax.getValue());
-	
-	
-    }//GEN-LAST:event_jButton1ActionPerformed
+        element.setColor(selectedColor);
+    }//GEN-LAST:event_jButtonValidateActionPerformed
+
+    private void jButtonChoseColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChoseColorActionPerformed
+        JFrame guiFrame = new JFrame();
+        selectedColor = JColorChooser.showDialog(guiFrame, "Choisissez une couleur" , element.getColor());
+    }//GEN-LAST:event_jButtonChoseColorActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonChoseColor;
+    private javax.swing.JButton jButtonValidate;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

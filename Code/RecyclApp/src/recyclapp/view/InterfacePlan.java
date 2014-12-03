@@ -65,6 +65,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             int w = (int) (dataElement.width * zoom);
             int h = (int) (dataElement.height * zoom);
             
+            g.setColor(dataElement.element.getColor());
             g.drawString(dataElement.element.getName(), x, y + h + 15);
             
 	    Image curImage = this.interfacePrincipale.getImageType(id);
