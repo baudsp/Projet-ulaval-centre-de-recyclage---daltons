@@ -226,7 +226,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
             if (this.panelTools.isMoveTools()) {
                 mip.changeCursor(-1);
-                // NEW
                 if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
                     int x = e.getX();
                     int y = e.getY();
@@ -239,8 +238,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             x = coo.getX();
                             y = coo.getY();
                         }
-
-                        int halfImageSize = panelTools.getSizeImage() / 2; // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
+                        
+                        // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
+                        int halfImageSize = panelTools.getSizeImage() / 2; 
 
                         int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
                         int createY = (int) (y / zoom) - halfImageSize;
@@ -254,7 +254,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
                     }
                     this.panelTools.setMoveTools(false);
-                } else {
+                } else { // CREATE ARC
                     int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
                     int y = (int) (e.getY() / zoom);
                     if (this.panelTools.getIdTools() >= 0

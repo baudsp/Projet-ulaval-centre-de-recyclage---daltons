@@ -9,7 +9,7 @@ public class EntreeUsine extends Element {
 
     public EntreeUsine(int x, int y, int width, int height) {
         super(new Coordinate(x, y), 0,1, width, height);
-        nbEntrances = 0;
+        nbEntrancesAvailable = 0;
         entranceProducts = new HashMap<>();
 	
 	name = "Entree " + this.id;

@@ -15,7 +15,7 @@ public abstract class Element extends Component {
     protected int width, height;
     protected Coordinate coordinate;
     protected Image image;
-    protected int nbEntrances;
+    protected int nbEntrancesAvailable = 1;
     protected int nbExits;
     protected Arc[] exits;
     protected List<Arc> entrances;
@@ -25,7 +25,7 @@ public abstract class Element extends Component {
 
     public Element(Coordinate coordinate, int nbEntrances, int nbExits, int width, int height) {
 	this.coordinate = coordinate;
-	this.nbEntrances = nbEntrances;
+	this.nbEntrancesAvailable = nbEntrances;
 	this.nbExits = nbExits;
 	exits = new Arc[nbExits];
 	entranceProducts = new HashMap<>();
@@ -35,9 +35,6 @@ public abstract class Element extends Component {
 	this.height = height;
 	
 	this.id = new Random().nextInt(40);
-	
-	
-	
     }
 
     public Coordinate getCoordinate() {
@@ -76,10 +73,21 @@ public abstract class Element extends Component {
 
 	for (int i = 0; i < nbExits; i++) {
 	    if (exits[i] == null) {
-		return i;
+		exit = i;
+                break;
 	    }
 	}
 	return exit;
+    }
+
+    public int getFirstFreeEntrance() {
+	int entrance = -1;
+
+	for (int i = 0; i < nbEntrancesAvailable; i++) {
+            entrance = i;
+            break;
+	}
+	return entrance;
     }
 
     public void addExit(Arc arc) {
@@ -105,6 +113,10 @@ public abstract class Element extends Component {
 
     public void addExit(int place, Arc arc) {
 	exits[place] = arc;
+    }
+
+    public void addEntrance() {
+	nbEntrancesAvailable--;
     }
 
     public void setMatrix(Map<String, Map<Integer, Map<String, Float>>> matrix) {
@@ -237,5 +249,13 @@ public abstract class Element extends Component {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public boolean equals(Element element){
+        if(element.coordinate.getX() == this.coordinate.getX() 
+                && element.coordinate.getY() == this.coordinate.getY()){
+            return true;
+        }
+        return false;
     }
 }
