@@ -47,8 +47,16 @@ public class Plan implements Serializable {
         if (dataElement.element != null && (dataElement.element.getFirstFreeExit() >= 0)) {
             tempDataElement = dataElement;
         } else {
+            String message;
+
+            if (dataElement.type == InterfaceOutils.ID_TOOL_SORTIE) {
+                message = "Rien ne peut partir d'une sortie, tout doit y arriver.";
+            } else {
+                message = "Plus de sorties disponibles pour l'élément. Augmentez ce nombre.";
+            }
+
             JOptionPane.showMessageDialog(null,
-                    "Plus de sorties disponibles pour l'élément. Augmentez ce nombre.",
+                    message,
                     "Erreur lors de l'ajout de l'arc",
                     JOptionPane.OK_OPTION,
                     null);
@@ -58,23 +66,32 @@ public class Plan implements Serializable {
     public boolean createArcEntrance(int x, int y) {
         boolean found = false;
         DataElement dataElement = findDataElement(x, y, 1);
+
         if (dataElement.element != null) {
-            if (dataElement.element.getFirstFreeEntrance() >= 0) {
-                if (!dataElement.element.equals(tempDataElement.element)) { // si les éléments sont différents on enregistre
-                    tempDataElement.element.addExit(tempDataElement.element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element));
-                    dataElement.element.addEntrance();
-                    tempDataElement = null;
-                    found = true;
+            String message = "Erreur lors de l'ajout de l'arc.";
+            if (dataElement.type != InterfaceOutils.ID_TOOL_SORTIE && tempDataElement.type != InterfaceOutils.ID_TOOL_ENTREE) {
+                if (dataElement.element.getFirstFreeEntrance() >= 0) {
+                    if (!dataElement.element.equals(tempDataElement.element)) { // si les éléments sont différents on enregistre
+                        tempDataElement.element.addExit(tempDataElement.element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element));
+                        dataElement.element.addEntrance();
+                        tempDataElement = null;
+                        found = true;
+                    } else {
+                        message = "Selectionnez un élément différent la deuxième fois.";
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null,
-                            "Selectionnez un élément différent la deuxième fois.",
-                            "Erreur lors de l'ajout de l'arc",
-                            JOptionPane.OK_OPTION,
-                            null);
+                    if (dataElement.type == InterfaceOutils.ID_TOOL_ENTREE) {
+                        message = "Une entrée doit être la base du système.";
+                    } else {
+                        message = "Plus d'entrées disponibles pour l'élément. Utilisez une jonction.";
+                    }
                 }
             } else {
+                message = "Relier une entrée à une sortie directement n'a pas de sens";
+            }
+            if (!found) {
                 JOptionPane.showMessageDialog(null,
-                        "Plus d'entrées disponibles pour l'élément. Utilisez une jonction.",
+                        message,
                         "Erreur lors de l'ajout de l'arc",
                         JOptionPane.OK_OPTION,
                         null);

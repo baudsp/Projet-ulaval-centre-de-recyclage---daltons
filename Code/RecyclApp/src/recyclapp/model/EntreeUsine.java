@@ -8,8 +8,7 @@ import recyclapp.view.InterfaceOutils;
 public class EntreeUsine extends Element {
 
     public EntreeUsine(int x, int y, int width, int height) {
-        super(new Coordinate(x, y), 0,1, width, height);
-        nbEntrancesAvailable = 0;
+        super(new Coordinate(x, y), 0, 1, width, height);
         entranceProducts = new HashMap<>();
 	
 	name = "Entree " + this.id;

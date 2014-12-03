@@ -15,7 +15,8 @@ public abstract class Element extends Component {
     protected int width, height;
     protected Coordinate coordinate;
     protected Image image;
-    protected int nbEntrancesAvailable = 1;
+    protected int nbEntrances;
+    protected int nbEntrancesUsed;
     protected int nbExits;
     protected Arc[] exits;
     protected List<Arc> entrances;
@@ -25,7 +26,8 @@ public abstract class Element extends Component {
 
     public Element(Coordinate coordinate, int nbEntrances, int nbExits, int width, int height) {
 	this.coordinate = coordinate;
-	this.nbEntrancesAvailable = nbEntrances;
+	this.nbEntrances = nbEntrances;
+        this.nbEntrancesUsed = 0;
 	this.nbExits = nbExits;
 	exits = new Arc[nbExits];
 	entranceProducts = new HashMap<>();
@@ -39,6 +41,31 @@ public abstract class Element extends Component {
 
     public Coordinate getCoordinate() {
 	return coordinate;
+    }
+    
+    public void setNbExits(int nbExits){
+        Arc[] newExits = new Arc[nbExits];
+        for (int i = 0; (i < this.nbExits) && (i < nbExits); i++) {
+            newExits[i] = exits[i];
+        }
+        this.nbExits = nbExits;
+        exits = newExits;
+    }
+    
+    public int getNbExits(){
+        return nbExits;
+    }
+    
+    public int getNbEntranceUsed(){
+        return nbEntrancesUsed;
+    }
+    
+    public int getNbEntrances(){
+        return nbEntrances;
+    }
+    
+    public void setNbEntrance(int nbEntrance){
+        this.nbEntrances = nbEntrance;
     }
 
     public void setCoordinate(Coordinate coordinate) {
@@ -83,7 +110,7 @@ public abstract class Element extends Component {
     public int getFirstFreeEntrance() {
 	int entrance = -1;
 
-	for (int i = 0; i < nbEntrancesAvailable; i++) {
+	for (int i = nbEntrancesUsed; i < nbEntrances; i++) {
             entrance = i;
             break;
 	}
@@ -116,7 +143,7 @@ public abstract class Element extends Component {
     }
 
     public void addEntrance() {
-	nbEntrancesAvailable--;
+	nbEntrancesUsed++;
     }
 
     public void setMatrix(Map<String, Map<Integer, Map<String, Float>>> matrix) {
