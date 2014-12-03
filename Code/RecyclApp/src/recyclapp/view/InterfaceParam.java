@@ -243,9 +243,6 @@ public class InterfaceParam extends javax.swing.JPanel {
                                     .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                                     .addComponent(jTextFieldDescription)))
                             .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                                .addComponent(jButtonChoseColor)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
                                 .addComponent(jLabelExits)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jSpinnerExits, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -258,7 +255,10 @@ public class InterfaceParam extends javax.swing.JPanel {
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEditionStationLayout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jSpinnerEntrances, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                        .addComponent(jSpinnerEntrances, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                                .addComponent(jButtonChoseColor)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanelEditionStationLayout.setVerticalGroup(
@@ -322,6 +322,11 @@ public class InterfaceParam extends javax.swing.JPanel {
         element.setColor(selectedColor);
         element.setNbExits((int) jSpinnerExits.getValue());
         element.setNbEntrance((int) jSpinnerEntrances.getValue());
+        JOptionPane.showConfirmDialog(null,
+                    "L'enregistrement s'est passé avec succès.",
+                    "Enregistrement de " + element.getName(),
+                    JOptionPane.CLOSED_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonValidateActionPerformed
 
     private void jButtonChoseColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChoseColorActionPerformed
