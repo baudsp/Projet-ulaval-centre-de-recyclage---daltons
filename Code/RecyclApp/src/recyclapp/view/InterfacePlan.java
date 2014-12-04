@@ -92,7 +92,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
     }
 
     private void drawArrow(Graphics g1, int xExit, int yExit, int xEntrance, int yEntrance) {
-        int TAILLE_FLECHE = 20;
+        int TAILLE_FLECHE = (int) (20*zoom);
         int sizeImage = (int) (interfacePrincipale.getPanelTools().getSizeImage() * zoom);
 
         // ATTENTION : Le zoom s'applique déjà sur Exit grâce à la méthode appelante
