@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -485,6 +486,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
         getContentPane().add(panelInfo, java.awt.BorderLayout.PAGE_END);
         getContentPane().add(panelParams, java.awt.BorderLayout.LINE_END);
+
         getContentPane().add(panelTools, java.awt.BorderLayout.LINE_START);
 
         jMenuBar1.setBackground(new java.awt.Color(164, 183, 145));
@@ -593,7 +595,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         jCheckBoxMenuItemMagnetique.setText("Grille magnétique");
         jMenuVue.add(jCheckBoxMenuItemMagnetique);
 
-        jMenuItemZoomIn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemZoomIn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemZoomIn.setText("Zoom +");
         jMenuItemZoomIn.setName("jMenuItemZoomIn"); // NOI18N
         jMenuItemZoomIn.addActionListener(new java.awt.event.ActionListener() {
@@ -603,7 +605,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         });
         jMenuVue.add(jMenuItemZoomIn);
 
-        jMenuItemZoomOut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SUBTRACT, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemZoomOut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemZoomOut.setText("Zoom -");
         jMenuItemZoomOut.setName("jMenuItemZoomOut"); // NOI18N
         jMenuItemZoomOut.addActionListener(new java.awt.event.ActionListener() {
@@ -662,13 +664,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemCloseActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if (evt.getKeyCode() == 127) { // Code pour SUPPR
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) { 
             if (interfacePlan.getStationIsSelected()) {
                 plan.removeElement(interfacePlan.getSelectedDataElement());
                 interfacePlan.setStationIsSelected(false);
                 this.panelParams.hideEditionStationInformations();
             }
-        } else if (evt.getKeyCode() == 27) { // Code pour ECHAP
+        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) { 
             interfacePlan.setStationIsSelected(false);
             this.panelParams.hideEditionStationInformations();
         }

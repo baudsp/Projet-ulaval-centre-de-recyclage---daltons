@@ -199,8 +199,6 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         } else {
             zoomOut();
         }
-
-        interfacePrincipale.updateInterfacePlan(zoom);
     }
 
     public void zoomIn() {
@@ -209,6 +207,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             zoom += 0.1;
             repaint();
         }
+        interfacePrincipale.updateInterfacePlan(zoom);
         logZoom();
     }
 
@@ -218,6 +217,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             zoom -= 0.1;
             repaint();
         }
+        interfacePrincipale.updateInterfacePlan(zoom);
         logZoom();
     }
 
