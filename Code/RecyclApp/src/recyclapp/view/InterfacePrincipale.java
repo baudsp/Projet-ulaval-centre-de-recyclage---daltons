@@ -88,8 +88,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public JLabel getLogZoom() {
         return logZoom;
     }
-    
-    public JLabel getLogDebug(){
+
+    public JLabel getLogDebug() {
         return logDebug;
     }
 
@@ -175,26 +175,28 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        boolean translate = false;
-        if (e.getX() > panelTools.getWidth() && e.getSource() != interfacePlan) { // On rentre dedans que si on part de Tools
+        if (e.getSource() != interfacePlan) { // On rentre dedans que si on part de Tools
+            if (e.getX() < panelTools.getWidth()) {
+                // TODO : Dessiner l'image qui suit dans InterfaceOutils (On est parti de tools : AJOUT)
+            }
             e.translatePoint(-panelTools.getWidth(), 0);
-            translate = true;
         } else {
-            // Souci d'implémentation
-            //panelTools.drawImageFollowingInterfaceOutils(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
-            return;
+            if(e.getX() < 0){
+                // TODO Pouvoir revenir vers InterfaceTools et dessiner là bas (On est parti de plan : EDIT)
+            }
         }
 
         if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_ARC) {
             mip.changeCursor(InterfaceOutils.ID_TOOL_ARC);
         }
 
-        if (e.getSource().equals(interfacePlan) && !translate) {
+        if (e.getSource().equals(interfacePlan)) {
+
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
             if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
 
-                if (jCheckBoxMenuItemMagnetique.isSelected()) { // interfacePlan.isWithGrid() ?
+                if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
                     Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                     interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX()), coo.getY());
                 } else {
@@ -203,24 +205,22 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             }
             this.interfacePlan.repaint();
         } else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
-            int margin = 0; //this.panelTools.getWidth();
-            if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
+            if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
-                // TODO Décaler de (- imageWidth / 2) pour centrer la souris
 
-                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX() - margin, coo.getY());
+                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX(), coo.getY());
             } else {
                 //System.out.println("egetx draw " + e.getX());
-                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX() - margin, e.getY());
+                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
             }
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-	
-	this.plan.calc();
-	
+
+        this.plan.calc();
+
         DataElement dataElement = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
         interfacePlan.showSelectedElement(dataElement);
 
@@ -676,13 +676,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }//GEN-LAST:event_jMenuItemCloseActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_DELETE) { 
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
             if (interfacePlan.getStationIsSelected()) {
                 plan.removeElement(interfacePlan.getSelectedDataElement());
                 interfacePlan.setStationIsSelected(false);
                 this.panelParams.hideEditionStationInformations();
             }
-        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) { 
+        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             interfacePlan.setStationIsSelected(false);
             this.panelParams.hideEditionStationInformations();
         }
