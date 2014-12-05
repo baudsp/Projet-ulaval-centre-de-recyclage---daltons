@@ -181,7 +181,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             }
             e.translatePoint(-panelTools.getWidth(), 0);
         } else {
-            if(e.getX() < 0){
+            if (e.getX() < 0) {
                 // TODO Pouvoir revenir vers InterfaceTools et dessiner là bas (On est parti de plan : EDIT)
             }
         }
@@ -190,11 +190,13 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             mip.changeCursor(InterfaceOutils.ID_TOOL_ARC);
         }
 
-        if (e.getSource().equals(interfacePlan)) {
-
+        if (e.getSource().equals(interfacePlan)) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
-            if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
+            int meterX = mip.convertPixelToMeter(e.getX());
+            int meterY = mip.convertPixelToMeter(e.getY());
+
+            if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
 
                 if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
                     Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
@@ -205,6 +207,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             }
             this.interfacePlan.repaint();
         } else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
+            interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
             if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
 
@@ -238,7 +241,11 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (inMap(e)) {
+        int xEvent = e.getX();
+        if (e.getSource() != this.interfacePlan) {
+            xEvent -= panelTools.getWidth();
+        }
+        if (inMap(xEvent, e.getY())) {
             float zoom = this.interfacePlan.getZoom();
 
             if (this.panelTools.isMoveTools()) {
@@ -247,28 +254,31 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                     int x = e.getX();
                     int y = e.getY();
 
-                    if (this.panelTools.getIdTools() >= 0
-                            && !this.mip.isOverlapElement((int) (x / zoom - this.panelTools.getWidth()),
-                                    (int) (y / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
-                        if (jCheckBoxMenuItemMagnetique.isSelected()) {
-                            Coordinate coo = mip.findCooMagnetique(x, y);
-                            x = coo.getX();
-                            y = coo.getY();
+                    if (this.panelTools.getIdTools() >= 0) {
+
+                        if (!this.mip.isOverlapElement((int) (x / zoom - this.panelTools.getWidth()),
+                                (int) (y / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
+
+                            if (jCheckBoxMenuItemMagnetique.isSelected()) {
+                                Coordinate coo = mip.findCooMagnetique(x, y);
+                                x = coo.getX();
+                                y = coo.getY();
+                            }
+
+                            // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
+                            int halfImageSize = panelTools.getSizeImage() / 2;
+
+                            int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
+                            int createY = (int) (y / zoom) - halfImageSize;
+
+                            this.plan.createElement(this.panelTools.getIdTools(), createX, createY);
+
+                            DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
+                            interfacePlan.showSelectedElement(addedDataElement);
+
+                            this.panelParams.setParametersInformations(addedDataElement.element);
+
                         }
-
-                        // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
-                        int halfImageSize = panelTools.getSizeImage() / 2;
-
-                        int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
-                        int createY = (int) (y / zoom) - halfImageSize;
-
-                        this.plan.createElement(this.panelTools.getIdTools(), createX, createY);
-
-                        DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
-                        interfacePlan.showSelectedElement(addedDataElement);
-
-                        this.panelParams.setParametersInformations(addedDataElement.element);
-
                     }
                     this.panelTools.setMoveTools(false);
                 } else { // CREATE ARC
@@ -297,24 +307,40 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 int x = e.getX();
                 int y = e.getY();
 
-                if (!this.mip.isOverlapElement((int) (x / zoom), (int) (y / zoom), dataElementTemp.width, dataElementTemp.height)) {
-                    if (jCheckBoxMenuItemMagnetique.isSelected()) {
-                        Coordinate coo = mip.findCooMagnetique(x, y);
-                        x = coo.getX();
-                        y = coo.getY();
-                    }
-
-                    int halfImageSize = panelTools.getSizeImage() / 2;
-
-                    int moveX = (int) (x / zoom) - halfImageSize;
-                    int moveY = (int) (y / zoom) - halfImageSize;
-
-                    this.plan.moveElement(dataElementTemp, moveX, moveY);
+                if (jCheckBoxMenuItemMagnetique.isSelected()) {
+                    Coordinate coo = mip.findCooMagnetique(x, y);
+                    x = coo.getX();
+                    y = coo.getY();
                 }
+
+                int halfImageSize = panelTools.getSizeImage() / 2;
+
+                int moveX = (int) (x / zoom) - halfImageSize;
+                int moveY = (int) (y / zoom) - halfImageSize;
+
+                this.plan.moveElement(dataElementTemp, moveX, moveY);
                 dataElementTemp = new DataElement();
             }
 
             this.interfacePlan.repaint();
+        } else {
+            if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
+                JOptionPane.showMessageDialog(null,
+                        "Déplacer l'élément dans le plan.",
+                        "Erreur lors du déplacement de l'élément",
+                        JOptionPane.OK_OPTION,
+                        null);
+            } else {
+                if(this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC){ // Vérifier qu'on drag and drop quelque chose
+                    JOptionPane.showMessageDialog(null,
+                        "Créer l'élément dans le plan.",
+                        "Erreur lors de la création de l'élément",
+                        JOptionPane.OK_OPTION,
+                        null);
+                }
+            }
+            this.interfacePlan.repaint();
+            this.panelTools.repaint();
         }
     }
 
@@ -322,16 +348,20 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
      * **
      * summary : Permet de savoir si on est bien dans le plan pour travailler.
      */
-    private boolean inMap(MouseEvent e) {
-        int marginLeft = 0;
-        if (this.itemTools.getState()) {
-            marginLeft = this.panelTools.getWidth();
+    private boolean inMap(int x, int y) {
+        if (mip.convertPixelToMeter(x) <= 0 || mip.convertPixelToMeter(y) <= 0) {
+            return false;
         }
 
-        return e.getX() + marginLeft >= this.jScrollPane1.getX()
-                && e.getX() <= this.jScrollPane1.getX() + this.jScrollPane1.getWidth()
-                && e.getY() >= this.jScrollPane1.getY()
-                && e.getY() <= this.jScrollPane1.getY() + this.jScrollPane1.getHeight();
+        int marginLeft = 0;
+        if (this.itemTools.getState()) {
+            x += this.panelTools.getWidth();
+        }
+
+        return x + marginLeft >= this.jScrollPane1.getX()
+                && x <= this.jScrollPane1.getX() + this.jScrollPane1.getWidth()
+                && y >= this.jScrollPane1.getY()
+                && y <= this.jScrollPane1.getY() + this.jScrollPane1.getHeight();
     }
 
     public JLabel getDebug() {
