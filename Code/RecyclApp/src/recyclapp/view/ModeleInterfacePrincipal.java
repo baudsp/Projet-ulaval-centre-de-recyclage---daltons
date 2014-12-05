@@ -7,7 +7,6 @@ package recyclapp.view;
 
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -63,12 +62,12 @@ public class ModeleInterfacePrincipal {
     public boolean isOverlapElement(int x, int y, int width, int height) {
         x = x - (width / 2);
         y = y - (height / 2);
-        int max = this.frame.getListDataElements(false).size();
+        int max = frame.getListDataElements(false).size();
         Rectangle rectangle = new Rectangle(x, y, width, height);
 
         for (int i = 0; i < max; i++) {
-            int r2X = this.frame.getListDataElements(false).get(i).x;
-            int r2Y = this.frame.getListDataElements(false).get(i).y;
+            int r2X = frame.getListDataElements(false).get(i).x;
+            int r2Y = frame.getListDataElements(false).get(i).y;
             int r2width = this.frame.getListDataElements(false).get(i).width;
             int r2height = this.frame.getListDataElements(false).get(i).height;
 

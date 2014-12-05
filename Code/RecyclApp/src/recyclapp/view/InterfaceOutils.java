@@ -1,13 +1,9 @@
 package recyclapp.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
-import static javax.swing.GroupLayout.Alignment.CENTER;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class InterfaceOutils extends JPanel {

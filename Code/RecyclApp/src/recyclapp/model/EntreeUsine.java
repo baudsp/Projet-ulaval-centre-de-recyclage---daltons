@@ -61,4 +61,13 @@ public class EntreeUsine extends Element {
 	    matrix.put(product, mapEntrances);
 	}
     }
+
+    @Override
+    public Element clone() {
+        Element elt =  new EntreeUsine(this.coordinate.getX(), this.coordinate.getY(), this.width, this.height);
+        
+        elt = this.helpClone(elt);
+        
+        return elt;
+    }
 }

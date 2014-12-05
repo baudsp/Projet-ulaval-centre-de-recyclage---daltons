@@ -5,38 +5,11 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 import recyclapp.view.InterfaceOutils;
 
-public class Plan implements Serializable {
+public class Plan implements Serializable, ParamObserver {
 
     private LinkedList<Element> listElements;
     private DataElement tempDataElement = null;
     private ChangeManager changeManager = new ChangeManager();
-
-    public class DataElement {
-
-        public int type;
-        public int x;
-        public int y;
-        public int width;
-        public int height;
-        public Element element;
-
-        public DataElement(Element elt) {
-            this.type = elt.getType();
-            this.x = elt.coordinate.getX();
-            this.y = elt.coordinate.getY();
-            this.width = elt.width;
-            this.height = elt.height;
-            this.element = elt;
-        }
-
-        public DataElement() {
-            this.type = -1;
-            this.x = 0;
-            this.y = 0;
-            this.width = 0;
-            this.height = 0;
-        }
-    };
 
     public Plan() {
         listElements = new LinkedList<>();
@@ -52,7 +25,7 @@ public class Plan implements Serializable {
             if (dataElement.type == InterfaceOutils.ID_TOOL_SORTIE) {
                 message = "Rien ne peut partir d'une sortie, tout doit y arriver.";
             } else {
-                if(dataElement.type == InterfaceOutils.ID_TOOL_ENTREE){
+                if (dataElement.type == InterfaceOutils.ID_TOOL_ENTREE) {
                     message = "Ajoutez une autre entrée d'usine.";
                 } else {
                     message = "Plus de sorties disponibles pour l'élément. Augmentez ce nombre.";
@@ -174,5 +147,10 @@ public class Plan implements Serializable {
 
     public ChangeManager getChangeManager() {
         return changeManager;
+    }
+
+    @Override
+    public void update(Element element) {
+        getChangeManager().addChange(listElements);
     }
 }

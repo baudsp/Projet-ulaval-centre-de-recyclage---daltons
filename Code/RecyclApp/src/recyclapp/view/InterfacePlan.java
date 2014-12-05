@@ -12,8 +12,7 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JPanel;
 import recyclapp.model.Arc;
 import recyclapp.model.Coordinate;
-import recyclapp.model.Plan;
-import recyclapp.model.Plan.DataElement;
+import recyclapp.model.DataElement;
 
 public class InterfacePlan extends JPanel implements MouseWheelListener, KeyListener {
 
@@ -57,9 +56,9 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             isDrag = false;
         }
 
-        for (int i = 0; i < this.interfacePrincipale.getListDataElements(isZoom).size(); i++) {
+        for (int i = 0; i < interfacePrincipale.getListDataElements(isZoom).size(); i++) {
 
-            DataElement dataElement = this.interfacePrincipale.getListDataElements(isZoom).get(i);
+            DataElement dataElement = interfacePrincipale.getListDataElements(isZoom).get(i);
 
             int id = dataElement.element.getType();
             int x = (int) (dataElement.x * zoom);
@@ -263,7 +262,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
      * @param dataElement
      * @return
      */
-    public void showSelectedElement(Plan.DataElement dataElement) {
+    public void showSelectedElement(DataElement dataElement) {
         if (dataElement.type >= InterfaceOutils.ID_TOOL_STATION) {
             if (getSelectedDataElement() != null) {
                 if (getSelectedDataElement().element != dataElement.element) {
