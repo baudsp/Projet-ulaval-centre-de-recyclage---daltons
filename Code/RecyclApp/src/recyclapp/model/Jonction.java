@@ -22,4 +22,16 @@ public class Jonction extends Element {
         
         return elt;
     }
+    
+    @Override
+    public int getFirstFreeEntrance() {
+	int entrance = super.getFirstFreeEntrance();
+	
+	// il n'y a plus d'netrée de libre, on en rajoute
+	if (entrance < 0) {
+	    this.nbEntrances++;
+	}
+	
+	return this.nbEntrances;
+    }
 }
