@@ -266,6 +266,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 			    if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_STATION) {
 				nbrSorties = getNbrSorties();
 				if (nbrSorties == -1) {
+                                    repaint();
 				    return;
 				}
 			    }
