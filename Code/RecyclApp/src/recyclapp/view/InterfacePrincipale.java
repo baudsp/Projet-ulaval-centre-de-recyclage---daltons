@@ -22,9 +22,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import recyclapp.model.Coordinate;
+import recyclapp.model.DataElement;
 import recyclapp.model.Element;
 import recyclapp.model.Plan;
-import recyclapp.model.Plan.DataElement;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -38,6 +38,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public InterfacePrincipale(Plan plan) {
         initComponents();
         initialize();
+        panelParams.addObserver(this.plan);
     }
 
     private void initialize() {
@@ -62,7 +63,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         mip = new ModeleInterfacePrincipal(this);
         plan = new Plan();
         // NEW
-        this.dataElementTemp = plan.new DataElement();
+        this.dataElementTemp = new DataElement();
         this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
     }
 
@@ -154,6 +155,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseMoved(MouseEvent e) {
         if (e.getSource().equals(interfacePlan)) {
+            //System.out.println("egetx " + e.getX());
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
             this.dataElementTemp = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
         }
@@ -169,16 +171,25 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         } else {
             mip.changeCursor(InterfaceOutils.ID_NOTHING);
         }
-
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        boolean translate = false;
+        if (e.getX() > panelTools.getWidth() && e.getSource() != interfacePlan) { // On rentre dedans que si on part de Tools
+            e.translatePoint(-panelTools.getWidth(), 0);
+            translate = true;
+        } else {
+            // Souci d'implémentation
+            //panelTools.drawImageFollowingInterfaceOutils(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
+            return;
+        }
+
         if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_ARC) {
             mip.changeCursor(InterfaceOutils.ID_TOOL_ARC);
         }
 
-        if (e.getSource().equals(interfacePlan)) {
+        if (e.getSource().equals(interfacePlan) && !translate) {
             interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
             if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
@@ -192,13 +203,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
             }
             this.interfacePlan.repaint();
         } else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
-            int margin = this.panelTools.getWidth();
+            int margin = 0; //this.panelTools.getWidth();
             if (jCheckBoxMenuItemMagnetique.isSelected()) { // faut-il vérifier qu'on est en mode grille ? interfacePlan.isWithGrid() ?
                 Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
                 // TODO Décaler de (- imageWidth / 2) pour centrer la souris
 
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX() - margin, coo.getY());
             } else {
+                //System.out.println("egetx draw " + e.getX());
                 interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX() - margin, e.getY());
             }
         }
@@ -243,9 +255,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             x = coo.getX();
                             y = coo.getY();
                         }
-                        
+
                         // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
-                        int halfImageSize = panelTools.getSizeImage() / 2; 
+                        int halfImageSize = panelTools.getSizeImage() / 2;
 
                         int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
                         int createY = (int) (y / zoom) - halfImageSize;
@@ -272,7 +284,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             }
                         } else {
                             DataElement dataElement = this.plan.createArcExit(x, y);
-                            if(dataElement != null){
+                            if (dataElement != null) {
                                 logDebug.setText("Selectionner l'élément à relier à " + dataElement.element.getName());
                             } else {
                                 logDebug.setText("");
@@ -299,7 +311,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
                     this.plan.moveElement(dataElementTemp, moveX, moveY);
                 }
-                dataElementTemp = this.plan.new DataElement();
+                dataElementTemp = new DataElement();
             }
 
             this.interfacePlan.repaint();

@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import recyclapp.model.Element;
+import recyclapp.model.ParamObserver;
 
 /**
  *
@@ -27,6 +28,7 @@ public class InterfaceParam extends javax.swing.JPanel {
 
     Element element = null;
     Color selectedColor;
+    LinkedList<ParamObserver> paramObserverList = new LinkedList<>();
 
     /**
      * Creates new form InterfaceParamBis
@@ -98,6 +100,24 @@ public class InterfaceParam extends javax.swing.JPanel {
 	// On verifie que la matrice trie bien le bon nombre de 
 	// dechets (et pas les bons dechets)
 	if (matrix.keySet().size() == element.getEntranceProducts().size()) {
+
+	    if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
+		this.jSpinnerEntrances.setValue(element.getNbEntrances());
+		this.jSpinnerExits.setValue(element.getNbExits());
+		this.jSpinnerExits.setEnabled(false);
+		this.jSpinnerEntrances.setEnabled(true);
+	    } else if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE
+		    || element.getType() == InterfaceOutils.ID_TOOL_SORTIE) {
+		this.jSpinnerEntrances.setValue(element.getNbEntrances());
+		this.jSpinnerExits.setValue(element.getNbExits());
+		this.jSpinnerExits.setEnabled(false);
+		this.jSpinnerEntrances.setEnabled(false);
+	    } else {
+		this.jSpinnerEntrances.setValue(element.getNbEntrances());
+		this.jSpinnerExits.setValue(element.getNbExits());
+		this.jSpinnerEntrances.setEnabled(false);
+		this.jSpinnerExits.setEnabled(true);
+	    }
 
 	    Iterator<String> iteratorProduits = matrix.keySet().iterator();
 
@@ -175,6 +195,23 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	    }
 	}
+    }
+
+    private void updateElement(String name, String description, float debitMax, Color color, int nbreExits, int nbreEntrance) {
+	element.setName(name);
+	element.setDescription(description);
+	element.setMaxFlow(debitMax);
+	element.setColor(color);
+	element.setNbExits(nbreExits);
+	element.setNbEntrance(nbreEntrance);
+
+	for (ParamObserver paramObserver : paramObserverList) {
+	    paramObserver.update(element.clone());
+	}
+    }
+
+    public void addObserver(ParamObserver paramObserver) {
+	paramObserverList.add(paramObserver);
     }
 
     /**
@@ -371,12 +408,6 @@ public class InterfaceParam extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValidateActionPerformed
-	element.setName(jTextFieldName.getText());
-	element.setDescription(jTextFieldDescription.getText());
-	element.setMaxFlow((Float) jSpinnerDebitMax.getValue());
-	element.setColor(selectedColor);
-	element.setNbExits((int) jSpinnerExits.getValue());
-	element.setNbEntrance((int) jSpinnerEntrances.getValue());
 
 	Component[] components = jValeursSorties.getComponents();
 
@@ -390,6 +421,8 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	element.setMatrix(inputs);
 
+	updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),
+			selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());
 
 	JOptionPane.showConfirmDialog(null,
 		"L'enregistrement s'est passé avec succès.",
@@ -451,5 +484,4 @@ public class InterfaceParam extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldName;
     private javax.swing.JPanel jValeursSorties;
     // End of variables declaration//GEN-END:variables
-
 }

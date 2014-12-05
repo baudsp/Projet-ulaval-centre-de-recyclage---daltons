@@ -13,4 +13,13 @@ public class Jonction extends Element {
     public int getType() {
 	return InterfaceOutils.ID_TOOL_JONCTION;
     }
+
+    @Override
+    public Element clone() {
+        Element elt =  new Jonction(this.coordinate.getX(), this.coordinate.getY(), this.width, this.height);
+        
+        elt = this.helpClone(elt);
+        
+        return elt;
+    }
 }

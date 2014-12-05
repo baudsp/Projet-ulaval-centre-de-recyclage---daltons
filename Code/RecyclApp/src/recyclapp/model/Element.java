@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public abstract class Element extends Component {
+public abstract class Element extends Component{
 
     protected int id;
     protected int width, height;
@@ -22,7 +22,7 @@ public abstract class Element extends Component {
     protected List<Arc> entrances;
     protected Map<String, Map<Integer, Map<String, Float>>> matrix;
     protected String name;
-    private String description;
+    protected String description;
 
     public Element(Coordinate coordinate, int nbEntrances, int nbExits, int width, int height) {
 	this.coordinate = coordinate;
@@ -286,6 +286,7 @@ public abstract class Element extends Component {
         }
         return false;
     }
+
     /**
      * Sauvegarde dans la matrix de tri de la station l'input
      */
@@ -310,5 +311,27 @@ public abstract class Element extends Component {
 	    matrix.put(product, matrixExits);
 	}
 	this.matrix = matrix;
+    }
+    
+    public abstract Element clone();
+
+    protected Element helpClone(Element elt) {
+        elt.coordinate = this.coordinate;
+        elt.description = this.description;
+        elt.entranceProducts = this.entranceProducts;
+        elt.entrances = this.entrances;
+        elt.exits = this.exits;
+        elt.height = this.height;
+        elt.id = this.id;
+        elt.image = this.image;
+        elt.matrix = this.matrix;
+        elt.maxFlow = this.maxFlow;
+        elt.name = this.name;
+        elt.nbEntrances = this.nbEntrances;
+        elt.nbEntrancesUsed = this.nbEntrancesUsed;
+        elt.nbExits = this.nbExits;
+        elt.width = this.width;
+        
+        return elt;
     }
 }

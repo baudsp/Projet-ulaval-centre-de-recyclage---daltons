@@ -91,4 +91,15 @@ public class Station extends Element {
     public int getType() {
 	return InterfaceOutils.ID_TOOL_STATION;
     }
+
+    @Override
+    public Element clone() {
+        Station station = new Station(this.coordinate.getX(), this.coordinate.getY(), this.width, this.height);
+        
+        station = (Station) helpClone(station);
+        
+        station.dimension = this.dimension;
+        
+        return station;
+    }
 }

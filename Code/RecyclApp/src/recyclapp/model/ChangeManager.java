@@ -8,17 +8,17 @@ public class ChangeManager implements Serializable{
     private int currentIndex = 0;
     private LinkedList<LinkedList<Element>> lklkElement = new LinkedList<>();
 
-    public void addChange(LinkedList elements) {
+    public void addChange(LinkedList<Element> elements) {
         LinkedList<Element> lkElement = new LinkedList<>();
-        
-        lkElement = (LinkedList<Element>) elements.clone();
+        for (Element elt : elements) {
+            lkElement.add(elt.clone());
+        }
         
         if(currentIndex != lklkElement.size()){
             for (int i = currentIndex; i < lklkElement.size(); i++) {
                 lklkElement.remove(i);
             }
         }
-            
         lklkElement.add(currentIndex, lkElement);
         
         currentIndex = lklkElement.size();
