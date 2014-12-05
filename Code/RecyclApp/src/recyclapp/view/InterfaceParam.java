@@ -58,29 +58,16 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	this.jSpinnerDebitMax.setValue(element.getMaxFlow());
 
-	if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
-	    this.jSpinnerEntrances.setValue(element.getNbEntrances());
-	    this.jSpinnerExits.setValue(element.getNbExits());
-	    this.jSpinnerExits.setEnabled(false);
-	    this.jSpinnerEntrances.setEnabled(true);
-	} else if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE
-		|| element.getType() == InterfaceOutils.ID_TOOL_SORTIE) {
-	    this.jSpinnerEntrances.setValue(element.getNbEntrances());
-	    this.jSpinnerExits.setValue(element.getNbExits());
-	    this.jSpinnerExits.setEnabled(false);
-	    this.jSpinnerEntrances.setEnabled(false);
-	} else {
-	    this.jSpinnerEntrances.setValue(element.getNbEntrances());
-	    this.jSpinnerExits.setValue(element.getNbExits());
-	    this.jSpinnerEntrances.setEnabled(false);
-	    this.jSpinnerExits.setEnabled(true);
-	}
+	this.jSpinnerEntrances.setValue(element.getNbEntrances());
+	this.jSpinnerExits.setValue(element.getNbExits());
+	this.jSpinnerExits.setEnabled(false);
+	this.jSpinnerEntrances.setEnabled(false);
 
 	this.jSpinnerExits.setValue(element.getNbExits());
 
 	this.jValeursSorties.removeAll();
 
-	if (element.getType() != InterfaceOutils.ID_TOOL_ENTREE) {
+	if (element.getType() != InterfaceOutils.ID_TOOL_ENTREE) {  
 	    filljValeursSorties();
 	}
 
@@ -100,24 +87,6 @@ public class InterfaceParam extends javax.swing.JPanel {
 	// On verifie que la matrice trie bien le bon nombre de 
 	// dechets (et pas les bons dechets)
 	if (matrix.keySet().size() == element.getEntranceProducts().size()) {
-
-	    if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
-		this.jSpinnerEntrances.setValue(element.getNbEntrances());
-		this.jSpinnerExits.setValue(element.getNbExits());
-		this.jSpinnerExits.setEnabled(false);
-		this.jSpinnerEntrances.setEnabled(true);
-	    } else if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE
-		    || element.getType() == InterfaceOutils.ID_TOOL_SORTIE) {
-		this.jSpinnerEntrances.setValue(element.getNbEntrances());
-		this.jSpinnerExits.setValue(element.getNbExits());
-		this.jSpinnerExits.setEnabled(false);
-		this.jSpinnerEntrances.setEnabled(false);
-	    } else {
-		this.jSpinnerEntrances.setValue(element.getNbEntrances());
-		this.jSpinnerExits.setValue(element.getNbExits());
-		this.jSpinnerEntrances.setEnabled(false);
-		this.jSpinnerExits.setEnabled(true);
-	    }
 
 	    Iterator<String> iteratorProduits = matrix.keySet().iterator();
 
@@ -422,7 +391,7 @@ public class InterfaceParam extends javax.swing.JPanel {
 	element.setMatrix(inputs);
 
 	updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),
-			selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());
+		selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());
 
 	JOptionPane.showConfirmDialog(null,
 		"L'enregistrement s'est passé avec succès.",

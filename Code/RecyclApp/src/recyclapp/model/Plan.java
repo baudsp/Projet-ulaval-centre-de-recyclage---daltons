@@ -149,13 +149,13 @@ public class Plan implements Serializable, ParamObserver {
         getChangeManager().addChange(listElements);
     }
 
-    public void createElement(int type, int x, int y) {
+    public void createElement(int type, int x, int y, int nbrSorties) {
 
         Element elt = null;
 
         switch (type) {
             case InterfaceOutils.ID_TOOL_STATION:
-                elt = new Station(x, y, 70, 70);
+                elt = new Station(x, y, 70, 70, nbrSorties);
                 break;
             case InterfaceOutils.ID_TOOL_ENTREE:
                 elt = new EntreeUsine(x, y, 70, 70);

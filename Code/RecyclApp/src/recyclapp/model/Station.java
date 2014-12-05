@@ -8,8 +8,8 @@ public class Station extends Element {
 
     private Dimension dimension;
     
-    public Station(int x, int y, int width, int height) {
-        super(new Coordinate(x, y), 1,1, width, height);
+    public Station(int x, int y, int width, int height, int nbrSorties) {
+        super(new Coordinate(x, y), 1, nbrSorties, width, height);
         
         exits = new Arc[nbExits];
 	
@@ -94,7 +94,7 @@ public class Station extends Element {
 
     @Override
     public Element clone() {
-        Station station = new Station(this.coordinate.getX(), this.coordinate.getY(), this.width, this.height);
+        Station station = new Station(this.coordinate.getX(), this.coordinate.getY(), this.width, this.height, this.nbExits);
         
         station = (Station) helpClone(station);
         

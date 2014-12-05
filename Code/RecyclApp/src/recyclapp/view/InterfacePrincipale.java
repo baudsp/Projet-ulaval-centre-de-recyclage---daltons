@@ -21,6 +21,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import recyclapp.model.Coordinate;
 import recyclapp.model.DataElement;
 import recyclapp.model.Element;
@@ -64,7 +67,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         plan = new Plan();
         // NEW
         this.dataElementTemp = new DataElement();
-        this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
+        this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2, 0);
     }
 
     public void updateInterfacePlan(float zoom) {
@@ -261,8 +264,16 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
                         int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
                         int createY = (int) (y / zoom) - halfImageSize;
-
-                        this.plan.createElement(this.panelTools.getIdTools(), createX, createY);
+			
+			int nbrSorties = 0;
+			if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_STATION) {
+			    nbrSorties =  getNbrSorties();
+			    if (nbrSorties == -1) {
+				return;
+			    }
+			}
+			
+                        this.plan.createElement(this.panelTools.getIdTools(), createX, createY, nbrSorties);
 
                         DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
                         interfacePlan.showSelectedElement(addedDataElement);
@@ -348,7 +359,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     private void restartPlan() {
         plan = new Plan();
-        this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2);
+        this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2, 0);
         openPlan();
     }
 
@@ -440,6 +451,27 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         interfacePlan.repaint();
     }
 
+    /**
+     * demande à l'utilisateur de rentrer le nombre de sorties de la station
+     * Retourne -1 si l'utilisateur choisis d'annuler
+     * @return 
+     */
+    private int getNbrSorties() {
+	int nbrSorties;
+	SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 5, 1);
+	
+	JSpinner spinner = new JSpinner(spinnerModel);
+	int res = JOptionPane.showOptionDialog(null, spinner, "Choix du nombre de sorties", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+	
+	if (res == JOptionPane.CANCEL_OPTION) {
+	    nbrSorties= -1;
+	} else {
+	    nbrSorties = (int)spinner.getValue();
+	}
+	
+	return nbrSorties;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
