@@ -145,7 +145,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemZoomIn">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+ADD"/>
+                  <KeyStroke key="Ctrl+EQUALS"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Zoom +"/>
                 <Property name="name" type="java.lang.String" value="jMenuItemZoomIn" noResource="true"/>
@@ -157,7 +157,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemZoomOut">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+SUBTRACT"/>
+                  <KeyStroke key="Ctrl+MINUS"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Zoom -"/>
                 <Property name="name" type="java.lang.String" value="jMenuItemZoomOut" noResource="true"/>
