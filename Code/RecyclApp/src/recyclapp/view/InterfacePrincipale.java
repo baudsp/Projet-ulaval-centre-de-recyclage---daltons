@@ -39,116 +39,116 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private DataElement dataElementTemp;
 
     public InterfacePrincipale(Plan plan) {
-        initComponents();
-        initialize();
-        panelParams.addObserver(this.plan);
+	initComponents();
+	initialize();
+	panelParams.addObserver(this.plan);
     }
 
     private void initialize() {
-        this.addMouseMotionListener(this);
-        this.addMouseListener(this);
+	this.addMouseMotionListener(this);
+	this.addMouseListener(this);
 
-        interfacePlan = new InterfacePlan(this);
-        interfacePlan.setBackground(java.awt.Color.white);
-        javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(interfacePlan);
-        interfacePlan.setLayout(panelMapLayout);
-        getContentPane().add(interfacePlan, java.awt.BorderLayout.CENTER);
-        interfacePlan.addMouseMotionListener(this);
-        interfacePlan.addMouseListener(this);
-        interfacePlan.setPreferredSize(new Dimension(2000, 2000));
-        jScrollPane1 = new javax.swing.JScrollPane(interfacePlan);
-        jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
-        interfacePlan.setAutoscrolls(true);
-        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
-        panelTools.addMouseMotionListener(this);
-        panelTools.addMouseListener(this);
+	interfacePlan = new InterfacePlan(this);
+	interfacePlan.setBackground(java.awt.Color.white);
+	javax.swing.GroupLayout panelMapLayout = new javax.swing.GroupLayout(interfacePlan);
+	interfacePlan.setLayout(panelMapLayout);
+	getContentPane().add(interfacePlan, java.awt.BorderLayout.CENTER);
+	interfacePlan.addMouseMotionListener(this);
+	interfacePlan.addMouseListener(this);
+	interfacePlan.setPreferredSize(new Dimension(2000, 2000));
+	jScrollPane1 = new javax.swing.JScrollPane(interfacePlan);
+	jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
+	interfacePlan.setAutoscrolls(true);
+	getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+	panelTools.addMouseMotionListener(this);
+	panelTools.addMouseListener(this);
 
-        mip = new ModeleInterfacePrincipal(this);
-        plan = new Plan();
-        // NEW
-        this.dataElementTemp = new DataElement();
-        this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2, 0);
+	mip = new ModeleInterfacePrincipal(this);
+	plan = new Plan();
+	// NEW
+	this.dataElementTemp = new DataElement();
+	this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2, 0);
     }
 
     public void updateInterfacePlan(float zoom) {
-        interfacePlan.setPreferredSize(new Dimension((int) (2000 * zoom), (int) (2000 * zoom)));
+	interfacePlan.setPreferredSize(new Dimension((int) (2000 * zoom), (int) (2000 * zoom)));
 
-        int value = jScrollPane1.getVerticalScrollBar().getValue();
-        int value2 = jScrollPane1.getHorizontalScrollBar().getValue();
+	int value = jScrollPane1.getVerticalScrollBar().getValue();
+	int value2 = jScrollPane1.getHorizontalScrollBar().getValue();
 
-        jScrollPane1.getVerticalScrollBar().setValue(value + 1);
-        jScrollPane1.getHorizontalScrollBar().setValue(value2 + 1);
+	jScrollPane1.getVerticalScrollBar().setValue(value + 1);
+	jScrollPane1.getHorizontalScrollBar().setValue(value2 + 1);
 
-        jScrollPane1.getVerticalScrollBar().setValue(value);
-        jScrollPane1.getHorizontalScrollBar().setValue(value2);
+	jScrollPane1.getVerticalScrollBar().setValue(value);
+	jScrollPane1.getHorizontalScrollBar().setValue(value2);
 
     }
 
     public JLabel getLogCoordinates() {
-        return logCoordinates;
+	return logCoordinates;
     }
 
     public JLabel getLogZoom() {
-        return logZoom;
+	return logZoom;
     }
 
     public JLabel getLogDebug() {
-        return logDebug;
+	return logDebug;
     }
 
     public void setLogCoordinates(JLabel logCoordinates) {
-        this.logCoordinates = logCoordinates;
+	this.logCoordinates = logCoordinates;
     }
 
     public JPanel getPanelInfo() {
-        return panelInfo;
+	return panelInfo;
     }
 
     public void setPanelInfo(JPanel panelInfo) {
-        this.panelInfo = panelInfo;
+	this.panelInfo = panelInfo;
     }
 
     public InterfacePlan getPanelMap() {
-        return interfacePlan;
+	return interfacePlan;
     }
 
     public void setPanelMap(InterfacePlan panelMap) {
-        this.interfacePlan = panelMap;
+	this.interfacePlan = panelMap;
     }
 
     public JPanel getPanelParam() {
-        return panelParams;
+	return panelParams;
     }
 
     public void setPanelParam(InterfaceParam panelParams) {
-        this.panelParams = panelParams;
+	this.panelParams = panelParams;
     }
 
     public InterfaceOutils getPanelTools() {
-        return panelTools;
+	return panelTools;
     }
 
     public void setPanelTools(InterfaceOutils panelTools) {
-        this.panelTools = panelTools;
+	this.panelTools = panelTools;
     }
 
     public LinkedList<DataElement> getListDataElements(boolean isZoom) {
-        LinkedList<DataElement> listDataElements = this.plan.getListDataElements();
-        if (this.dataElementTemp != null && this.dataElementTemp.type >= 0 && !isZoom) {
-            DataElement currentDataElement = null;
-            for (DataElement dataElement : listDataElements) {
-                if (dataElement.x == this.dataElementTemp.x && dataElement.y == this.dataElementTemp.y) {
-                    currentDataElement = dataElement;
-                }
-            }
-            listDataElements.remove(currentDataElement);
-        }
+	LinkedList<DataElement> listDataElements = this.plan.getListDataElements();
+	if (this.dataElementTemp != null && this.dataElementTemp.type >= 0 && !isZoom) {
+	    DataElement currentDataElement = null;
+	    for (DataElement dataElement : listDataElements) {
+		if (dataElement.x == this.dataElementTemp.x && dataElement.y == this.dataElementTemp.y) {
+		    currentDataElement = dataElement;
+		}
+	    }
+	    listDataElements.remove(currentDataElement);
+	}
 
-        return listDataElements;
+	return listDataElements;
     }
 
     public Image getImageType(int imageId) {
-        return this.panelTools.getImages(imageId);
+	return this.panelTools.getImages(imageId);
     }
 
     @Override
@@ -157,196 +157,225 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (e.getSource().equals(interfacePlan)) {
-            //System.out.println("egetx " + e.getX());
-            interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
-            this.dataElementTemp = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
-        }
+	if (e.getSource().equals(interfacePlan)) {
+	    //System.out.println("egetx " + e.getX());
+	    interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
+	    this.dataElementTemp = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
+	}
 
-        if (e.getSource().equals(panelTools)) {
-            panelTools.moveTool(e.getX(), e.getY());
-        } else {
-            panelTools.setMoveTools(false);
-        }
+	if (e.getSource().equals(panelTools)) {
+	    panelTools.moveTool(e.getX(), e.getY());
+	} else {
+	    panelTools.setMoveTools(false);
+	}
 
-        if (panelTools.isMoveTools() || this.dataElementTemp.type >= 0) {
-            mip.changeCursor(-2);
-        } else {
-            mip.changeCursor(InterfaceOutils.ID_NOTHING);
-        }
+	if (panelTools.isMoveTools() || this.dataElementTemp.type >= 0) {
+	    mip.changeCursor(-2);
+	} else {
+	    mip.changeCursor(InterfaceOutils.ID_NOTHING);
+	}
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (e.getSource() != interfacePlan) { // On rentre dedans que si on part de Tools
-            if (e.getX() < panelTools.getWidth()) {
-                // TODO : Dessiner l'image qui suit dans InterfaceOutils (On est parti de tools : AJOUT)
-            }
-            e.translatePoint(-panelTools.getWidth(), 0);
-        } else {
-            if(e.getX() < 0){
-                // TODO Pouvoir revenir vers InterfaceTools et dessiner là bas (On est parti de plan : EDIT)
-            }
-        }
+	if (e.getSource() != interfacePlan) { // On rentre dedans que si on part de Tools
+	    if (e.getX() < panelTools.getWidth()) {
+		// TODO : Dessiner l'image qui suit dans InterfaceOutils (On est parti de tools : AJOUT)
+	    }
+	    e.translatePoint(-panelTools.getWidth(), 0);
+	} else {
+	    if (e.getX() < 0) {
+		// TODO Pouvoir revenir vers InterfaceTools et dessiner là bas (On est parti de plan : EDIT)
+	    }
+	}
 
-        if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_ARC) {
-            mip.changeCursor(InterfaceOutils.ID_TOOL_ARC);
-        }
+	if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_ARC) {
+	    mip.changeCursor(InterfaceOutils.ID_TOOL_ARC);
+	}
 
-        if (e.getSource().equals(interfacePlan)) {
+	if (e.getSource().equals(interfacePlan)) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
+	    interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
-            interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
+	    int meterX = mip.convertPixelToMeter(e.getX());
+	    int meterY = mip.convertPixelToMeter(e.getY());
 
-            if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
+	    if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
 
-                if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
-                    Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
-                    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX()), coo.getY());
-                } else {
-                    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (e.getX()), e.getY());
-                }
-            }
-            this.interfacePlan.repaint();
-        } else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
-            if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
-                Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
+		if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
+		    Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
+		    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX()), coo.getY());
+		} else {
+		    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (e.getX()), e.getY());
+		}
+	    }
+	    this.interfacePlan.repaint();
+	} else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
+	    interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
+	    if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
+		Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
 
-                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX(), coo.getY());
-            } else {
-                //System.out.println("egetx draw " + e.getX());
-                interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
-            }
-        }
+		interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX(), coo.getY());
+	    } else {
+		//System.out.println("egetx draw " + e.getX());
+		interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
+	    }
+	}
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
 
-        this.plan.calc();
+	this.plan.calc();
 
-        DataElement dataElement = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
-        interfacePlan.showSelectedElement(dataElement);
+	DataElement dataElement = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
+	interfacePlan.showSelectedElement(dataElement);
 
-        if (dataElement.element != null) {
-            this.panelParams.setParametersInformations(dataElement.element);
-        } else {
-            this.panelParams.hideEditionStationInformations();
-        }
+	if (dataElement.element != null) {
+	    this.panelParams.setParametersInformations(dataElement.element);
+	} else {
+	    this.panelParams.hideEditionStationInformations();
+	}
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        this.panelTools.repaint();
+	this.panelTools.repaint();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (inMap(e)) {
-            float zoom = this.interfacePlan.getZoom();
+	int xEvent = e.getX();
+	if (e.getSource() != this.interfacePlan) {
+	    xEvent -= panelTools.getWidth();
+	}
+	if (inMap(xEvent, e.getY())) {
+	    float zoom = this.interfacePlan.getZoom();
 
-            if (this.panelTools.isMoveTools()) {
-                mip.changeCursor(-1);
-                if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
-                    int x = e.getX();
-                    int y = e.getY();
+	    if (this.panelTools.isMoveTools()) {
+		mip.changeCursor(-1);
+		if (this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
+		    int x = e.getX();
+		    int y = e.getY();
 
-                    if (this.panelTools.getIdTools() >= 0
-                            && !this.mip.isOverlapElement((int) (x / zoom - this.panelTools.getWidth()),
-                                    (int) (y / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
-                        if (jCheckBoxMenuItemMagnetique.isSelected()) {
-                            Coordinate coo = mip.findCooMagnetique(x, y);
-                            x = coo.getX();
-                            y = coo.getY();
-                        }
+		    if (this.panelTools.getIdTools() >= 0) {
 
-                        // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
-                        int halfImageSize = panelTools.getSizeImage() / 2;
+			if (!this.mip.isOverlapElement((int) (x / zoom - this.panelTools.getWidth()),
+				(int) (y / zoom), this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
 
-                        int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
-                        int createY = (int) (y / zoom) - halfImageSize;
-			
-			int nbrSorties = 0;
-			if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_STATION) {
-			    nbrSorties =  getNbrSorties();
-			    if (nbrSorties == -1) {
-				return;
+			    int nbrSorties = 0;
+			    if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_STATION) {
+				nbrSorties = getNbrSorties();
+				if (nbrSorties == -1) {
+				    return;
+				}
+			    }
+			    if (jCheckBoxMenuItemMagnetique.isSelected()) {
+				Coordinate coo = mip.findCooMagnetique(x, y);
+				x = coo.getX();
+				y = coo.getY();
+			    }
+
+			    // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
+			    int halfImageSize = panelTools.getSizeImage() / 2;
+
+			    int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
+			    int createY = (int) (y / zoom) - halfImageSize;
+
+			    this.plan.createElement(this.panelTools.getIdTools(), createX, createY, nbrSorties);
+
+			    DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
+			    interfacePlan.showSelectedElement(addedDataElement);
+
+			    this.panelParams.setParametersInformations(addedDataElement.element);
+
+			}
+		    }
+		    this.panelTools.setMoveTools(false);
+		} else { // CREATE ARC
+		    int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
+		    int y = (int) (e.getY() / zoom);
+		    if (this.panelTools.getIdTools() >= 0
+			    && this.plan.findDataElement(x, y, 1).element != null) { // 1 de findDataElement, n'est ce pas bizzare ?
+			if (this.plan.isDrawingArc()) {
+			    if (this.plan.createArcEntrance(x, y)) {
+				this.panelTools.setMoveTools(false);
+				this.panelTools.resetTools();
+				logDebug.setText("");
+			    }
+			} else {
+			    DataElement dataElement = this.plan.createArcExit(x, y);
+			    if (dataElement != null) {
+				logDebug.setText("Selectionner l'élément à relier à " + dataElement.element.getName());
+			    } else {
+				logDebug.setText("");
 			    }
 			}
-			
-                        this.plan.createElement(this.panelTools.getIdTools(), createX, createY, nbrSorties);
+		    }
+		}
+		this.panelTools.repaint();
+	    } else if (e.getSource().equals(interfacePlan)) {
+		int x = e.getX();
+		int y = e.getY();
 
-                        DataElement addedDataElement = this.plan.getListDataElements().get(this.plan.getListDataElements().size() - 1); // Le dernier
-                        interfacePlan.showSelectedElement(addedDataElement);
+		if (jCheckBoxMenuItemMagnetique.isSelected()) {
+		    Coordinate coo = mip.findCooMagnetique(x, y);
+		    x = coo.getX();
+		    y = coo.getY();
+		}
 
-                        this.panelParams.setParametersInformations(addedDataElement.element);
+		int halfImageSize = panelTools.getSizeImage() / 2;
 
-                    }
-                    this.panelTools.setMoveTools(false);
-                } else { // CREATE ARC
-                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
-                    int y = (int) (e.getY() / zoom);
-                    if (this.panelTools.getIdTools() >= 0
-                            && this.plan.findDataElement(x, y, 1).element != null) { // 1 de findDataElement, n'est ce pas bizzare ?
-                        if (this.plan.isDrawingArc()) {
-                            if (this.plan.createArcEntrance(x, y)) {
-                                this.panelTools.setMoveTools(false);
-                                this.panelTools.resetTools();
-                                logDebug.setText("");
-                            }
-                        } else {
-                            DataElement dataElement = this.plan.createArcExit(x, y);
-                            if (dataElement != null) {
-                                logDebug.setText("Selectionner l'élément à relier à " + dataElement.element.getName());
-                            } else {
-                                logDebug.setText("");
-                            }
-                        }
-                    }
-                }
-                this.panelTools.repaint();
-            } else if (e.getSource().equals(interfacePlan)) {
-                int x = e.getX();
-                int y = e.getY();
+		int moveX = (int) (x / zoom) - halfImageSize;
+		int moveY = (int) (y / zoom) - halfImageSize;
 
-                if (!this.mip.isOverlapElement((int) (x / zoom), (int) (y / zoom), dataElementTemp.width, dataElementTemp.height)) {
-                    if (jCheckBoxMenuItemMagnetique.isSelected()) {
-                        Coordinate coo = mip.findCooMagnetique(x, y);
-                        x = coo.getX();
-                        y = coo.getY();
-                    }
+		this.plan.moveElement(dataElementTemp, moveX, moveY);
+		dataElementTemp = new DataElement();
+	    }
 
-                    int halfImageSize = panelTools.getSizeImage() / 2;
-
-                    int moveX = (int) (x / zoom) - halfImageSize;
-                    int moveY = (int) (y / zoom) - halfImageSize;
-
-                    this.plan.moveElement(dataElementTemp, moveX, moveY);
-                }
-                dataElementTemp = new DataElement();
-            }
-
-            this.interfacePlan.repaint();
-        }
+	    this.interfacePlan.repaint();
+	} else {
+	    if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
+		JOptionPane.showMessageDialog(null,
+			"Déplacer l'élément dans le plan.",
+			"Erreur lors du déplacement de l'élément",
+			JOptionPane.OK_OPTION,
+			null);
+	    } else {
+		if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // Vérifier qu'on drag and drop quelque chose
+		    JOptionPane.showMessageDialog(null,
+			    "Créer l'élément dans le plan.",
+			    "Erreur lors de la création de l'élément",
+			    JOptionPane.OK_OPTION,
+			    null);
+		}
+	    }
+	    this.interfacePlan.repaint();
+	    this.panelTools.repaint();
+	}
     }
 
     /**
      * **
      * summary : Permet de savoir si on est bien dans le plan pour travailler.
      */
-    private boolean inMap(MouseEvent e) {
-        int marginLeft = 0;
-        if (this.itemTools.getState()) {
-            marginLeft = this.panelTools.getWidth();
-        }
+    private boolean inMap(int x, int y) {
+	if (mip.convertPixelToMeter(x) <= 0 || mip.convertPixelToMeter(y) <= 0) {
+	    return false;
+	}
 
-        return e.getX() + marginLeft >= this.jScrollPane1.getX()
-                && e.getX() <= this.jScrollPane1.getX() + this.jScrollPane1.getWidth()
-                && e.getY() >= this.jScrollPane1.getY()
-                && e.getY() <= this.jScrollPane1.getY() + this.jScrollPane1.getHeight();
+	int marginLeft = 0;
+	if (this.itemTools.getState()) {
+	    x += this.panelTools.getWidth();
+	}
+
+	return x + marginLeft >= this.jScrollPane1.getX()
+		&& x <= this.jScrollPane1.getX() + this.jScrollPane1.getWidth()
+		&& y >= this.jScrollPane1.getY()
+		&& y <= this.jScrollPane1.getY() + this.jScrollPane1.getHeight();
     }
 
     public JLabel getDebug() {
-        return logDebug;
+	return logDebug;
     }
 
     @Override
@@ -358,120 +387,121 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     }
 
     private void restartPlan() {
-        plan = new Plan();
-        this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2, 0);
-        openPlan();
+	plan = new Plan();
+	this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2, 0);
+	openPlan();
     }
 
     private void openPlan() {
-        interfacePlan.setStationIsSelected(false);
-        interfacePlan.setZoom(1);
-        this.panelParams.hideEditionStationInformations();
-        interfacePlan.repaint();
+	interfacePlan.setStationIsSelected(false);
+	interfacePlan.setZoom(1);
+	this.panelParams.hideEditionStationInformations();
+	interfacePlan.repaint();
     }
 
     private void savePlan() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        int option = chooser.showSaveDialog(null);
-        if (option == JFileChooser.APPROVE_OPTION) {
-            // TODO : Verifier que l'on écrase pas un fichier existant
+	JFileChooser chooser = new JFileChooser();
+	chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	int option = chooser.showSaveDialog(null);
+	if (option == JFileChooser.APPROVE_OPTION) {
+	    // TODO : Verifier que l'on écrase pas un fichier existant
 
-            File selectedPfile = chooser.getSelectedFile();
-            String path = selectedPfile.getAbsolutePath() + ".ser";
+	    File selectedPfile = chooser.getSelectedFile();
+	    String path = selectedPfile.getAbsolutePath() + ".ser";
 
-            try {
-                FileOutputStream fout = new FileOutputStream(path);
-                ObjectOutputStream oos = new ObjectOutputStream(fout);
-                oos.writeObject(plan);
-                oos.close();
-            } catch (Exception ex) {
-                String questionEr = "Erreur : " + ex.getMessage();
+	    try {
+		FileOutputStream fout = new FileOutputStream(path);
+		ObjectOutputStream oos = new ObjectOutputStream(fout);
+		oos.writeObject(plan);
+		oos.close();
+	    } catch (Exception ex) {
+		String questionEr = "Erreur : " + ex.getMessage();
 
-                JOptionPane.showMessageDialog(null,
-                        questionEr,
-                        "Erreur lors de la sauvegarde",
-                        JOptionPane.OK_OPTION,
-                        null);
-            }
-        }
+		JOptionPane.showMessageDialog(null,
+			questionEr,
+			"Erreur lors de la sauvegarde",
+			JOptionPane.OK_OPTION,
+			null);
+	    }
+	}
     }
 
     private void chargePlan() {
-        String question = "Voulez vous sauvegarder le plan en cours d'abord ?";
-        Object[] optionsReponse = {"Oui, bien sûr !", "Non, merci"};
-        int n = JOptionPane.showOptionDialog(null,
-                question,
-                "Sauvegarder le plan en cours ?",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                optionsReponse,
-                optionsReponse[1]);
+	String question = "Voulez vous sauvegarder le plan en cours d'abord ?";
+	Object[] optionsReponse = {"Oui, bien sûr !", "Non, merci"};
+	int n = JOptionPane.showOptionDialog(null,
+		question,
+		"Sauvegarder le plan en cours ?",
+		JOptionPane.YES_NO_CANCEL_OPTION,
+		JOptionPane.QUESTION_MESSAGE,
+		null,
+		optionsReponse,
+		optionsReponse[1]);
 
-        if (n == 0) {
-            savePlan(); // Gérer le cas où l'enregistrement se passe mal pour pas perdre les infos à sauvegarder
-        }
+	if (n == 0) {
+	    savePlan(); // Gérer le cas où l'enregistrement se passe mal pour pas perdre les infos à sauvegarder
+	}
 
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        int option = chooser.showOpenDialog(null);
-        if (option == JFileChooser.APPROVE_OPTION) {
+	JFileChooser chooser = new JFileChooser();
+	chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	int option = chooser.showOpenDialog(null);
+	if (option == JFileChooser.APPROVE_OPTION) {
 
-            File selectedPfile = chooser.getSelectedFile();
-            String path = selectedPfile.getAbsolutePath();
-            try {
-                FileInputStream fin = new FileInputStream(path);
-                ObjectInputStream ois = new ObjectInputStream(fin);
-                plan = new Plan();
-                plan = (Plan) ois.readObject();
-                ois.close();
-                openPlan();
-            } catch (IOException | ClassNotFoundException ex) {
-                String questionEr = "Erreur : " + ex.getMessage();
+	    File selectedPfile = chooser.getSelectedFile();
+	    String path = selectedPfile.getAbsolutePath();
+	    try {
+		FileInputStream fin = new FileInputStream(path);
+		ObjectInputStream ois = new ObjectInputStream(fin);
+		plan = new Plan();
+		plan = (Plan) ois.readObject();
+		ois.close();
+		openPlan();
+	    } catch (IOException | ClassNotFoundException ex) {
+		String questionEr = "Erreur : " + ex.getMessage();
 
-                JOptionPane.showMessageDialog(null,
-                        questionEr,
-                        "Erreur lors du chargement",
-                        JOptionPane.OK_OPTION,
-                        null);
-            }
-        }
+		JOptionPane.showMessageDialog(null,
+			questionEr,
+			"Erreur lors du chargement",
+			JOptionPane.OK_OPTION,
+			null);
+	    }
+	}
     }
 
     public void undo() {
-        LinkedList<Element> listElements = plan.getChangeManager().undo();
-        plan.resetElements(listElements);
-        interfacePlan.repaint();
+	LinkedList<Element> listElements = plan.getChangeManager().undo();
+	plan.resetElements(listElements);
+	interfacePlan.repaint();
     }
 
     public void redo() {
-        LinkedList<Element> listElements = plan.getChangeManager().redo();
-        plan.resetElements(listElements);
-        interfacePlan.repaint();
+	LinkedList<Element> listElements = plan.getChangeManager().redo();
+	plan.resetElements(listElements);
+	interfacePlan.repaint();
     }
 
     /**
      * demande à l'utilisateur de rentrer le nombre de sorties de la station
      * Retourne -1 si l'utilisateur choisis d'annuler
-     * @return 
+     *
+     * @return
      */
     private int getNbrSorties() {
 	int nbrSorties;
 	SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 5, 1);
-	
+
 	JSpinner spinner = new JSpinner(spinnerModel);
 	int res = JOptionPane.showOptionDialog(null, spinner, "Choix du nombre de sorties", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-	
+
 	if (res == JOptionPane.CANCEL_OPTION) {
-	    nbrSorties= -1;
+	    nbrSorties = -1;
 	} else {
-	    nbrSorties = (int)spinner.getValue();
+	    nbrSorties = (int) spinner.getValue();
 	}
-	
+
 	return nbrSorties;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -668,65 +698,65 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
 
     private void itemGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGridActionPerformed
-        this.mip.GridView();
+	this.mip.GridView();
     }//GEN-LAST:event_itemGridActionPerformed
 
     private void itemParamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemParamActionPerformed
-        this.mip.setVisiblePaneParam(this.itemParam.getState());
+	this.mip.setVisiblePaneParam(this.itemParam.getState());
     }//GEN-LAST:event_itemParamActionPerformed
 
     private void itemToolsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemToolsActionPerformed
-        this.mip.setVisiblePaneTools(this.itemTools.getState());
+	this.mip.setVisiblePaneTools(this.itemTools.getState());
     }//GEN-LAST:event_itemToolsActionPerformed
 
     private void jMenuItemZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemZoomInActionPerformed
-        interfacePlan.zoomIn();
+	interfacePlan.zoomIn();
     }//GEN-LAST:event_jMenuItemZoomInActionPerformed
 
     private void jMenuItemZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemZoomOutActionPerformed
-        interfacePlan.zoomOut();
+	interfacePlan.zoomOut();
     }//GEN-LAST:event_jMenuItemZoomOutActionPerformed
 
     private void jMenuItemExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExportActionPerformed
-        mip.exportImageAsPng();
+	mip.exportImageAsPng();
     }//GEN-LAST:event_jMenuItemExportActionPerformed
 
     private void jMenuItemNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewActionPerformed
-        restartPlan();
+	restartPlan();
     }//GEN-LAST:event_jMenuItemNewActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
-        chargePlan();
+	chargePlan();
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        savePlan();
+	savePlan();
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCloseActionPerformed
-        System.exit(0);
+	System.exit(0);
     }//GEN-LAST:event_jMenuItemCloseActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            if (interfacePlan.getStationIsSelected()) {
-                plan.removeElement(interfacePlan.getSelectedDataElement());
-                interfacePlan.setStationIsSelected(false);
-                this.panelParams.hideEditionStationInformations();
-            }
-        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            interfacePlan.setStationIsSelected(false);
-            this.panelParams.hideEditionStationInformations();
-        }
-        interfacePlan.repaint();
+	if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+	    if (interfacePlan.getStationIsSelected()) {
+		plan.removeElement(interfacePlan.getSelectedDataElement());
+		interfacePlan.setStationIsSelected(false);
+		this.panelParams.hideEditionStationInformations();
+	    }
+	} else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+	    interfacePlan.setStationIsSelected(false);
+	    this.panelParams.hideEditionStationInformations();
+	}
+	interfacePlan.repaint();
     }//GEN-LAST:event_formKeyPressed
 
     private void jMenuItemUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUndoActionPerformed
-        undo();
+	undo();
     }//GEN-LAST:event_jMenuItemUndoActionPerformed
 
     private void jMenuItemRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRedoActionPerformed
-        redo();
+	redo();
     }//GEN-LAST:event_jMenuItemRedoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
