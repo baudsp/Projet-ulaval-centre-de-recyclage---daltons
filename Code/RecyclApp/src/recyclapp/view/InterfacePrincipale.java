@@ -295,7 +295,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
 		    int y = (int) (e.getY() / zoom);
 		    if (this.panelTools.getIdTools() >= 0
-			    && this.plan.findDataElement(x, y, 1).element != null) { // 1 de findDataElement, n'est ce pas bizzare ?
+			    && this.plan.findDataElement(x, y, zoom).element != null) { 
 			if (this.plan.isDrawingArc()) {
 			    if (this.plan.createArcEntrance(x, y)) {
 				this.panelTools.setMoveTools(false);
