@@ -1,7 +1,10 @@
 package recyclapp.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import recyclapp.view.InterfaceOutils;
 
@@ -10,6 +13,13 @@ public class Plan implements Serializable {
     private LinkedList<Element> listElements;
     private DataElement tempDataElement = null;
     private ChangeManager changeManager = new ChangeManager();
+
+    /**
+     * @return the tempDataElement
+     */
+    public DataElement getTempDataElement() {
+	return tempDataElement;
+    }
 
     public class DataElement {
 
@@ -41,6 +51,29 @@ public class Plan implements Serializable {
     public Plan() {
         listElements = new LinkedList<>();
     }
+    
+    public void calc() {
+	List<EntreeUsine> listEntreeUsine = findEntreesUsine();
+	
+	if(!listEntreeUsine.isEmpty()) {
+	    for (EntreeUsine entreeUsine : listEntreeUsine) {
+		entreeUsine.pushExitProducts(entreeUsine.a);
+	    }
+	}
+    }
+    
+    public List<EntreeUsine> findEntreesUsine() {
+	
+	List<EntreeUsine> listEntreeUsine = new ArrayList<>();
+	
+	for (Element listElement : listElements) {
+	    if (listElement.getClass().equals(EntreeUsine.class)) {
+		listEntreeUsine.add((EntreeUsine) listElement);
+	    }
+	}
+	
+	return listEntreeUsine;
+    }
 
     public DataElement createArcExit(int x, int y) {
         DataElement dataElement = findDataElement(x, y, 1);
@@ -65,7 +98,7 @@ public class Plan implements Serializable {
                     JOptionPane.OK_OPTION,
                     null);
         }
-        return tempDataElement;
+        return getTempDataElement();
     }
 
     public boolean createArcEntrance(int x, int y) {
@@ -74,10 +107,10 @@ public class Plan implements Serializable {
 
         if (dataElement.element != null) {
             String message = "Erreur lors de l'ajout de l'arc.";
-            if (dataElement.type != InterfaceOutils.ID_TOOL_SORTIE || tempDataElement.type != InterfaceOutils.ID_TOOL_ENTREE) {
+            if (dataElement.type != InterfaceOutils.ID_TOOL_SORTIE || getTempDataElement().type != InterfaceOutils.ID_TOOL_ENTREE) {
                 if (dataElement.element.getFirstFreeEntrance() >= 0) {
                     if (!dataElement.element.equals(tempDataElement.element)) { // si les éléments sont différents on enregistre
-                        tempDataElement.element.addExit(tempDataElement.element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element));
+                        getTempDataElement().element.addExit(getTempDataElement().element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element, getTempDataElement().element));
                         dataElement.element.addEntrance();
                         tempDataElement = null;
                         found = true;
@@ -135,7 +168,7 @@ public class Plan implements Serializable {
     }
 
     public boolean isDrawingArc() {
-        return (tempDataElement != null);
+        return (getTempDataElement() != null);
     }
 
     public void removeElement(DataElement dataElement) {

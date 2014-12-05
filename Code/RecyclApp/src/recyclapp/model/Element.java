@@ -167,7 +167,8 @@ public abstract class Element extends Component {
 	}
 	for (int exitNumber = 0; exitNumber < nbExits; exitNumber++) {
 	    if (exits[exitNumber] != null) {
-		exits[exitNumber].pushExitProducts(exitProductsFromArc(exitNumber));
+		Map<String, Float> productFromExit = exitProductsFromArc(exitNumber);
+		exits[exitNumber].pushExitProducts(productFromExit);
 	    }
 	}
     }
@@ -284,5 +285,30 @@ public abstract class Element extends Component {
             return true;
         }
         return false;
+    }
+    /**
+     * Sauvegarde dans la matrix de tri de la station l'input
+     */
+    public void setMatrix(LinkedList<String> inputs) {
+	Map<String, Map<Integer, Map<String, Float>>> matrix = new HashMap<>();
+	
+	Map<Integer, Map<String, Float>> matrixExits = new HashMap<>();
+	
+	for (String input : inputs) {
+	    String[] splitResult = input.split(":::");
+	    
+	    int numSortie = Integer.valueOf(splitResult[0]);
+	    String product = splitResult[1];
+	    
+	    float value = Float.valueOf(splitResult[3]);
+	    
+	    Map<String, Float> productToExit = new HashMap<>();
+	    
+	    productToExit.put(product, value);
+	    
+	    matrixExits.put(numSortie, productToExit);	    
+	    matrix.put(product, matrixExits);
+	}
+	this.matrix = matrix;
     }
 }

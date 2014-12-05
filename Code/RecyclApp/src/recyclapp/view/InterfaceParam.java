@@ -6,8 +6,11 @@
 package recyclapp.view;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
@@ -29,13 +32,13 @@ public class InterfaceParam extends javax.swing.JPanel {
      * Creates new form InterfaceParamBis
      */
     public InterfaceParam() {
-        initComponents();
-        this.jPanelEditionStation.setVisible(false);
+	initComponents();
+	this.jPanelEditionStation.setVisible(false);
     }
 
     public void hideEditionStationInformations() {
-        this.jPanelEditionStation.setVisible(false);
-        element = null;
+	this.jPanelEditionStation.setVisible(false);
+	element = null;
     }
 
     /**
@@ -44,82 +47,134 @@ public class InterfaceParam extends javax.swing.JPanel {
      * @param element
      */
     public void setParametersInformations(Element element) {
-        this.element = element;
+	this.element = element;
 
-        jPanelEditionStation.setVisible(true);
+	jPanelEditionStation.setVisible(true);
 
-        this.jTextFieldName.setText(element.getName());
-        this.jTextFieldDescription.setText(element.getDescription());
+	this.jTextFieldName.setText(element.getName());
+	this.jTextFieldDescription.setText(element.getDescription());
 
-        this.jSpinnerDebitMax.setValue(element.getMaxFlow());
+	this.jSpinnerDebitMax.setValue(element.getMaxFlow());
 
-        if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
-            this.jSpinnerEntrances.setValue(element.getNbEntrances());
-            this.jSpinnerExits.setValue(element.getNbExits());
-            this.jSpinnerExits.setEnabled(false);
-            this.jSpinnerEntrances.setEnabled(true);
-        } else if(element.getType() == InterfaceOutils.ID_TOOL_ENTREE
-                || element.getType() == InterfaceOutils.ID_TOOL_SORTIE){
-            this.jSpinnerEntrances.setValue(element.getNbEntrances());
-            this.jSpinnerExits.setValue(element.getNbExits());
-            this.jSpinnerExits.setEnabled(false);
-            this.jSpinnerEntrances.setEnabled(false);
-        }
-        else {
-            this.jSpinnerEntrances.setValue(element.getNbEntrances());
-            this.jSpinnerExits.setValue(element.getNbExits());
-            this.jSpinnerEntrances.setEnabled(false);
-            this.jSpinnerExits.setEnabled(true);
-        }
+	if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
+	    this.jSpinnerEntrances.setValue(element.getNbEntrances());
+	    this.jSpinnerExits.setValue(element.getNbExits());
+	    this.jSpinnerExits.setEnabled(false);
+	    this.jSpinnerEntrances.setEnabled(true);
+	} else if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE
+		|| element.getType() == InterfaceOutils.ID_TOOL_SORTIE) {
+	    this.jSpinnerEntrances.setValue(element.getNbEntrances());
+	    this.jSpinnerExits.setValue(element.getNbExits());
+	    this.jSpinnerExits.setEnabled(false);
+	    this.jSpinnerEntrances.setEnabled(false);
+	} else {
+	    this.jSpinnerEntrances.setValue(element.getNbEntrances());
+	    this.jSpinnerExits.setValue(element.getNbExits());
+	    this.jSpinnerEntrances.setEnabled(false);
+	    this.jSpinnerExits.setEnabled(true);
+	}
 
-        this.jSpinnerExits.setValue(element.getNbExits());
+	this.jSpinnerExits.setValue(element.getNbExits());
 
-        this.jValeursSorties.removeAll();
+	this.jValeursSorties.removeAll();
 
-        // On ecrit le contenu de la matrice de transformation
-        Map<String, Map<Integer, Map<String, Float>>> matrix = element.getMatrix();
+	if (element.getType() != InterfaceOutils.ID_TOOL_ENTREE) {
+	    filljValeursSorties();
+	}
 
-        Iterator<String> iteratorProduits = matrix.keySet().iterator();
+	jValeursSorties.repaint();
+	repaint();
+    }
 
-        GridBagConstraints c = new GridBagConstraints();
+    private void filljValeursSorties() {
+	// On ecrit le contenu de la matrice de transformation
+	Map<String, Map<Integer, Map<String, Float>>> matrix = element.getMatrix();
 
-        int i = 0;
-        while (iteratorProduits.hasNext()) {
+	GridBagConstraints gridBagConstaints = new GridBagConstraints();
 
-            String produit = iteratorProduits.next();
+	int i = 0;
 
-            c.gridx = 0;
-            c.gridy = i;
-            jValeursSorties.add(new JLabel(produit), c);
+	// A ameliorer
+	// On verifie que la matrice trie bien le bon nombre de 
+	// dechets (et pas les bons dechets)
+	if (matrix.keySet().size() == element.getEntranceProducts().size()) {
 
-            Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);
-            Iterator<Integer> iteratorSorties = matriceProduit.keySet().iterator();
-            while (iteratorSorties.hasNext()) {
-                i++;
+	    Iterator<String> iteratorProduits = matrix.keySet().iterator();
 
-                int numsortie = iteratorSorties.next();
+	    while (iteratorProduits.hasNext()) {
 
-                c.gridx = 0;
-                c.gridy = i;
-                jValeursSorties.add(new JLabel("Sortie " + numsortie + " :"), c);
+		String produit = iteratorProduits.next();
 
-                float pourcentage = (float) matriceProduit.get(numsortie).values().toArray()[0];
-                // A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
+		gridBagConstaints.gridx = 0;
+		gridBagConstaints.gridy = i;
+		jValeursSorties.add(new JLabel(produit), gridBagConstaints);
 
-                c.gridx = 1;
-                c.gridy = i;
-                jValeursSorties.add(new JTextField(pourcentage + ""), c);
+		Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);
+		Iterator<Integer> iteratorSorties = matriceProduit.keySet().iterator();
+		while (iteratorSorties.hasNext()) {
+		    i++;
 
-                c.gridx = 2;
-                c.gridy = i;
-                jValeursSorties.add(new JLabel(" %"), c);
-            }
+		    int numsortie = iteratorSorties.next();
 
-            i++;
-        }
+		    gridBagConstaints.gridx = 0;
+		    gridBagConstaints.gridy = i;
+		    jValeursSorties.add(new JLabel("Sortie " + numsortie + 1 + " :"), gridBagConstaints);
 
-        jValeursSorties.repaint();
-        repaint();
+		    float pourcentage = (float) matriceProduit.get(numsortie).values().toArray()[0];
+		    // A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
+
+		    gridBagConstaints.gridx = 1;
+		    gridBagConstaints.gridy = i;
+		    jValeursSorties.add(new JTextField(pourcentage + ""), gridBagConstaints);
+
+		    gridBagConstaints.gridx = 2;
+		    gridBagConstaints.gridy = i;
+		    jValeursSorties.add(new JLabel(" %"), gridBagConstaints);
+		}
+
+		i++;
+
+	    }
+	} else {
+
+	    Iterator<String> iteratorProducts = element.getEntranceProducts().keySet().iterator();
+
+	    int k = 0;
+
+	    while (iteratorProducts.hasNext()) {
+
+		String produit = iteratorProducts.next();
+
+		gridBagConstaints.gridx = 0;
+		gridBagConstaints.gridy = i;
+		jValeursSorties.add(new JLabel(produit + " : "), gridBagConstaints);
+
+		for (int j = 0; j < element.getNbExits(); j++) {
+		    gridBagConstaints.gridx = 0;
+		    gridBagConstaints.gridy = i + 1;
+		    jValeursSorties.add(new JLabel("Sortie " + j + 1), gridBagConstaints);
+		    gridBagConstaints.gridx = 1;
+		    JTextField jtSortie = new JTextField();
+		    // ajout d'un nom pour identifier chaque 
+		    // textField :
+		    // j = sortie (partant de 0) ::: produit = nom du dechet ::: k = identifiant unique
+		    // ::: parce que Guillaume est parano
+		    jtSortie.setName(j + ":::" + produit + ":::" + k);
+		    jtSortie.setPreferredSize(new Dimension(70, 20));
+		    jValeursSorties.add(jtSortie, gridBagConstaints);
+
+		    gridBagConstaints.gridx = 2;
+		    jValeursSorties.add(new JLabel(" %"), gridBagConstaints);
+
+		    i++;
+
+		    k++;
+		}
+
+		i++;
+
+	    }
+	}
     }
 
     /**
@@ -316,49 +371,63 @@ public class InterfaceParam extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValidateActionPerformed
-        element.setName(jTextFieldName.getText());
-        element.setDescription(jTextFieldDescription.getText());
-        element.setMaxFlow((Float) jSpinnerDebitMax.getValue());
-        element.setColor(selectedColor);
-        element.setNbExits((int) jSpinnerExits.getValue());
-        element.setNbEntrance((int) jSpinnerEntrances.getValue());
-        JOptionPane.showConfirmDialog(null,
-                    "L'enregistrement s'est passé avec succès.",
-                    "Enregistrement de " + element.getName(),
-                    JOptionPane.CLOSED_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE);
+	element.setName(jTextFieldName.getText());
+	element.setDescription(jTextFieldDescription.getText());
+	element.setMaxFlow((Float) jSpinnerDebitMax.getValue());
+	element.setColor(selectedColor);
+	element.setNbExits((int) jSpinnerExits.getValue());
+	element.setNbEntrance((int) jSpinnerEntrances.getValue());
+
+	Component[] components = jValeursSorties.getComponents();
+
+	LinkedList<String> inputs = new LinkedList<>();
+	for (Component component : components) {
+	    if (component.getClass().equals(JTextField.class)) {
+		JTextField jTextField = (JTextField) component;
+		inputs.add(jTextField.getName() + ":::" + jTextField.getText());
+	    }
+	}
+
+	element.setMatrix(inputs);
+
+
+	JOptionPane.showConfirmDialog(null,
+		"L'enregistrement s'est passé avec succès.",
+		"Enregistrement de " + element.getName(),
+		JOptionPane.CLOSED_OPTION,
+		JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonValidateActionPerformed
 
     private void jButtonChoseColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChoseColorActionPerformed
-        JFrame guiFrame = new JFrame();
-        selectedColor = JColorChooser.showDialog(guiFrame, "Choisissez une couleur", element.getColor());
+	JFrame guiFrame = new JFrame();
+	selectedColor = JColorChooser.showDialog(guiFrame, "Choisissez une couleur", element.getColor());
     }//GEN-LAST:event_jButtonChoseColorActionPerformed
 
     private void jSpinnerExitsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerExitsStateChanged
-        // Nombre de sorties incorrectes
-        if ((int) jSpinnerExits.getValue() < element.getNbArcs()) {
-            JOptionPane.showMessageDialog(null,
-                    "Des arcs doivent être supprimées pour avoir " + jSpinnerExits.getValue() + " nombre de sorties.",
-                    "Total de sorties incorrect",
-                    JOptionPane.OK_OPTION,
-                    null);
-            jSpinnerExits.setValue(element.getNbArcs());
-        }
+	// Nombre de sorties incorrectes
+	if ((int) jSpinnerExits.getValue() < element.getNbArcs()) {
+	    JOptionPane.showMessageDialog(null,
+		    "Des arcs doivent être supprimées pour avoir " + jSpinnerExits.getValue() + " nombre de sorties.",
+		    "Total de sorties incorrect",
+		    JOptionPane.OK_OPTION,
+		    null);
+	    jSpinnerExits.setValue(element.getNbArcs());
+	}
     }//GEN-LAST:event_jSpinnerExitsStateChanged
 
     private void jSpinnerEntrancesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerEntrancesStateChanged
-        // Nombre d'entrées incorrectes
-        // Ici ne devraient rentrer que les jonctions
-        if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
-            if ((int) jSpinnerEntrances.getValue() < element.getNbEntranceUsed()) {
-                JOptionPane.showMessageDialog(null,
-                        "Des arcs vers cette jonction doivent être supprimées pour avoir " + jSpinnerEntrances.getValue() + " nombre d'entrées",
-                        "Total d'entrées incorrect",
-                        JOptionPane.OK_OPTION,
-                        null);
-                jSpinnerEntrances.setValue(element.getNbEntrances());
-            }
-        }
+	// Nombre d'entrées incorrectes
+	// Ici ne devraient rentrer que les jonctions
+	if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
+	    if ((int) jSpinnerEntrances.getValue() < element.getNbEntranceUsed()) {
+		JOptionPane.showMessageDialog(null,
+			"Des arcs vers cette jonction doivent être supprimées pour avoir " + jSpinnerEntrances.getValue() + " nombre d'entrées",
+			"Total d'entrées incorrect",
+			JOptionPane.OK_OPTION,
+			null);
+		jSpinnerEntrances.setValue(element.getNbEntrances());
+	    }
+	}
     }//GEN-LAST:event_jSpinnerEntrancesStateChanged
 
 

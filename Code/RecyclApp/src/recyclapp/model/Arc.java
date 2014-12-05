@@ -6,16 +6,18 @@ public class Arc extends Component {
 
     private Coordinate coordinateExit;
     private Coordinate coordinateEntrance;
-    private Element entranceElement;
+    /**
+     * Origine de l'arc
+     */
     private Element exitElement;
+    /**
+     * Destination de l'arc
+     */
+    private Element entranceElement;
 
-    public Arc(Element entranceElement) {
+    public Arc(Element entranceElement, Element exitElement) {
         this.entranceElement = entranceElement;
-    }
-
-    public Arc(Element entrance, Element exit) {
-        entranceElement = entrance;
-        exitElement = exit;
+	this.exitElement = exitElement;
     }
 
     public void pushExitProducts(Map<String, Float> listEntranceProducts) {
@@ -23,10 +25,6 @@ public class Arc extends Component {
         if (entranceElement != null) {
             entranceElement.pushExitProducts(entranceProducts);
         }
-    }
-
-    public void setEntranceCoordinate(Coordinate coordinateEntrance) {
-        this.coordinateEntrance = coordinateEntrance;
     }
 
     public boolean getEntranceCoordinateStatus() {
@@ -38,10 +36,6 @@ public class Arc extends Component {
      */
     public Element getEntranceElement() {
         return entranceElement;
-    }
-
-    public void setEntranceElement(Element entrance) {
-        entranceElement = entrance;
     }
 
     public Element getExitElement() {

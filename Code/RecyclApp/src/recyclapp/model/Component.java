@@ -31,4 +31,8 @@ public abstract class Component  implements Serializable{
     public void setColor(Color color) {
         this.color = color;
     }
+    
+    public Map<String, Float> getEntranceProducts() {
+	return entranceProducts;
+    }
 }
