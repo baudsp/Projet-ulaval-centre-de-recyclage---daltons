@@ -21,9 +21,9 @@ public class Arc extends Component {
     }
 
     public void pushExitProducts(Map<String, Float> listEntranceProducts) {
-        entranceProducts = listEntranceProducts;
+        setEntranceProducts(listEntranceProducts);
         if (entranceElement != null) {
-            entranceElement.pushExitProducts(entranceProducts);
+            entranceElement.pushExitProducts(super.getEntranceProducts());
         }
     }
 
