@@ -291,15 +291,23 @@ public abstract class Element extends Component{
      * Sauvegarde dans la matrix de tri de la station l'input
      */
     public void setMatrix(LinkedList<String> inputs) {
-	Map<String, Map<Integer, Map<String, Float>>> matrix = new HashMap<>();
+	Map<String, Map<Integer, Map<String, Float>>> matrixTri = new HashMap<>();
 	
 	Map<Integer, Map<String, Float>> matrixExits = new HashMap<>();
+	
+	String product = "";
 	
 	for (String input : inputs) {
 	    String[] splitResult = input.split(":::");
 	    
 	    int numSortie = Integer.valueOf(splitResult[0]);
-	    String product = splitResult[1];
+	    product = splitResult[1];
+	    
+	    // Si on change de produit, on recrée une nouvelle matrice 
+	    if (!splitResult[1].equals(product)) {
+		matrixExits = new HashMap<>();
+		product = splitResult[1];
+	    }
 	    
 	    float value = Float.valueOf(splitResult[3]);
 	    
@@ -308,9 +316,9 @@ public abstract class Element extends Component{
 	    productToExit.put(product, value);
 	    
 	    matrixExits.put(numSortie, productToExit);	    
-	    matrix.put(product, matrixExits);
+	    matrixTri.put(product, matrixExits);
 	}
-	this.matrix = matrix;
+	this.matrix = matrixTri;
     }
     
     public abstract Element clone();

@@ -65,17 +65,20 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	this.jSpinnerExits.setValue(element.getNbExits());
 
-	this.jValeursSorties.removeAll();
+	this.jPanelMatrix.removeAll();
 
-	if (element.getType() == InterfaceOutils.ID_TOOL_STATION) {  
-	    filljValeursSorties();
+	this.jPanelExitValues.removeAll();
+
+	if (element.getType() == InterfaceOutils.ID_TOOL_STATION) {
+	    filljPanelMatrix();
 	}
 
-	jValeursSorties.repaint();
+	filljPanelExitValues();
+
 	repaint();
     }
 
-    private void filljValeursSorties() {
+    private void filljPanelMatrix() {
 	// On ecrit le contenu de la matrice de transformation
 	Map<String, Map<Integer, Map<String, Float>>> matrix = element.getMatrix();
 
@@ -96,29 +99,40 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 		gridBagConstaints.gridx = 0;
 		gridBagConstaints.gridy = i;
-		jValeursSorties.add(new JLabel(produit), gridBagConstaints);
+		jPanelMatrix.add(new JLabel(produit), gridBagConstaints);
 
 		Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);
 		Iterator<Integer> iteratorSorties = matriceProduit.keySet().iterator();
 		while (iteratorSorties.hasNext()) {
 		    i++;
 
-		    int numsortie = iteratorSorties.next() + 1;
+		    int numsortie = iteratorSorties.next();
 
 		    gridBagConstaints.gridx = 0;
 		    gridBagConstaints.gridy = i;
-		    jValeursSorties.add(new JLabel("Sortie " + (numsortie ) + " :"), gridBagConstaints);
+		    jPanelMatrix.add(new JLabel("Sortie " + Integer.toString(numsortie + 1) + " :"), gridBagConstaints);
 
-		    float pourcentage = (float) matriceProduit.get(numsortie).values().toArray()[0];
+		    Map<String, Float> a = matriceProduit.get(numsortie);
+
+		    float pourcentage = (float) a.values().toArray()[0];
 		    // A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
 
 		    gridBagConstaints.gridx = 1;
 		    gridBagConstaints.gridy = i;
-		    jValeursSorties.add(new JTextField(pourcentage + ""), gridBagConstaints);
+		    
+		    JTextField jtSortie = new JTextField(pourcentage + "");
+		    // ajout d'un nom pour identifier chaque 
+		    // textField :
+		    //  = sortie (partant de 0) ::: produit = nom du dechet ::: i = identifiant unique
+		    // ::: parce que Guillaume est parano
+		    jtSortie.setName(numsortie + ":::" + produit + ":::" + i);
+		    jtSortie.setPreferredSize(new Dimension(70, 20));
+		    jPanelMatrix.add(jtSortie, gridBagConstaints);
+		    jPanelMatrix.add(jtSortie, gridBagConstaints);
 
 		    gridBagConstaints.gridx = 2;
 		    gridBagConstaints.gridy = i;
-		    jValeursSorties.add(new JLabel(" %"), gridBagConstaints);
+		    jPanelMatrix.add(new JLabel(" %"), gridBagConstaints);
 		}
 
 		i++;
@@ -136,12 +150,13 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 		gridBagConstaints.gridx = 0;
 		gridBagConstaints.gridy = i;
-		jValeursSorties.add(new JLabel(produit + " : "), gridBagConstaints);
+		jPanelMatrix.add(new JLabel(produit + " : "), gridBagConstaints);
 
 		for (int j = 0; j < element.getNbExits(); j++) {
 		    gridBagConstaints.gridx = 0;
 		    gridBagConstaints.gridy = i + 1;
-		    jValeursSorties.add(new JLabel("Sortie " + j + 1), gridBagConstaints);
+		    int numSortie = (j + 1);
+		    jPanelMatrix.add(new JLabel("Sortie " + numSortie), gridBagConstaints);
 		    gridBagConstaints.gridx = 1;
 		    JTextField jtSortie = new JTextField();
 		    // ajout d'un nom pour identifier chaque 
@@ -150,10 +165,10 @@ public class InterfaceParam extends javax.swing.JPanel {
 		    // ::: parce que Guillaume est parano
 		    jtSortie.setName(j + ":::" + produit + ":::" + k);
 		    jtSortie.setPreferredSize(new Dimension(70, 20));
-		    jValeursSorties.add(jtSortie, gridBagConstaints);
+		    jPanelMatrix.add(jtSortie, gridBagConstaints);
 
 		    gridBagConstaints.gridx = 2;
-		    jValeursSorties.add(new JLabel(" %"), gridBagConstaints);
+		    jPanelMatrix.add(new JLabel(" %"), gridBagConstaints);
 
 		    i++;
 
@@ -162,6 +177,37 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 		i++;
 
+	    }
+	}
+    }
+
+    private void filljPanelExitValues() {
+	
+	GridBagConstraints gridBagConstaints = new GridBagConstraints();
+
+	int nbExits = this.element.getNbExits();
+
+	for (int exit = 0; exit < nbExits; exit++) {
+	    Map<String, Float> exitValues = this.element.exitProductsFromArc(exit);
+
+    	    if (exitValues != null && !exitValues.isEmpty()) {
+		int numExit = exit + 1;
+		
+		gridBagConstaints.gridx = 0;
+		gridBagConstaints.gridy = exit;
+		jPanelExitValues.add(new JLabel("Exit " + numExit + " : "), gridBagConstaints);
+
+		Iterator<String> productIterator = exitValues.keySet().iterator();
+		
+		while (productIterator.hasNext()) {
+		    exit++;
+		    String product = productIterator.next();
+		    gridBagConstaints.gridx = 0;
+		    gridBagConstaints.gridy = exit;
+		    jPanelExitValues.add(new JLabel(product + " => "), gridBagConstaints);
+		     gridBagConstaints.gridx = 1;
+		    jPanelExitValues.add(new JLabel("" + exitValues.get(product)), gridBagConstaints);
+		}
 	    }
 	}
     }
@@ -203,13 +249,13 @@ public class InterfaceParam extends javax.swing.JPanel {
         jTextFieldName = new javax.swing.JTextField();
         jTextFieldDescription = new javax.swing.JTextField();
         jSpinnerDebitMax = new javax.swing.JSpinner();
-        jLabel6 = new javax.swing.JLabel();
         jLabelExits = new javax.swing.JLabel();
-        jValeursSorties = new javax.swing.JPanel();
+        jPanelMatrix = new javax.swing.JPanel();
         jButtonChoseColor = new javax.swing.JButton();
         jSpinnerExits = new javax.swing.JSpinner();
         jLabelEntrances = new javax.swing.JLabel();
         jSpinnerEntrances = new javax.swing.JSpinner();
+        jPanelExitValues = new javax.swing.JPanel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -243,12 +289,10 @@ public class InterfaceParam extends javax.swing.JPanel {
 
         jSpinnerDebitMax.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
 
-        jLabel6.setText("Essai");
-
         jLabelExits.setText("Sorties");
 
-        jValeursSorties.setBackground(new java.awt.Color(164, 183, 145));
-        jValeursSorties.setLayout(new java.awt.GridBagLayout());
+        jPanelMatrix.setBackground(new java.awt.Color(164, 183, 145));
+        jPanelMatrix.setLayout(new java.awt.GridBagLayout());
 
         jButtonChoseColor.setText("Choisir couleur");
         jButtonChoseColor.addActionListener(new java.awt.event.ActionListener() {
@@ -273,84 +317,80 @@ public class InterfaceParam extends javax.swing.JPanel {
             }
         });
 
+        jPanelExitValues.setBackground(new java.awt.Color(164, 183, 145));
+        jPanelExitValues.setLayout(new java.awt.GridBagLayout());
+
         javax.swing.GroupLayout jPanelEditionStationLayout = new javax.swing.GroupLayout(jPanelEditionStation);
         jPanelEditionStation.setLayout(jPanelEditionStationLayout);
         jPanelEditionStationLayout.setHorizontalGroup(
             jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                        .addComponent(jLabelDebitMax)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addComponent(jSpinnerDebitMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEditionStationLayout.createSequentialGroup()
                         .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jButtonValidate))
-                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(jLabel6)))
-                        .addGap(0, 122, Short.MAX_VALUE))
+                            .addComponent(jLabelDescription)
+                            .addComponent(jLabelName))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(jTextFieldDescription)))
                     .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                        .addContainerGap()
+                        .addComponent(jLabelExits)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSpinnerExits, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                        .addComponent(jLabelEntrances)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                                .addComponent(jLabelDebitMax)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                                .addComponent(jSpinnerDebitMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEditionStationLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jSpinnerEntrances, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
                                 .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelDescription)
-                                    .addComponent(jLabelName))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldDescription)))
-                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                                .addComponent(jLabelExits)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jSpinnerExits, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                                .addComponent(jLabelEntrances)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                                        .addComponent(jValeursSorties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEditionStationLayout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jSpinnerEntrances, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanelEditionStationLayout.createSequentialGroup()
-                                .addComponent(jButtonChoseColor)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                    .addComponent(jPanelMatrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jPanelExitValues, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanelEditionStationLayout.createSequentialGroup()
+                        .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonValidate)
+                            .addComponent(jButtonChoseColor))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanelEditionStationLayout.setVerticalGroup(
             jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelEditionStationLayout.createSequentialGroup()
-                .addComponent(jLabel6)
-                .addGap(10, 10, 10)
                 .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelName)
                     .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelDescription)
                     .addComponent(jTextFieldDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelDebitMax)
                     .addComponent(jSpinnerDebitMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelExits)
                     .addComponent(jSpinnerExits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelEditionStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelEntrances)
                     .addComponent(jSpinnerEntrances, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jValeursSorties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(5, 5, 5)
                 .addComponent(jButtonChoseColor)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanelMatrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanelExitValues, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
                 .addComponent(jButtonValidate)
                 .addContainerGap())
         );
@@ -372,13 +412,13 @@ public class InterfaceParam extends javax.swing.JPanel {
                 .addComponent(jLabelParameters)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelEditionStation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
+                .addGap(14, 14, 14))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValidateActionPerformed
 
-	Component[] components = jValeursSorties.getComponents();
+	Component[] components = jPanelMatrix.getComponents();
 
 	LinkedList<String> inputs = new LinkedList<>();
 	for (Component component : components) {
@@ -436,7 +476,6 @@ public class InterfaceParam extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonChoseColor;
     private javax.swing.JButton jButtonValidate;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelDebitMax;
     private javax.swing.JLabel jLabelDescription;
     private javax.swing.JLabel jLabelEntrances;
@@ -444,6 +483,8 @@ public class InterfaceParam extends javax.swing.JPanel {
     private javax.swing.JLabel jLabelName;
     private javax.swing.JLabel jLabelParameters;
     private javax.swing.JPanel jPanelEditionStation;
+    private javax.swing.JPanel jPanelExitValues;
+    private javax.swing.JPanel jPanelMatrix;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinnerDebitMax;
     private javax.swing.JSpinner jSpinnerEntrances;
@@ -451,6 +492,6 @@ public class InterfaceParam extends javax.swing.JPanel {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextFieldDescription;
     private javax.swing.JTextField jTextFieldName;
-    private javax.swing.JPanel jValeursSorties;
     // End of variables declaration//GEN-END:variables
+
 }
