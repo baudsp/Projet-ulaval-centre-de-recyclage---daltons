@@ -63,7 +63,7 @@ public class InterfaceParam extends javax.swing.JPanel {
         this.jSpinnerExits.setValue(element.getNbExits());
         this.jSpinnerExits.setEnabled(false);
         this.jSpinnerEntrances.setEnabled(false);
-
+        
         this.jSpinnerExits.setValue(element.getNbExits());
 
         this.jPanelMatrix.removeAll();
@@ -435,7 +435,7 @@ public class InterfaceParam extends javax.swing.JPanel {
 
         LinkedList<String> inputs = new LinkedList<>();
 
-        Map<String, Float> sorties = new HashMap<>();
+        Map<String, Float> products = new HashMap<>();
 
         try {
             for (Component component : components) {
@@ -443,11 +443,11 @@ public class InterfaceParam extends javax.swing.JPanel {
                     JTextField jTextField = (JTextField) component;
                     inputs.add(jTextField.getName() + ":::" + jTextField.getText());
 
-                    String exitNumber = jTextField.getName().split(":::")[0];
-                    if (sorties.containsKey(exitNumber)) {
-                        sorties.put(exitNumber, sorties.get(exitNumber) + Float.parseFloat(jTextField.getText()));
+                    String product = jTextField.getName().split(":::")[1];
+                    if (products.containsKey(product)) {
+                        products.put(product, products.get(product) + Float.parseFloat(jTextField.getText()));
                     } else {
-                        sorties.put(exitNumber, Float.parseFloat(jTextField.getText()));
+                        products.put(product, Float.parseFloat(jTextField.getText()));
                     }
                 }
             }
@@ -457,11 +457,11 @@ public class InterfaceParam extends javax.swing.JPanel {
         }
 
         // Vérifier que la matrice est bonne.
-        Iterator<Float> sortiesValuesIterator = sorties.values().iterator();
+        Iterator<Float> productsValuesIterator = products.values().iterator();
 
-        while (sortiesValuesIterator.hasNext()) {
-            Float sortiesValue = sortiesValuesIterator.next();
-            if (sortiesValue != 100) {
+        while (productsValuesIterator.hasNext()) {
+            Float productsValue = productsValuesIterator.next();
+            if (productsValue != 100) {
                 showProblemInMatrix();
                 return;
             }
