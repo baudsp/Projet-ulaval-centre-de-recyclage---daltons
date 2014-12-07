@@ -492,7 +492,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 5, 1);
 
 	JSpinner spinner = new JSpinner(spinnerModel);
-	int res = JOptionPane.showOptionDialog(null, spinner, "Choix du nombre d'entrées", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+	int res = JOptionPane.showOptionDialog(null, spinner, "Choix du nombre de sorties", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 	if (res == JOptionPane.CANCEL_OPTION) {
 	    nbrSorties = -1;

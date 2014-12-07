@@ -67,7 +67,7 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	this.jValeursSorties.removeAll();
 
-	if (element.getType() != InterfaceOutils.ID_TOOL_ENTREE) {  
+	if (element.getType() == InterfaceOutils.ID_TOOL_STATION) {  
 	    filljValeursSorties();
 	}
 
@@ -103,11 +103,11 @@ public class InterfaceParam extends javax.swing.JPanel {
 		while (iteratorSorties.hasNext()) {
 		    i++;
 
-		    int numsortie = iteratorSorties.next();
+		    int numsortie = iteratorSorties.next() + 1;
 
 		    gridBagConstaints.gridx = 0;
 		    gridBagConstaints.gridy = i;
-		    jValeursSorties.add(new JLabel("Sortie " + numsortie + 1 + " :"), gridBagConstaints);
+		    jValeursSorties.add(new JLabel("Sortie " + (numsortie ) + " :"), gridBagConstaints);
 
 		    float pourcentage = (float) matriceProduit.get(numsortie).values().toArray()[0];
 		    // A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
