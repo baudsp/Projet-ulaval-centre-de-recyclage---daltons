@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -34,13 +35,13 @@ public class InterfaceParam extends javax.swing.JPanel {
      * Creates new form InterfaceParamBis
      */
     public InterfaceParam() {
-	initComponents();
-	this.jPanelEditionStation.setVisible(false);
+        initComponents();
+        this.jPanelEditionStation.setVisible(false);
     }
 
     public void hideEditionStationInformations() {
-	this.jPanelEditionStation.setVisible(false);
-	element = null;
+        this.jPanelEditionStation.setVisible(false);
+        element = null;
     }
 
     /**
@@ -49,186 +50,194 @@ public class InterfaceParam extends javax.swing.JPanel {
      * @param element
      */
     public void setParametersInformations(Element element) {
-	this.element = element;
+        this.element = element;
 
-	jPanelEditionStation.setVisible(true);
+        jPanelEditionStation.setVisible(true);
 
-	this.jTextFieldName.setText(element.getName());
-	this.jTextFieldDescription.setText(element.getDescription());
+        this.jTextFieldName.setText(element.getName());
+        this.jTextFieldDescription.setText(element.getDescription());
 
-	this.jSpinnerDebitMax.setValue(element.getMaxFlow());
+        this.jSpinnerDebitMax.setValue(element.getMaxFlow());
 
-	this.jSpinnerEntrances.setValue(element.getNbEntrances());
-	this.jSpinnerExits.setValue(element.getNbExits());
-	this.jSpinnerExits.setEnabled(false);
-	this.jSpinnerEntrances.setEnabled(false);
+        this.jSpinnerEntrances.setValue(element.getNbEntrances());
+        this.jSpinnerExits.setValue(element.getNbExits());
+        this.jSpinnerExits.setEnabled(false);
+        this.jSpinnerEntrances.setEnabled(false);
 
-	this.jSpinnerExits.setValue(element.getNbExits());
+        this.jSpinnerExits.setValue(element.getNbExits());
 
-	this.jPanelMatrix.removeAll();
+        this.jPanelMatrix.removeAll();
 
-	this.jPanelExitValues.removeAll();
+        this.jPanelExitValues.removeAll();
 
-	if (element.getType() == InterfaceOutils.ID_TOOL_STATION) {
-	    filljPanelMatrix();
-	}
+        if (element.getType() == InterfaceOutils.ID_TOOL_STATION) {
+            filljPanelMatrix();
+        }
 
-	filljPanelExitValues();
+        filljPanelExitValues();
 
-	repaint();
+        repaint();
     }
 
     private void filljPanelMatrix() {
-	// On ecrit le contenu de la matrice de transformation
-	Map<String, Map<Integer, Map<String, Float>>> matrix = element.getMatrix();
+        // On ecrit le contenu de la matrice de transformation
+        Map<String, Map<Integer, Map<String, Float>>> matrix = element.getMatrix();
 
-	GridBagConstraints gridBagConstaints = new GridBagConstraints();
+        GridBagConstraints gridBagConstaints = new GridBagConstraints();
 
-	int i = 0;
+        int i = 0;
 
 	// A ameliorer
-	// On verifie que la matrice trie bien le bon nombre de 
-	// dechets (et pas les bons dechets)
-	if (matrix.keySet().size() == element.getEntranceProducts().size()) {
+        // On verifie que la matrice trie bien le bon nombre de 
+        // dechets (et pas les bons dechets)
+        if (matrix.keySet().size() == element.getEntranceProducts().size()) {
 
-	    Iterator<String> iteratorProduits = matrix.keySet().iterator();
+            Iterator<String> iteratorProduits = matrix.keySet().iterator();
 
-	    while (iteratorProduits.hasNext()) {
+            while (iteratorProduits.hasNext()) {
 
-		String produit = iteratorProduits.next();
+                String produit = iteratorProduits.next();
 
-		gridBagConstaints.gridx = 0;
-		gridBagConstaints.gridy = i;
-		jPanelMatrix.add(new JLabel(produit), gridBagConstaints);
+                gridBagConstaints.gridx = 0;
+                gridBagConstaints.gridy = i;
+                jPanelMatrix.add(new JLabel(produit), gridBagConstaints);
 
-		Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);
-		Iterator<Integer> iteratorSorties = matriceProduit.keySet().iterator();
-		while (iteratorSorties.hasNext()) {
-		    i++;
+                Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);
+                Iterator<Integer> iteratorSorties = matriceProduit.keySet().iterator();
+                while (iteratorSorties.hasNext()) {
+                    i++;
 
-		    int numsortie = iteratorSorties.next();
+                    int numsortie = iteratorSorties.next();
 
-		    gridBagConstaints.gridx = 0;
-		    gridBagConstaints.gridy = i;
-		    jPanelMatrix.add(new JLabel("Sortie " + Integer.toString(numsortie + 1) + " :"), gridBagConstaints);
+                    gridBagConstaints.gridx = 0;
+                    gridBagConstaints.gridy = i;
+                    jPanelMatrix.add(new JLabel("Sortie " + Integer.toString(numsortie + 1) + " :"), gridBagConstaints);
 
-		    Map<String, Float> a = matriceProduit.get(numsortie);
+                    Map<String, Float> a = matriceProduit.get(numsortie);
 
-		    float pourcentage = (float) a.values().toArray()[0];
-		    // A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
+                    float pourcentage = (float) a.values().toArray()[0];
+                    // A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
 
-		    gridBagConstaints.gridx = 1;
-		    gridBagConstaints.gridy = i;
-		    
-		    JTextField jtSortie = new JTextField(pourcentage + "");
+                    gridBagConstaints.gridx = 1;
+                    gridBagConstaints.gridy = i;
+
+                    JTextField jtSortie = new JTextField(pourcentage + "");
 		    // ajout d'un nom pour identifier chaque 
-		    // textField :
-		    //  = sortie (partant de 0) ::: produit = nom du dechet ::: i = identifiant unique
-		    // ::: parce que Guillaume est parano
-		    jtSortie.setName(numsortie + ":::" + produit + ":::" + i);
-		    jtSortie.setPreferredSize(new Dimension(70, 20));
-		    jPanelMatrix.add(jtSortie, gridBagConstaints);
-		    jPanelMatrix.add(jtSortie, gridBagConstaints);
+                    // textField :
+                    //  = sortie (partant de 0) ::: produit = nom du dechet ::: i = identifiant unique
+                    // ::: parce que Guillaume est parano
+                    jtSortie.setName(numsortie + ":::" + produit + ":::" + i);
+                    jtSortie.setPreferredSize(new Dimension(70, 20));
+                    jPanelMatrix.add(jtSortie, gridBagConstaints);
+                    jPanelMatrix.add(jtSortie, gridBagConstaints);
 
-		    gridBagConstaints.gridx = 2;
-		    gridBagConstaints.gridy = i;
-		    jPanelMatrix.add(new JLabel(" %"), gridBagConstaints);
-		}
+                    gridBagConstaints.gridx = 2;
+                    gridBagConstaints.gridy = i;
+                    jPanelMatrix.add(new JLabel(" %"), gridBagConstaints);
+                }
 
-		i++;
+                i++;
 
-	    }
-	} else {
+            }
+        } else {
 
-	    Iterator<String> iteratorProducts = element.getEntranceProducts().keySet().iterator();
+            Iterator<String> iteratorProducts = element.getEntranceProducts().keySet().iterator();
 
-	    int k = 0;
+            int k = 0;
 
-	    while (iteratorProducts.hasNext()) {
+            while (iteratorProducts.hasNext()) {
 
-		String produit = iteratorProducts.next();
+                String produit = iteratorProducts.next();
 
-		gridBagConstaints.gridx = 0;
-		gridBagConstaints.gridy = i;
-		jPanelMatrix.add(new JLabel(produit + " : "), gridBagConstaints);
+                gridBagConstaints.gridx = 0;
+                gridBagConstaints.gridy = i;
+                jPanelMatrix.add(new JLabel(produit + " : "), gridBagConstaints);
 
-		for (int j = 0; j < element.getNbExits(); j++) {
-		    gridBagConstaints.gridx = 0;
-		    gridBagConstaints.gridy = i + 1;
-		    int numSortie = (j + 1);
-		    jPanelMatrix.add(new JLabel("Sortie " + numSortie), gridBagConstaints);
-		    gridBagConstaints.gridx = 1;
-		    JTextField jtSortie = new JTextField();
+                for (int j = 0; j < element.getNbExits(); j++) {
+                    gridBagConstaints.gridx = 0;
+                    gridBagConstaints.gridy = i + 1;
+                    int numSortie = (j + 1);
+                    jPanelMatrix.add(new JLabel("Sortie " + numSortie), gridBagConstaints);
+                    gridBagConstaints.gridx = 1;
+                    JTextField jtSortie = new JTextField();
 		    // ajout d'un nom pour identifier chaque 
-		    // textField :
-		    // j = sortie (partant de 0) ::: produit = nom du dechet ::: k = identifiant unique
-		    // ::: parce que Guillaume est parano
-		    jtSortie.setName(j + ":::" + produit + ":::" + k);
-		    jtSortie.setPreferredSize(new Dimension(70, 20));
-		    jPanelMatrix.add(jtSortie, gridBagConstaints);
+                    // textField :
+                    // j = sortie (partant de 0) ::: produit = nom du dechet ::: k = identifiant unique
+                    // ::: parce que Guillaume est parano
+                    jtSortie.setName(j + ":::" + produit + ":::" + k);
+                    jtSortie.setPreferredSize(new Dimension(70, 20));
+                    jPanelMatrix.add(jtSortie, gridBagConstaints);
 
-		    gridBagConstaints.gridx = 2;
-		    jPanelMatrix.add(new JLabel(" %"), gridBagConstaints);
+                    gridBagConstaints.gridx = 2;
+                    jPanelMatrix.add(new JLabel(" %"), gridBagConstaints);
 
-		    i++;
+                    i++;
 
-		    k++;
-		}
+                    k++;
+                }
 
-		i++;
+                i++;
 
-	    }
-	}
+            }
+        }
     }
 
     private void filljPanelExitValues() {
-	
-	GridBagConstraints gridBagConstaints = new GridBagConstraints();
 
-	int nbExits = this.element.getNbExits();
-	int y = 0;
-	for (int exit = 0; exit < nbExits; exit++) {
-	    
-	    Map<String, Float> exitValues = this.element.exitProductsFromArc(exit);
+        GridBagConstraints gridBagConstaints = new GridBagConstraints();
 
-    	    if (exitValues != null && !exitValues.isEmpty()) {
-		int numExit = exit + 1;
-		
-		gridBagConstaints.gridx = 0;
-		gridBagConstaints.gridy = y;
-		jPanelExitValues.add(new JLabel("Sortie " + numExit + " : "), gridBagConstaints);
-		y++;
-		
-		Iterator<String> productIterator = exitValues.keySet().iterator();
-		
-		while (productIterator.hasNext()) {		    
-		    String product = productIterator.next();
-		    gridBagConstaints.gridx = 0;
-		    gridBagConstaints.gridy = y;
-		    jPanelExitValues.add(new JLabel(product + " => "), gridBagConstaints);
-		     gridBagConstaints.gridx = 1;
-		    jPanelExitValues.add(new JLabel("" + exitValues.get(product)), gridBagConstaints);
-		    y++;
-		}
-	    }
-	}
+        int nbExits = this.element.getNbExits();
+        int y = 0;
+        for (int exit = 0; exit < nbExits; exit++) {
+
+            Map<String, Float> exitValues = this.element.exitProductsFromArc(exit);
+
+            if (exitValues != null && !exitValues.isEmpty()) {
+                int numExit = exit + 1;
+
+                gridBagConstaints.gridx = 0;
+                gridBagConstaints.gridy = y;
+                jPanelExitValues.add(new JLabel("Sortie " + numExit + " : "), gridBagConstaints);
+                y++;
+
+                Iterator<String> productIterator = exitValues.keySet().iterator();
+
+                while (productIterator.hasNext()) {
+                    String product = productIterator.next();
+                    gridBagConstaints.gridx = 0;
+                    gridBagConstaints.gridy = y;
+                    jPanelExitValues.add(new JLabel(product + " => "), gridBagConstaints);
+                    gridBagConstaints.gridx = 1;
+                    jPanelExitValues.add(new JLabel("" + exitValues.get(product)), gridBagConstaints);
+                    y++;
+                }
+            }
+        }
     }
 
     private void updateElement(String name, String description, float debitMax, Color color, int nbreExits, int nbreEntrance) {
-	element.setName(name);
-	element.setDescription(description);
-	element.setMaxFlow(debitMax);
-	element.setColor(color);
-	element.setNbExits(nbreExits);
-	element.setNbEntrance(nbreEntrance);
+        element.setName(name);
+        element.setDescription(description);
+        element.setMaxFlow(debitMax);
+        element.setColor(color);
+        element.setNbExits(nbreExits);
+        element.setNbEntrance(nbreEntrance);
 
-	for (ParamObserver paramObserver : paramObserverList) {
-	    paramObserver.update(element.clone());
-	}
+        for (ParamObserver paramObserver : paramObserverList) {
+            paramObserver.update(element.clone());
+        }
     }
 
     public void addObserver(ParamObserver paramObserver) {
-	paramObserverList.add(paramObserver);
+        paramObserverList.add(paramObserver);
+    }
+    
+    private void showProblemInMatrix(){
+        JOptionPane.showConfirmDialog(null,
+                        "La matrice est incorrecte.",
+                        "L'élement " + element.getName() + " n'a pas été sauvegardé",
+                        JOptionPane.CLOSED_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -419,59 +428,84 @@ public class InterfaceParam extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValidateActionPerformed
+        Component[] components = jPanelMatrix.getComponents();
 
-	Component[] components = jPanelMatrix.getComponents();
+        LinkedList<String> inputs = new LinkedList<>();
 
-	LinkedList<String> inputs = new LinkedList<>();
-	for (Component component : components) {
-	    if (component.getClass().equals(JTextField.class)) {
-		JTextField jTextField = (JTextField) component;
-		inputs.add(jTextField.getName() + ":::" + jTextField.getText());
-	    }
-	}
+        Map<String, Float> sorties = new HashMap<>();
 
-	element.setMatrix(inputs);
+        try {
+            for (Component component : components) {
+                if (component.getClass().equals(JTextField.class)) {
+                    JTextField jTextField = (JTextField) component;
+                    inputs.add(jTextField.getName() + ":::" + jTextField.getText());
 
-	updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),
-		selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());
+                    String exitNumber = jTextField.getName().split(":::")[0];
+                    if (sorties.containsKey(exitNumber)) {
+                        sorties.put(exitNumber, sorties.get(exitNumber) + Float.parseFloat(jTextField.getText()));
+                    } else {
+                        sorties.put(exitNumber, Float.parseFloat(jTextField.getText()));
+                    }
+                }
+            }
+        } catch(NumberFormatException ex){
+            showProblemInMatrix();
+            return;
+        }
 
-	JOptionPane.showConfirmDialog(null,
-		"L'enregistrement s'est passé avec succès.",
-		"Enregistrement de " + element.getName(),
-		JOptionPane.CLOSED_OPTION,
-		JOptionPane.INFORMATION_MESSAGE);
+        // Vérifier que la matrice est bonne.
+        Iterator<Float> sortiesValuesIterator = sorties.values().iterator();
+
+        while (sortiesValuesIterator.hasNext()) {
+            Float sortiesValue = sortiesValuesIterator.next();
+            if (sortiesValue != 100) {
+                showProblemInMatrix();
+                return;
+            }
+        }
+
+        element.setMatrix(inputs);
+
+        updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),
+                selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());
+
+        JOptionPane.showConfirmDialog(null,
+                "L'enregistrement s'est passé avec succès.",
+                "Enregistrement de " + element.getName(),
+                JOptionPane.CLOSED_OPTION,
+                JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonValidateActionPerformed
 
     private void jButtonChoseColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChoseColorActionPerformed
-	JFrame guiFrame = new JFrame();
-	selectedColor = JColorChooser.showDialog(guiFrame, "Choisissez une couleur", element.getColor());
+        JFrame guiFrame = new JFrame();
+        selectedColor = JColorChooser.showDialog(guiFrame, "Choisissez une couleur", element.getColor());
     }//GEN-LAST:event_jButtonChoseColorActionPerformed
 
     private void jSpinnerExitsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerExitsStateChanged
-	// Nombre de sorties incorrectes
-	if ((int) jSpinnerExits.getValue() < element.getNbArcs()) {
-	    JOptionPane.showMessageDialog(null,
-		    "Des arcs doivent être supprimées pour avoir " + jSpinnerExits.getValue() + " nombre de sorties.",
-		    "Total de sorties incorrect",
-		    JOptionPane.OK_OPTION,
-		    null);
-	    jSpinnerExits.setValue(element.getNbArcs());
-	}
+        // Nombre de sorties incorrectes
+        if ((int) jSpinnerExits.getValue() < element.getNbArcs()) {
+            JOptionPane.showMessageDialog(null,
+                    "Des arcs doivent être supprimées pour avoir " + jSpinnerExits.getValue() + " nombre de sorties.",
+                    "Total de sorties incorrect",
+                    JOptionPane.OK_OPTION,
+                    null);
+            jSpinnerExits.setValue(element.getNbArcs());
+        }
     }//GEN-LAST:event_jSpinnerExitsStateChanged
 
     private void jSpinnerEntrancesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerEntrancesStateChanged
 	// Nombre d'entrées incorrectes
-	// Ici ne devraient rentrer que les jonctions
-	if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
-	    if ((int) jSpinnerEntrances.getValue() < element.getNbEntranceUsed()) {
-		JOptionPane.showMessageDialog(null,
-			"Des arcs vers cette jonction doivent être supprimées pour avoir " + jSpinnerEntrances.getValue() + " nombre d'entrées",
-			"Total d'entrées incorrect",
-			JOptionPane.OK_OPTION,
-			null);
-		jSpinnerEntrances.setValue(element.getNbEntrances());
-	    }
-	}
+        // Ici ne devraient rentrer que les jonctions
+        if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
+            if ((int) jSpinnerEntrances.getValue() < element.getNbEntranceUsed()) {
+                JOptionPane.showMessageDialog(null,
+                        "Des arcs vers cette jonction doivent être supprimées pour avoir " + jSpinnerEntrances.getValue() + " nombre d'entrées",
+                        "Total d'entrées incorrect",
+                        JOptionPane.OK_OPTION,
+                        null);
+                jSpinnerEntrances.setValue(element.getNbEntrances());
+            }
+        }
     }//GEN-LAST:event_jSpinnerEntrancesStateChanged
 
 
