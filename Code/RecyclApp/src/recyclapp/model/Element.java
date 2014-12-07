@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public abstract class Element extends Component{
+public abstract class Element extends Component {
 
     protected int id;
     protected int width, height;
@@ -27,7 +27,7 @@ public abstract class Element extends Component{
     public Element(Coordinate coordinate, int nbEntrances, int nbExits, int width, int height) {
 	this.coordinate = coordinate;
 	this.nbEntrances = nbEntrances;
-        this.nbEntrancesUsed = 0;
+	this.nbEntrancesUsed = 0;
 	this.nbExits = nbExits;
 	exits = new Arc[nbExits];
 	entranceProducts = new HashMap<>();
@@ -35,37 +35,37 @@ public abstract class Element extends Component{
 	entrances = new LinkedList<>();
 	this.width = width;
 	this.height = height;
-	
+
 	this.id = new Random().nextInt(40);
     }
 
     public Coordinate getCoordinate() {
 	return coordinate;
     }
-    
-    public void setNbExits(int nbExits){
-        Arc[] newExits = new Arc[nbExits];
-        for (int i = 0; (i < this.nbExits) && (i < nbExits); i++) {
-            newExits[i] = exits[i];
-        }
-        this.nbExits = nbExits;
-        exits = newExits;
+
+    public void setNbExits(int nbExits) {
+	Arc[] newExits = new Arc[nbExits];
+	for (int i = 0; (i < this.nbExits) && (i < nbExits); i++) {
+	    newExits[i] = exits[i];
+	}
+	this.nbExits = nbExits;
+	exits = newExits;
     }
-    
-    public int getNbExits(){
-        return nbExits;
+
+    public int getNbExits() {
+	return nbExits;
     }
-    
-    public int getNbEntranceUsed(){
-        return nbEntrancesUsed;
+
+    public int getNbEntranceUsed() {
+	return nbEntrancesUsed;
     }
-    
-    public int getNbEntrances(){
-        return nbEntrances;
+
+    public int getNbEntrances() {
+	return nbEntrances;
     }
-    
-    public void setNbEntrance(int nbEntrance){
-        this.nbEntrances = nbEntrance;
+
+    public void setNbEntrance(int nbEntrance) {
+	this.nbEntrances = nbEntrance;
     }
 
     public void setCoordinate(Coordinate coordinate) {
@@ -101,7 +101,7 @@ public abstract class Element extends Component{
 	for (int i = 0; i < nbExits; i++) {
 	    if (exits[i] == null) {
 		exit = i;
-                break;
+		break;
 	    }
 	}
 	return exit;
@@ -111,8 +111,8 @@ public abstract class Element extends Component{
 	int entrance = -1;
 
 	for (int i = nbEntrancesUsed; i < nbEntrances; i++) {
-            entrance = i;
-            break;
+	    entrance = i;
+	    break;
 	}
 	return entrance;
     }
@@ -155,7 +155,10 @@ public abstract class Element extends Component{
     }
 
     public void pushExitProducts(Map<String, Float> entrance) {
-	entranceProducts = new HashMap<>();
+	
+	if (!this.getClass().equals(Jonction.class)) {
+	    entranceProducts = new HashMap<>();
+	}
 	
 	Set<String> listProducts = entrance.keySet();
 	Iterator<String> productsIterator = listProducts.iterator();
@@ -208,6 +211,7 @@ public abstract class Element extends Component{
     // Récupère le dictionnaire de données Produit/Quantité pour un Arc en sortie (numéro de sortie)
     public Map<String, Float> exitProductsFromArc(int exitNumber) {
 	Map<String, Float> result = new HashMap<>();
+
 	// Verifie la Map des produits en entree est instanciee
 	if (entranceProducts != null) {
 	    Set<String> listProducts = entranceProducts.keySet();
@@ -263,30 +267,29 @@ public abstract class Element extends Component{
     }
 
     public abstract int getType();
-    
-    
+
     public String getDescription() {
-        return description;
+	return description;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+	this.description = description;
     }
 
     public String getName() {
-        return name;
+	return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+	this.name = name;
     }
-    
-    public boolean equals(Element element){
-        if(element.coordinate.getX() == this.coordinate.getX() 
-                && element.coordinate.getY() == this.coordinate.getY()){
-            return true;
-        }
-        return false;
+
+    public boolean equals(Element element) {
+	if (element.coordinate.getX() == this.coordinate.getX()
+		&& element.coordinate.getY() == this.coordinate.getY()) {
+	    return true;
+	}
+	return false;
     }
 
     /**
@@ -294,53 +297,53 @@ public abstract class Element extends Component{
      */
     public void setMatrix(LinkedList<String> inputs) {
 	Map<String, Map<Integer, Map<String, Float>>> matrixTri = new HashMap<>();
-	
+
 	Map<Integer, Map<String, Float>> matrixExits = new HashMap<>();
-	
+
 	String product = "";
-	
+
 	for (String input : inputs) {
 	    String[] splitResult = input.split(":::");
-	    
+
 	    int numSortie = Integer.valueOf(splitResult[0]);
-	    
+
 	    // Si on change de produit, on recrée une nouvelle matrice 
 	    if (!splitResult[1].equals(product)) {
 		matrixExits = new HashMap<>();
 		product = splitResult[1];
 	    }
-	    
+
 	    float value = Float.valueOf(splitResult[3]);
-	    
+
 	    Map<String, Float> productToExit = new HashMap<>();
-	    
+
 	    productToExit.put(product, value);
-	    
-	    matrixExits.put(numSortie, productToExit);	    
+
+	    matrixExits.put(numSortie, productToExit);
 	    matrixTri.put(product, matrixExits);
 	}
 	this.matrix = matrixTri;
     }
-    
+
     public abstract Element clone();
 
     protected Element helpClone(Element elt) {
-        elt.coordinate = this.coordinate;
-        elt.description = this.description;
-        elt.entranceProducts = this.entranceProducts;
-        elt.entrances = this.entrances;
-        elt.exits = this.exits;
-        elt.height = this.height;
-        elt.id = this.id;
-        elt.image = this.image;
-        elt.matrix = this.matrix;
-        elt.maxFlow = this.maxFlow;
-        elt.name = this.name;
-        elt.nbEntrances = this.nbEntrances;
-        elt.nbEntrancesUsed = this.nbEntrancesUsed;
-        elt.nbExits = this.nbExits;
-        elt.width = this.width;
-        
-        return elt;
+	elt.coordinate = this.coordinate;
+	elt.description = this.description;
+	elt.setEntranceProducts(this.entranceProducts);
+	elt.entrances = this.entrances;
+	elt.exits = this.exits;
+	elt.height = this.height;
+	elt.id = this.id;
+	elt.image = this.image;
+	elt.matrix = this.matrix;
+	elt.maxFlow = this.maxFlow;
+	elt.name = this.name;
+	elt.nbEntrances = this.nbEntrances;
+	elt.nbEntrancesUsed = this.nbEntrancesUsed;
+	elt.nbExits = this.nbExits;
+	elt.width = this.width;
+
+	return elt;
     }
 }

@@ -75,6 +75,9 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 	filljPanelExitValues();
 
+	jPanelExitValues.repaint();
+	jPanelMatrix.repaint();
+	
 	repaint();
     }
 
@@ -430,7 +433,9 @@ public class InterfaceParam extends javax.swing.JPanel {
 	    }
 	}
 
-	element.setMatrix(inputs);
+	if (inputs.size() != 0) {
+	    element.setMatrix(inputs);
+	}
 
 	updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),
 		selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());

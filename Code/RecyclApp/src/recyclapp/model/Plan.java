@@ -3,6 +3,7 @@ package recyclapp.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import static java.util.Collections.list;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -26,13 +27,29 @@ public class Plan implements Serializable, ParamObserver {
     }
     
     public void calc() {
-	List<EntreeUsine> listEntreeUsine = findEntreesUsine();
+	resetEntranceValues();
 	
+	List<EntreeUsine> listEntreeUsine = findEntreesUsine();
+		
 	if(!listEntreeUsine.isEmpty()) {
 	    for (EntreeUsine entreeUsine : listEntreeUsine) {
 		entreeUsine.pushExitProducts();
 	    }
 	}
+    }
+    
+    /**
+     * Reset the entranceValues of all elements of the plan
+     */
+    private void resetEntranceValues() {
+	List<EntreeUsine> listEntreeUsine = new ArrayList<>();
+	
+	for (Element element : listElements) {
+	    if (!element.getClass().equals(EntreeUsine.class)) {
+		element.setEntranceProducts(new HashMap<String, Float>());
+	    }
+	}
+	
     }
     
     public List<EntreeUsine> findEntreesUsine() {

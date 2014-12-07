@@ -35,4 +35,11 @@ public abstract class Component  implements Serializable{
     public Map<String, Float> getEntranceProducts() {
 	return entranceProducts;
     }
+
+    /**
+     * @param entranceProducts the entranceProducts to set
+     */
+    public void setEntranceProducts(Map<String, Float> entranceProducts) {
+	this.entranceProducts = entranceProducts;
+    }
 }
