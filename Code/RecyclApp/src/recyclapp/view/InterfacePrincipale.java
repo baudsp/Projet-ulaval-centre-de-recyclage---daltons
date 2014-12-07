@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,10 +25,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import recyclapp.model.Coordinate;
 import recyclapp.model.DataElement;
 import recyclapp.model.Element;
 import recyclapp.model.Plan;
+import recyclapp.model.SavePlan;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -266,7 +269,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 			    if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_STATION) {
 				nbrSorties = getNbrSorties();
 				if (nbrSorties == -1) {
-                                    repaint();
+				    repaint();
 				    return;
 				}
 			    }
@@ -296,7 +299,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
 		    int y = (int) (e.getY() / zoom);
 		    if (this.panelTools.getIdTools() >= 0
-			    && this.plan.findDataElement(x, y, zoom).element != null) { 
+			    && this.plan.findDataElement(x, y, zoom).element != null) {
 			if (this.plan.isDrawingArc()) {
 			    if (this.plan.createArcEntrance(x, y)) {
 				this.panelTools.setMoveTools(false);
@@ -389,6 +392,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     private void restartPlan() {
 	plan = new Plan();
+
 	this.plan.createElement(InterfaceOutils.ID_TOOL_ENTREE, 20, this.getHeight() / 2, 0);
 	openPlan();
     }
@@ -402,19 +406,16 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     private void savePlan() {
 	JFileChooser chooser = new JFileChooser();
-	chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	FileNameExtensionFilter filter = new FileNameExtensionFilter(".ser", "ser");
+	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 	int option = chooser.showSaveDialog(null);
 	if (option == JFileChooser.APPROVE_OPTION) {
 	    // TODO : Verifier que l'on écrase pas un fichier existant
 
-	    File selectedPfile = chooser.getSelectedFile();
-	    String path = selectedPfile.getAbsolutePath() + ".ser";
-
 	    try {
-		FileOutputStream fout = new FileOutputStream(path);
-		ObjectOutputStream oos = new ObjectOutputStream(fout);
-		oos.writeObject(plan);
-		oos.close();
+		SavePlan saver = new SavePlan();
+		saver.save(chooser.getSelectedFile(), this.plan);
+		
 	    } catch (Exception ex) {
 		String questionEr = "Erreur : " + ex.getMessage();
 
@@ -447,17 +448,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	int option = chooser.showOpenDialog(null);
 	if (option == JFileChooser.APPROVE_OPTION) {
-
-	    File selectedPfile = chooser.getSelectedFile();
-	    String path = selectedPfile.getAbsolutePath();
-	    try {
-		FileInputStream fin = new FileInputStream(path);
-		ObjectInputStream ois = new ObjectInputStream(fin);
-		plan = new Plan();
-		plan = (Plan) ois.readObject();
-		ois.close();
-		openPlan();
-	    } catch (IOException | ClassNotFoundException ex) {
+	try {
+	    SavePlan loader = new SavePlan();
+	    
+	    this.plan = loader.load(chooser.getSelectedFile());
+	    
+	    openPlan();
+	    
+	} catch (IOException | ClassNotFoundException ex) {
 		String questionEr = "Erreur : " + ex.getMessage();
 
 		JOptionPane.showMessageDialog(null,
