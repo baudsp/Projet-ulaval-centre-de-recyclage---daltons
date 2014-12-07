@@ -30,7 +30,7 @@ public class Plan implements Serializable, ParamObserver {
 	
 	if(!listEntreeUsine.isEmpty()) {
 	    for (EntreeUsine entreeUsine : listEntreeUsine) {
-		entreeUsine.pushExitProducts(entreeUsine.a);
+		entreeUsine.pushExitProducts();
 	    }
 	}
     }

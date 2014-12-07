@@ -3,20 +3,20 @@ package recyclapp.model;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import recyclapp.view.InterfaceOutils;
 
 public class EntreeUsine extends Element {
-    Map<String, Float> a;
 
     public EntreeUsine(int x, int y, int width, int height) {
         super(new Coordinate(x, y), 0, 1, width, height);
-        a = new HashMap<>();
+        entranceProducts = new HashMap<>();
 	
 	name = "Entree " + this.id;
 	
 	//Pour le livrable 3, on code ce truc en dur
-	a.put("Produit 1", 1000f);
-	a.put("Produit 2", 1000f);
+	entranceProducts.put("Produit 1", 1000f);
+	entranceProducts.put("Produit 2", 1000f);
 	
 	transformeEntranceProductToMatrix();
     }
@@ -44,7 +44,7 @@ public class EntreeUsine extends Element {
     }
     
     private void transformeEntranceProductToMatrix() {
-	Iterator<String> iteratorProduct = a.keySet().iterator();
+	Iterator<String> iteratorProduct = entranceProducts.keySet().iterator();
 	
 	while (iteratorProduct.hasNext()) {
 	    
@@ -73,5 +73,14 @@ public class EntreeUsine extends Element {
         elt = this.helpClone(elt);
         
         return elt;
+    }
+
+    void pushExitProducts() {
+	for (int exitNumber = 0; exitNumber < nbExits; exitNumber++) {
+	    if (exits[exitNumber] != null) {
+		Map<String, Float> productFromExit = exitProductsFromArc(exitNumber);
+		exits[exitNumber].pushExitProducts(productFromExit);
+	    }
+	}
     }
 }

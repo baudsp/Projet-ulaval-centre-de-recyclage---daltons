@@ -301,7 +301,6 @@ public abstract class Element extends Component{
 	    String[] splitResult = input.split(":::");
 	    
 	    int numSortie = Integer.valueOf(splitResult[0]);
-	    product = splitResult[1];
 	    
 	    // Si on change de produit, on recrée une nouvelle matrice 
 	    if (!splitResult[1].equals(product)) {
