@@ -72,13 +72,34 @@ public class InterfaceParam extends javax.swing.JPanel {
 	if (element.getType() == InterfaceOutils.ID_TOOL_STATION) {
 	    filljPanelMatrix();
 	}
-
-	filljPanelExitValues();
+	if (element.getType() != InterfaceOutils.ID_TOOL_SORTIE) {
+	    filljPanelExitValues();
+	} else {
+	    filljPanelExitValuesForSortieUsine();
+	}
 
 	jPanelExitValues.repaint();
 	jPanelMatrix.repaint();
-	
+
 	repaint();
+    }
+
+    private void filljPanelExitValuesForSortieUsine() {
+	
+	GridBagConstraints gridBagConstraints = new GridBagConstraints();
+
+	Map<String, Float> entranceValue = element.getEntranceProducts();
+
+	int line = 0;
+	Iterator<String> iteratorProduct = entranceValue.keySet().iterator();
+	while (iteratorProduct.hasNext()) {
+	    String product = iteratorProduct.next();
+	    float value = entranceValue.get(product);
+	    
+	    gridBagConstraints.gridy = line;
+	    jPanelExitValues.add(new JLabel(product + " : " + value), gridBagConstraints);
+	    line ++;
+	}
     }
 
     private void filljPanelMatrix() {
@@ -122,7 +143,7 @@ public class InterfaceParam extends javax.swing.JPanel {
 
 		    gridBagConstaints.gridx = 1;
 		    gridBagConstaints.gridy = i;
-		    
+
 		    JTextField jtSortie = new JTextField(pourcentage + "");
 		    // ajout d'un nom pour identifier chaque 
 		    // textField :
@@ -185,31 +206,31 @@ public class InterfaceParam extends javax.swing.JPanel {
     }
 
     private void filljPanelExitValues() {
-	
+
 	GridBagConstraints gridBagConstaints = new GridBagConstraints();
 
 	int nbExits = this.element.getNbExits();
 	int y = 0;
 	for (int exit = 0; exit < nbExits; exit++) {
-	    
+
 	    Map<String, Float> exitValues = this.element.exitProductsFromArc(exit);
 
-    	    if (exitValues != null && !exitValues.isEmpty()) {
+	    if (exitValues != null && !exitValues.isEmpty()) {
 		int numExit = exit + 1;
-		
+
 		gridBagConstaints.gridx = 0;
 		gridBagConstaints.gridy = y;
 		jPanelExitValues.add(new JLabel("Sortie " + numExit + " : "), gridBagConstaints);
 		y++;
-		
+
 		Iterator<String> productIterator = exitValues.keySet().iterator();
-		
-		while (productIterator.hasNext()) {		    
+
+		while (productIterator.hasNext()) {
 		    String product = productIterator.next();
 		    gridBagConstaints.gridx = 0;
 		    gridBagConstaints.gridy = y;
 		    jPanelExitValues.add(new JLabel(product + " => "), gridBagConstaints);
-		     gridBagConstaints.gridx = 1;
+		    gridBagConstaints.gridx = 1;
 		    jPanelExitValues.add(new JLabel("" + exitValues.get(product)), gridBagConstaints);
 		    y++;
 		}
@@ -500,5 +521,4 @@ public class InterfaceParam extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldDescription;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
-
 }
