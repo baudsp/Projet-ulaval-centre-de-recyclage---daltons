@@ -186,27 +186,29 @@ public class InterfaceParam extends javax.swing.JPanel {
 	GridBagConstraints gridBagConstaints = new GridBagConstraints();
 
 	int nbExits = this.element.getNbExits();
-
+	int y = 0;
 	for (int exit = 0; exit < nbExits; exit++) {
+	    
 	    Map<String, Float> exitValues = this.element.exitProductsFromArc(exit);
 
     	    if (exitValues != null && !exitValues.isEmpty()) {
 		int numExit = exit + 1;
 		
 		gridBagConstaints.gridx = 0;
-		gridBagConstaints.gridy = exit;
-		jPanelExitValues.add(new JLabel("Exit " + numExit + " : "), gridBagConstaints);
-
+		gridBagConstaints.gridy = y;
+		jPanelExitValues.add(new JLabel("Sortie " + numExit + " : "), gridBagConstaints);
+		y++;
+		
 		Iterator<String> productIterator = exitValues.keySet().iterator();
 		
-		while (productIterator.hasNext()) {
-		    exit++;
+		while (productIterator.hasNext()) {		    
 		    String product = productIterator.next();
 		    gridBagConstaints.gridx = 0;
-		    gridBagConstaints.gridy = exit;
+		    gridBagConstaints.gridy = y;
 		    jPanelExitValues.add(new JLabel(product + " => "), gridBagConstaints);
 		     gridBagConstaints.gridx = 1;
 		    jPanelExitValues.add(new JLabel("" + exitValues.get(product)), gridBagConstaints);
+		    y++;
 		}
 	    }
 	}

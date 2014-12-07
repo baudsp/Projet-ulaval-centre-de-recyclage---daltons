@@ -155,6 +155,8 @@ public abstract class Element extends Component{
     }
 
     public void pushExitProducts(Map<String, Float> entrance) {
+	entranceProducts = new HashMap<>();
+	
 	Set<String> listProducts = entrance.keySet();
 	Iterator<String> productsIterator = listProducts.iterator();
 	while (productsIterator.hasNext()) {
