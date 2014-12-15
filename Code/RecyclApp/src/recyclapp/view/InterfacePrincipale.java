@@ -30,7 +30,7 @@ import recyclapp.model.Coordinate;
 import recyclapp.model.DataElement;
 import recyclapp.model.Element;
 import recyclapp.model.Plan;
-import recyclapp.model.SavePlan;
+import recyclapp.serviceTechnique.SavePlan;
 
 public class InterfacePrincipale extends javax.swing.JFrame implements ActionListener, MouseMotionListener, MouseListener {
 

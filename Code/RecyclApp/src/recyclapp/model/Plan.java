@@ -1,5 +1,6 @@
 package recyclapp.model;
 
+import recyclapp.serviceTechnique.ChangeManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import static java.util.Collections.list;

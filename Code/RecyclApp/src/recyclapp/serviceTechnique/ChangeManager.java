@@ -1,7 +1,8 @@
-package recyclapp.model;
+package recyclapp.serviceTechnique;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import recyclapp.model.Element;
 
 public class ChangeManager implements Serializable{
 
