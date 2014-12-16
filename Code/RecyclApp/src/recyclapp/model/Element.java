@@ -338,6 +338,11 @@ public abstract class Element extends Component {
     }
 
     public void deleteArc(Arc arcOfElt) {
-	
+	for (int i = 0; i < exits.length; i++) {
+	    Arc exit = exits[i];
+	    if (exit.equals(arcOfElt)) {
+		exits[i] = null;
+	    }
+	}
     }
 }
