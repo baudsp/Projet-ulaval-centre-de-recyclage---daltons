@@ -209,24 +209,31 @@ public class InterfaceParam extends javax.swing.JPanel {
         // On ecrit le contenu de la matrice de transformation
         Map<String, Map<Integer, Map<String, Float>>> matrix = element.getMatrix();
 
-        GridBagConstraints gridBagConstaints = new GridBagConstraints();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
 
         int i = 0;
 
 	// A ameliorer
         // On verifie que la matrice trie bien le bon nombre de 
         // dechets (et pas les bons dechets)
-        if (matrix.keySet().size() == element.getEntranceProducts().size()) {
-
-            Iterator<String> iteratorProduits = matrix.keySet().iterator();
+        boolean dechetsGood = true;
+        Map<String, Float> entranceProducts = element.getEntranceProducts();
+        Iterator<String> iteratorProduits = entranceProducts.keySet().iterator();
+        while (iteratorProduits.hasNext()) {
+            if (!matrix.containsKey(iteratorProduits.next())) {
+                dechetsGood = false;
+            }
+        }
+        if (dechetsGood) {
+            iteratorProduits = matrix.keySet().iterator();
 
             while (iteratorProduits.hasNext()) {
 
                 String produit = iteratorProduits.next();
 
-                gridBagConstaints.gridx = 0;
-                gridBagConstaints.gridy = i;
-                jPanelMatrix.add(new JLabel(produit), gridBagConstaints);
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = i;
+                jPanelMatrix.add(new JLabel(produit), gridBagConstraints);
 
                 Map<Integer, Map<String, Float>> matriceProduit = matrix.get(produit);
                 Iterator<Integer> iteratorSorties = matriceProduit.keySet().iterator();
@@ -235,9 +242,9 @@ public class InterfaceParam extends javax.swing.JPanel {
 
                     int numsortie = iteratorSorties.next();
 
-                    gridBagConstaints.gridx = 0;
-                    gridBagConstaints.gridy = i;
-                    jPanelMatrix.add(new JLabel("Sortie " + Integer.toString(numsortie + 1) + " :"), gridBagConstaints);
+                    gridBagConstraints.gridx = 0;
+                    gridBagConstraints.gridy = i;
+                    jPanelMatrix.add(new JLabel("Sortie " + Integer.toString(numsortie + 1) + " :"), gridBagConstraints);
 
                     Map<String, Float> a = matriceProduit.get(numsortie);
 
@@ -245,8 +252,8 @@ public class InterfaceParam extends javax.swing.JPanel {
                     // A ce point-là, on ne gère pas les transformations, donc un seul paire clé=>valeur par produit
 
 
-		    gridBagConstaints.gridx = 1;
-		    gridBagConstaints.gridy = i;
+		    gridBagConstraints.gridx = 1;
+		    gridBagConstraints.gridy = i;
 
 		    JTextField jtSortie = new JTextField(pourcentage + "");
 
@@ -256,12 +263,12 @@ public class InterfaceParam extends javax.swing.JPanel {
                     // ::: parce que Guillaume est parano
                     jtSortie.setName(numsortie + ":::" + produit + ":::" + i);
                     jtSortie.setPreferredSize(new Dimension(70, 20));
-                    jPanelMatrix.add(jtSortie, gridBagConstaints);
-                    jPanelMatrix.add(jtSortie, gridBagConstaints);
+                    jPanelMatrix.add(jtSortie, gridBagConstraints);
+                    jPanelMatrix.add(jtSortie, gridBagConstraints);
 
-                    gridBagConstaints.gridx = 2;
-                    gridBagConstaints.gridy = i;
-                    jPanelMatrix.add(new JLabel(" %"), gridBagConstaints);
+                    gridBagConstraints.gridx = 2;
+                    gridBagConstraints.gridy = i;
+                    jPanelMatrix.add(new JLabel(" %"), gridBagConstraints);
                 }
 
                 i++;
@@ -277,27 +284,30 @@ public class InterfaceParam extends javax.swing.JPanel {
 
                 String produit = iteratorProducts.next();
 
-                gridBagConstaints.gridx = 0;
-                gridBagConstaints.gridy = i;
-                jPanelMatrix.add(new JLabel(produit + " : "), gridBagConstaints);
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = i;
+                jPanelMatrix.add(new JLabel(produit + " : "), gridBagConstraints);
 
                 for (int j = 0; j < element.getNbExits(); j++) {
-                    gridBagConstaints.gridx = 0;
-                    gridBagConstaints.gridy = i + 1;
+                    gridBagConstraints.gridx = 0;
+                    gridBagConstraints.gridy = i + 1;
                     int numSortie = (j + 1);
-                    jPanelMatrix.add(new JLabel("Sortie " + numSortie), gridBagConstaints);
-                    gridBagConstaints.gridx = 1;
+                    jPanelMatrix.add(new JLabel("Sortie " + numSortie), gridBagConstraints);
+                    gridBagConstraints.gridx = 1;
                     JTextField jtSortie = new JTextField();
+                    if (matrix.containsKey(produit)) {
+                        jtSortie.setText(matrix.get(produit).get(numSortie-1).get(produit).toString());
+                    }
 		    // ajout d'un nom pour identifier chaque 
                     // textField :
                     // j = sortie (partant de 0) ::: produit = nom du dechet ::: k = identifiant unique
                     // ::: parce que Guillaume est parano
                     jtSortie.setName(j + ":::" + produit + ":::" + k);
                     jtSortie.setPreferredSize(new Dimension(70, 20));
-                    jPanelMatrix.add(jtSortie, gridBagConstaints);
+                    jPanelMatrix.add(jtSortie, gridBagConstraints);
 
-                    gridBagConstaints.gridx = 2;
-                    jPanelMatrix.add(new JLabel(" %"), gridBagConstaints);
+                    gridBagConstraints.gridx = 2;
+                    jPanelMatrix.add(new JLabel(" %"), gridBagConstraints);
 
                     i++;
 
@@ -307,6 +317,13 @@ public class InterfaceParam extends javax.swing.JPanel {
                 i++;
             }
         }
+    }
+    
+    private boolean confirmDeleteEntranceMatrix() {
+        int res = JOptionPane.showConfirmDialog(null, 
+                "Souhaitez-vous vraiment supprimer cette entrée ?", 
+                "Confirmer suppression", JOptionPane.YES_NO_OPTION);
+        return (res == JOptionPane.OK_OPTION);
     }
 
     private void filljPanelExitValues() {
