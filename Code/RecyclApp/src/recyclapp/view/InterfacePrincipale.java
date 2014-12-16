@@ -141,7 +141,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    currentDataElement = dataElement;
 		}
 	    }
-	    listDataElements.remove(currentDataElement);
+	    //listDataElements.remove(currentDataElement);
 	}
 
 	return listDataElements;

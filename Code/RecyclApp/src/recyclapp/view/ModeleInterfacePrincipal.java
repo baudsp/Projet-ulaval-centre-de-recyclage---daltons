@@ -13,12 +13,14 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import recyclapp.model.Coordinate;
+import recyclapp.model.DataElement;
 
 /**
  *
@@ -62,14 +64,17 @@ public class ModeleInterfacePrincipal {
     public boolean isOverlapElement(int x, int y, int width, int height) {
         x = x - (width / 2);
         y = y - (height / 2);
-        int max = frame.getListDataElements(false).size();
+        
+        LinkedList<DataElement> listDataElements = frame.getListDataElements(false);
+        
+        int max = listDataElements.size();
         Rectangle rectangle = new Rectangle(x, y, width, height);
 
         for (int i = 0; i < max; i++) {
-            int r2X = frame.getListDataElements(false).get(i).x;
-            int r2Y = frame.getListDataElements(false).get(i).y;
-            int r2width = this.frame.getListDataElements(false).get(i).width;
-            int r2height = this.frame.getListDataElements(false).get(i).height;
+            int r2X = listDataElements.get(i).x;
+            int r2Y = listDataElements.get(i).y;
+            int r2width = listDataElements.get(i).width;
+            int r2height = listDataElements.get(i).height;
 
             Rectangle rectangle2 = new Rectangle(r2X, r2Y, r2width, r2height);
 
@@ -91,17 +96,16 @@ public class ModeleInterfacePrincipal {
      * @return
      */
     public boolean isThereAnElementHere(int x, int y) {
-        int listDataElements = this.frame.getListDataElements(false).size();
+        LinkedList<DataElement> listDataElements = this.frame.getListDataElements(false);
         boolean found = false;
+        
 
-        for (int i = 0; i < listDataElements; i++) {
-            int rX = this.frame.getListDataElements(false).get(i).x;
-            int rY = this.frame.getListDataElements(false).get(i).y;
-            int rWidth = this.frame.getListDataElements(false).get(i).width;
-            int rHeight = this.frame.getListDataElements(false).get(i).height;
-
+        for (DataElement listDataElement : listDataElements) {
+            int rX = listDataElement.x;
+            int rY = listDataElement.y;
+            int rWidth = listDataElement.width;
+            int rHeight = listDataElement.height;
             Rectangle rectangle = new Rectangle(rX, rY, rWidth, rHeight);
-
             if (rectangle.contains(x, y)) {
                 this.frame.getDebug().setText("Trouvé");
                 found = true;

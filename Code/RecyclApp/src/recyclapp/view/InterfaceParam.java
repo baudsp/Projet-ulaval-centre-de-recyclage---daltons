@@ -363,7 +363,7 @@ public class InterfaceParam extends javax.swing.JPanel {
                         "La matrice est incorrecte.",
                         "L'élement " + element.getName() + " n'a pas été sauvegardé",
                         JOptionPane.CLOSED_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE);
     }
     
     /**
