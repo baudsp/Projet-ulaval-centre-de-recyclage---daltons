@@ -118,14 +118,6 @@ public abstract class Element extends Component {
 	return entrance;
     }
 
-    public void addExit(Arc arc) {
-	for (int i = 0; i < exits.length; i++) {
-	    if (exits[i] == null) {
-		exits[i] = arc;
-	    }
-	}
-    }
-
     public boolean isPossibleToAddEntrance() {
 	return true;
     }
@@ -139,7 +131,7 @@ public abstract class Element extends Component {
 	return false;
     }
 
-    public void addExit(int place, Arc arc) {
+    public void addArcToExit(int place, Arc arc) {
 	exits[place] = arc;
     }
 
