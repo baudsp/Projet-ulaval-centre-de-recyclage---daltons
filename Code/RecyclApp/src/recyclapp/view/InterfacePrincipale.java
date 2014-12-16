@@ -8,13 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -280,11 +274,18 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 				y = coo.getY();
 			    }
 
-			    // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
-			    int halfImageSize = panelTools.getSizeImage() / 2;
-
-			    int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
-			    int createY = (int) (y / zoom) - halfImageSize;
+			    int halfImageSize = (int) (zoom * panelTools.getSizeImage() / 2);
+				
+			    int panelToolWidth = this.panelTools.getWidth();
+			    
+			    int horizontaleScrollBarValue = jScrollPane1.getHorizontalScrollBar().getValue();
+			    int verticaleScrollBarValue = jScrollPane1.getVerticalScrollBar().getValue();
+			    
+			    // On crée la position dans le plan à partir de la position dans l'interface
+			    // Il faut prendre en compte la position de la souris, la largeur du panneau des outils, 
+			    // la position des scroll bars, le zoom, et la taille de l'image
+			    int createX = (int) ((x - panelToolWidth + horizontaleScrollBarValue - halfImageSize) / zoom);
+			    int createY = (int) ((y + verticaleScrollBarValue - halfImageSize) / zoom);
 
 			    this.plan.createElement(this.panelTools.getIdTools(), createX, createY, nbrSorties);
 

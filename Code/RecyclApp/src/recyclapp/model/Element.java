@@ -3,6 +3,7 @@ package recyclapp.model;
 import java.awt.Image;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public abstract class Element extends Component {
 	this.nbEntrancesUsed = 0;
 	this.nbExits = nbExits;
 	exits = new Arc[nbExits];
-	entranceProducts = new HashMap<>();
+	entranceProducts = new LinkedHashMap<>();
 	matrix = new HashMap<>();
 	entrances = new LinkedList<>();
 	this.width = width;
@@ -157,7 +158,7 @@ public abstract class Element extends Component {
     public void pushExitProducts(Map<String, Float> entrance) {
 	
 	if (!this.getClass().equals(Jonction.class)) {
-	    entranceProducts = new HashMap<>();
+	    entranceProducts = new LinkedHashMap<>();
 	}
 	
 	Set<String> listProducts = entrance.keySet();
@@ -285,14 +286,11 @@ public abstract class Element extends Component {
     }
 
     public boolean equals(Element element) {
-	if (element.coordinate.getX() == this.coordinate.getX()
-		&& element.coordinate.getY() == this.coordinate.getY()) {
-	    return true;
-	}
-	return false;
+	return (element.coordinate.getX() == this.coordinate.getX()
+		&& element.coordinate.getY() == this.coordinate.getY());
     }
 
-    /**
+    /*
      * Sauvegarde dans la matrix de tri de la station l'input
      */
     public void setMatrix(LinkedList<String> inputs) {
@@ -325,6 +323,7 @@ public abstract class Element extends Component {
 	this.matrix = matrixTri;
     }
 
+    @Override
     public abstract Element clone();
 
     protected Element helpClone(Element elt) {

@@ -9,10 +9,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -96,7 +99,7 @@ public class InterfaceParam extends javax.swing.JPanel {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         int y = 0;
 
-        Map<String, Float> exitValues = element.exitProductsFromArc(0);
+        Map<String, Float> exitValues = element.getEntranceProducts();
         if (exitValues != null && !exitValues.isEmpty()) {
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = y;
@@ -114,11 +117,73 @@ public class InterfaceParam extends javax.swing.JPanel {
                 jspin.setModel(new SpinnerNumberModel(exitValues.get(product), 0.0f, null, 1.0f));
                 jspin.setSize(80, 20);
                 jspin.setPreferredSize(new Dimension(80, 20));
-                jspin.setName(product);
+                jspin.setName(product + "_jSpinner");
                 jPanelExitValues.add(jspin, gridBagConstraints);
+                gridBagConstraints.gridx = 2;
+                JButton delButton = new JButton("X");
+                delButton.setName(product + "_jButton");
+                delButton.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        JButton button = (JButton) evt.getSource();
+                        String product = button.getName().split("_")[0];
+                        if (confirmDeleteProduct()) {
+                            Map<String, Float> exitValues = element.getEntranceProducts();
+                            exitValues.remove(product);
+                            JOptionPane.showConfirmDialog(null,
+                            "La suppression de produit s'est passé avec succès.",
+                            "Enregistrement de la suppression de produit",
+                            JOptionPane.CLOSED_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE);
+                            setParametersInformations(element);
+                        }
+                    }
+                });
+                delButton.setPreferredSize(new Dimension(40, 20));
+                jPanelExitValues.add(delButton, gridBagConstraints);
                 y++;
             }
         }
+        
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = y;
+        JButton addProductB = new JButton("Ajouter Produit");
+        addProductB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                String product = getNewProduct();
+                Map<String, Float> entranceProducts = element.getEntranceProducts();
+                if ((!product.equals("")) && (!entranceProducts.containsKey(product))) {
+                    entranceProducts.put(product, 0.0f);
+                    JOptionPane.showConfirmDialog(null,
+                        "L'ajout de produit s'est passé avec succès.",
+                        "Enregistrement de l'ajout de produit",
+                        JOptionPane.CLOSED_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE);
+                    setParametersInformations(element);
+                } 
+            }
+        });
+        jPanelExitValues.add(addProductB, gridBagConstraints);
+    }
+    
+    private boolean confirmDeleteProduct() {
+        int res = JOptionPane.showConfirmDialog(null, 
+                "Souhaitez-vous vraiment supprimer ce produit ?", 
+                "Confirmer suppression", JOptionPane.YES_NO_OPTION);
+        return (res == JOptionPane.OK_OPTION);
+    }
+    
+    private String getNewProduct() {
+        String product = "";
+        JTextField productTextField = new JTextField();
+        int res = JOptionPane.showOptionDialog(null, productTextField, 
+                "Ajouter un produit en entrée", JOptionPane.OK_CANCEL_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (res != JOptionPane.CANCEL_OPTION) {
+            product = productTextField.getText();
+        }
+        return product;
     }
 
     private void filljPanelExitValuesForSortieUsine() {
@@ -519,11 +584,14 @@ public class InterfaceParam extends javax.swing.JPanel {
 	}
         
         if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE) {
-            Map<String, Float> entrees = element.exitProductsFromArc(0);
+            Map<String, Float> entrees = element.getEntranceProducts();
             for (Component comp : jPanelExitValues.getComponents()) {
-                if ((comp.getClass().equals(JSpinner.class)) && entrees.containsKey(comp.getName())) {
-                    JSpinner jspin = (JSpinner) comp;
-                    entrees.put(jspin.getName(), (Float) jspin.getValue());
+                if (comp.getClass().equals(JSpinner.class)) {
+                    String product = comp.getName().split("_")[0];
+                    if (entrees.containsKey(product)) {
+                        JSpinner jspin = (JSpinner) comp;
+                        entrees.put(product, (Float) jspin.getValue());
+                    }
                 }
             }
             element.setEntranceProducts(entrees);
