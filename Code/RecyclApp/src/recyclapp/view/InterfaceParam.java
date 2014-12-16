@@ -73,10 +73,7 @@ public class InterfaceParam extends javax.swing.JPanel {
         if (element.getType() == InterfaceOutils.ID_TOOL_STATION) {
             filljPanelMatrix();
         }
-
-	if (element.getType() == InterfaceOutils.ID_TOOL_STATION) {
-	    filljPanelMatrix();
-	}
+        
 	if (element.getType() != InterfaceOutils.ID_TOOL_SORTIE) {
 	    filljPanelExitValues();
 	} else {
