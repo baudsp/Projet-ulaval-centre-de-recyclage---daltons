@@ -62,6 +62,7 @@ public class ModeleInterfacePrincipal {
     }
 
     public boolean isOverlapElement(int x, int y, int width, int height) {
+        this.frame.getDebug().setText("");
         x = x - (width / 2);
         y = y - (height / 2);
         
@@ -70,6 +71,7 @@ public class ModeleInterfacePrincipal {
         int max = listDataElements.size();
         Rectangle rectangle = new Rectangle(x, y, width, height);
 
+        
         for (int i = 0; i < max; i++) {
             int r2X = listDataElements.get(i).x;
             int r2Y = listDataElements.get(i).y;
@@ -79,7 +81,7 @@ public class ModeleInterfacePrincipal {
             Rectangle rectangle2 = new Rectangle(r2X, r2Y, r2width, r2height);
 
             if (rectangle2.intersects(rectangle)) {
-                this.frame.getDebug().setText("Trouvé");
+                this.frame.getDebug().setText("Il y a déjà un élement ici");
                 return true;
             }
         }

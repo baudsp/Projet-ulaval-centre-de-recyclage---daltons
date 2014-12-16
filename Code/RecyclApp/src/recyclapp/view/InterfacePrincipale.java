@@ -345,9 +345,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 int moveY = (int) (y / zoom) - halfImageSize;
 
                 if (moveableElement) {
-                    if(this.panelTools.isVisible()){
-                        
-                    }
                     if (!this.mip.isOverlapElement(x, y, this.panelTools.getSizeImage(), this.panelTools.getSizeImage())) {
                         this.plan.moveElement(dataElementTemp, moveX, moveY);
                         dataElementTemp = new DataElement();
@@ -355,7 +352,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                 }
             }
 
-            this.interfacePlan.repaint();
         } else { // On est en dehors du plan
             if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
                 JOptionPane.showMessageDialog(null,
@@ -372,9 +368,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                             null);
                 }
             }
-            this.interfacePlan.repaint();
-            this.panelTools.repaint();
         }
+        this.interfacePlan.repaint();
+        this.panelTools.repaint();
     }
 
     /**
