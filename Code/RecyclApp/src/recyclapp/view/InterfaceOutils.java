@@ -31,23 +31,23 @@ public class InterfaceOutils extends JPanel {
         coord[1] = 0;
         images = new LinkedList<>();
         coordImage = new int[5][2];
-        images.add(ID_TOOL_STATION, getToolkit().getImage("src/recyclapp/resources/Station.png"));
-        images.add(ID_TOOL_ENTREE, getToolkit().getImage("src/recyclapp/resources/Entree.png"));
-        images.add(ID_TOOL_SORTIE, getToolkit().getImage("src/recyclapp/resources/Sortie.png"));
-        images.add(ID_TOOL_ARC, getToolkit().getImage("src/recyclapp/resources/Arc.png"));
-        images.add(ID_TOOL_JONCTION, getToolkit().getImage("src/recyclapp/resources/Jonction.png"));
+        images.add(ID_TOOL_STATION, getToolkit().getImage("resources/Station.png"));
+        images.add(ID_TOOL_ENTREE, getToolkit().getImage("resources/Entree.png"));
+        images.add(ID_TOOL_SORTIE, getToolkit().getImage("resources/Sortie.png"));
+        images.add(ID_TOOL_ARC, getToolkit().getImage("resources/Arc.png"));
+        images.add(ID_TOOL_JONCTION, getToolkit().getImage("resources/Jonction.png"));
         sizeImage = 70;
         
         initComponents();
         
-        imagePanelStation.setImage(getToolkit().getImage("src/recyclapp/resources/Station.png"));
+        imagePanelStation.setImage(getToolkit().getImage("resources/Station.png"));
         coordImage[ID_TOOL_STATION][0] = imagePanelStation.getX();
         coordImage[ID_TOOL_STATION][1] = imagePanelStation.getY();
                 
-        imagePanelEntree.setImage(getToolkit().getImage("src/recyclapp/resources/Entree.png"));
-        imagePanelSortie.setImage(getToolkit().getImage("src/recyclapp/resources/Sortie.png"));
-        imagePanelJonction.setImage(getToolkit().getImage("src/recyclapp/resources/Jonction.png"));
-        imagePanelArc.setImage(getToolkit().getImage("src/recyclapp/resources/Arc.png"));
+        imagePanelEntree.setImage(getToolkit().getImage("resources/Entree.png"));
+        imagePanelSortie.setImage(getToolkit().getImage("resources/Sortie.png"));
+        imagePanelJonction.setImage(getToolkit().getImage("resources/Jonction.png"));
+        imagePanelArc.setImage(getToolkit().getImage("resources/Arc.png"));
     }
 
     /**
