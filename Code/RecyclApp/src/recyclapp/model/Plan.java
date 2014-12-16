@@ -1,6 +1,5 @@
 package recyclapp.model;
 
-import java.awt.Frame;
 import recyclapp.serviceTechnique.ChangeManager;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import recyclapp.view.InterfaceOutils;
-import recyclapp.view.InterfacePrincipale;
 
 public class Plan implements Serializable, ParamObserver {
 
@@ -99,8 +97,9 @@ public class Plan implements Serializable, ParamObserver {
             if (dataElement.type != InterfaceOutils.ID_TOOL_SORTIE || getTempDataElement().type != InterfaceOutils.ID_TOOL_ENTREE) {
                 if (dataElement.element.getFirstFreeEntrance() >= 0) {
                     if (!dataElement.element.equals(tempDataElement.element)) { // si les éléments sont différents on enregistre
-                        getTempDataElement().element.addExit(getTempDataElement().element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element, getTempDataElement().element));
-                        dataElement.element.addEntrance();
+                        getTempDataElement().element.addArcToExit(getTempDataElement().element.getFirstFreeExit(), 
+				new Arc(dataElement.element, getTempDataElement().element));
+                        
                         tempDataElement = null;
                         found = true;
                     } else {
@@ -160,9 +159,25 @@ public class Plan implements Serializable, ParamObserver {
         return (getTempDataElement() != null);
     }
 
-    public void removeElement(DataElement dataElement) {
-        listElements.remove(dataElement.element);
-        getChangeManager().addChange(listElements);
+    public void removeElement(DataElement dataElement) {	
+	listElements.remove(dataElement.element);
+	
+	for (Element elementOfPlan : listElements) {
+	    
+	    Arc[] arcsOfElt = elementOfPlan.getArcs();
+	    
+	    for (Arc arcOfElt : arcsOfElt) {
+		Element elt = arcOfElt.getEntranceElement();
+		
+		// If the element list does not contains this element,
+		// then the arc is linked to a deleted element and should be deleted
+		if (!listElements.contains(elt)) {
+		    
+		}
+	    }
+	}
+	
+	getChangeManager().addChange(listElements);
     }
 
     public void createElement(int type, int x, int y, int nbrSorties) {

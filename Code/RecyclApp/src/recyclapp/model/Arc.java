@@ -32,12 +32,18 @@ public class Arc extends Component {
     }
 
     /**
-     * @return the exit
+     * @return the element where the arc ends,
+     * where the arc is linked to the entrance
      */
     public Element getEntranceElement() {
         return entranceElement;
     }
-
+    
+    /**
+     * 
+     * @return the element where the arc begin, 
+     * where the arc is linked to the exit
+     */
     public Element getExitElement() {
         return exitElement;
     }
