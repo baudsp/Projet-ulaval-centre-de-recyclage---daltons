@@ -38,7 +38,7 @@ public abstract class Element extends Component {
 	this.width = width;
 	this.height = height;
 	this.id = new Random().nextInt(40);
-        productsEntrance = new LinkedHashMap<>();
+	productsEntrance = new LinkedHashMap<>();
     }
 
     public Coordinate getCoordinate() {
@@ -56,15 +56,15 @@ public abstract class Element extends Component {
     public int getNbEntrances() {
 	return nbEntrances;
     }
-    
+
     public boolean getIsMatrixValid() {
-        Iterator<String> listProductsIterator = productsEntrance.keySet().iterator();
-        while (listProductsIterator.hasNext()) {
-            if (!matrix.containsKey(listProductsIterator.next())) {
-                return false;
-            }
-        }
-        return true;
+	Iterator<String> listProductsIterator = productsEntrance.keySet().iterator();
+	while (listProductsIterator.hasNext()) {
+	    if (!matrix.containsKey(listProductsIterator.next())) {
+		return false;
+	    }
+	}
+	return true;
     }
 
     public void setCoordinate(Coordinate coordinate) {
@@ -123,8 +123,8 @@ public abstract class Element extends Component {
 	    entrances.remove(entrance);
 	}
     }
-    
-        public int getRankArc(Arc arc) {
+
+    public int getRankArc(Arc arc) {
 	for (int i = 0; i < nbExits; i++) {
 	    if (exits[i].equals(arc)) {
 		return i;
@@ -146,7 +146,7 @@ public abstract class Element extends Component {
 	}
 	return nb;
     }
-    
+
     public void addEntrance() {
 	nbEntrancesUsed++;
     }
@@ -160,11 +160,11 @@ public abstract class Element extends Component {
     }
 
     public void pushExitProducts(Map<String, Float> entrance) {
-        productsEntrance = entrance;
+	productsEntrance = entrance;
 	if (!this.getClass().equals(Jonction.class)) {
 	    entranceProducts = new LinkedHashMap<>();
 	}
-	
+
 	Set<String> listProducts = entrance.keySet();
 	Iterator<String> productsIterator = listProducts.iterator();
 	while (productsIterator.hasNext()) {
@@ -340,7 +340,7 @@ public abstract class Element extends Component {
     public void deleteArc(Arc arcOfElt) {
 	for (int i = 0; i < exits.length; i++) {
 	    Arc exit = exits[i];
-	    if (exit.equals(arcOfElt)) {
+	    if (exit != null && exit.equals(arcOfElt)) {
 		exits[i] = null;
 	    }
 	}
