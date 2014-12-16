@@ -2,6 +2,7 @@ package recyclapp.model;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import recyclapp.view.InterfaceOutils;
@@ -10,7 +11,7 @@ public class EntreeUsine extends Element {
 
     public EntreeUsine(int x, int y, int width, int height) {
         super(new Coordinate(x, y), 0, 1, width, height);
-        entranceProducts = new HashMap<>();
+        entranceProducts = new LinkedHashMap<>();
 	
 	name = "Entree " + this.id;
 	
@@ -50,9 +51,9 @@ public class EntreeUsine extends Element {
 	    
 	    String product = iteratorProduct.next();
 	    
-	    Map <Integer, Map<String, Float>> mapEntrances =  new HashMap<>();
+	    Map <Integer, Map<String, Float>> mapEntrances =  new LinkedHashMap<>();
 	    
-	    Map<String, Float> mapProduits = new HashMap<>();
+	    Map<String, Float> mapProduits = new LinkedHashMap<>();
 	    mapProduits.put(product, 100f);
 	    
 	    mapEntrances.put(0, mapProduits);
