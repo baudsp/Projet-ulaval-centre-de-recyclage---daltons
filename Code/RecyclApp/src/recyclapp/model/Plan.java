@@ -30,7 +30,7 @@ public class Plan implements Serializable, ParamObserver {
 	
 	// If there is a loop in the plan, the calcul 
 	// is not tried to avoid the stack overflow due to infinite loop
-	if (isThereLoop()) {
+	if (!isThereLoop()) {
 	
 	    resetEntranceValues();
 
