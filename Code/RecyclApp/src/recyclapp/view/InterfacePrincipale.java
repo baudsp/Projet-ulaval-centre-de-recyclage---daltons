@@ -21,6 +21,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
@@ -76,15 +77,17 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public void updateInterfacePlan(float zoom) {
 	interfacePlan.setPreferredSize(new Dimension((int) (2000 * zoom), (int) (2000 * zoom)));
 
+	// Pour actualiser la scroll Bar (merci Guillaume !)
 	int value = jScrollPane1.getVerticalScrollBar().getValue();
-	int value2 = jScrollPane1.getHorizontalScrollBar().getValue();
-
+	int value2 = jScrollPane1.getHorizontalScrollBar().getValue();	
 	jScrollPane1.getVerticalScrollBar().setValue(value + 1);
 	jScrollPane1.getHorizontalScrollBar().setValue(value2 + 1);
-
 	jScrollPane1.getVerticalScrollBar().setValue(value);
 	jScrollPane1.getHorizontalScrollBar().setValue(value2);
 
+	JScrollBar scrollBarHorizontale = jScrollPane1.getHorizontalScrollBar();
+	scrollBarHorizontale.setVisible(true);
+	jScrollPane1.getVerticalScrollBar().setVisible(true);
     }
 
     public JLabel getLogCoordinates() {
