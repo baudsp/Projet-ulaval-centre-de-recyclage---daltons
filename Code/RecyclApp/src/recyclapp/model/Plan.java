@@ -128,7 +128,7 @@ public class Plan implements Serializable, ParamObserver {
     }
 
     public LinkedList<DataElement> getListDataElements() {
-        LinkedList<DataElement> listDataElements = new LinkedList<DataElement>();
+        LinkedList<DataElement> listDataElements = new LinkedList<>();
         for (Element elt : listElements) {
             listDataElements.add(new DataElement(elt));
         }

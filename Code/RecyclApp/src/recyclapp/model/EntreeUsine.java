@@ -1,10 +1,8 @@
 package recyclapp.model;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import recyclapp.view.InterfaceOutils;
 
 public class EntreeUsine extends Element {
@@ -14,10 +12,6 @@ public class EntreeUsine extends Element {
         entranceProducts = new LinkedHashMap<>();
 	
 	name = "Entree " + this.id;
-	
-	//Pour le livrable 3, on code ce truc en dur
-	entranceProducts.put("Produit 1", 1000f);
-	entranceProducts.put("Produit 2", 1000f);
 	
 	transformeEntranceProductToMatrix();
     }
@@ -83,5 +77,14 @@ public class EntreeUsine extends Element {
 		exits[exitNumber].pushExitProducts(productFromExit);
 	    }
 	}
+    }
+    
+    /**
+     * @param entranceProducts the entranceProducts to set
+     */
+    @Override
+    public void setEntranceProducts(Map<String, Float> entranceProducts) {
+	this.entranceProducts = entranceProducts;
+	this.transformeEntranceProductToMatrix();
     }
 }
