@@ -62,8 +62,8 @@ public class Plan implements Serializable, ParamObserver {
 	return listEntreeUsine;
     }
 
-    public DataElement createArcExit(int x, int y) {
-        DataElement dataElement = findDataElement(x, y, 1);
+    public DataElement createArcExit(int x, int y, float zoom) {
+        DataElement dataElement = findDataElement(x, y, zoom);
         if (dataElement.element != null && (dataElement.element.getFirstFreeExit() >= 0)) {
             tempDataElement = dataElement;
         } else {
@@ -88,17 +88,18 @@ public class Plan implements Serializable, ParamObserver {
         return getTempDataElement();
     }
 
-    public boolean createArcEntrance(int x, int y) {
+    public boolean createArcEntrance(int x, int y, float zoom) {
         boolean found = false;
-        DataElement dataElement = findDataElement(x, y, 1);
+        DataElement dataElement = findDataElement(x, y, zoom);
 
         if (dataElement.element != null) {
             String message = "Erreur lors de l'ajout de l'arc.";
             if (dataElement.type != InterfaceOutils.ID_TOOL_SORTIE || getTempDataElement().type != InterfaceOutils.ID_TOOL_ENTREE) {
                 if (dataElement.element.getFirstFreeEntrance() >= 0) {
                     if (!dataElement.element.equals(tempDataElement.element)) { // si les éléments sont différents on enregistre
-                        getTempDataElement().element.addExit(getTempDataElement().element.getFirstFreeExit(), new Arc(findDataElement(x, y, 1).element, getTempDataElement().element));
-                        dataElement.element.addEntrance();
+                        getTempDataElement().element.addArcToExit(getTempDataElement().element.getFirstFreeExit(), 
+				new Arc(dataElement.element, getTempDataElement().element));
+                        
                         tempDataElement = null;
                         found = true;
                     } else {
@@ -158,9 +159,25 @@ public class Plan implements Serializable, ParamObserver {
         return (getTempDataElement() != null);
     }
 
-    public void removeElement(DataElement dataElement) {
-        listElements.remove(dataElement.element);
-        getChangeManager().addChange(listElements);
+    public void removeElement(DataElement dataElement) {	
+	listElements.remove(dataElement.element);
+	
+	for (Element elementOfPlan : listElements) {
+	    
+	    Arc[] arcsOfElt = elementOfPlan.getArcs();
+	    
+	    for (Arc arcOfElt : arcsOfElt) {
+		Element elt = arcOfElt.getEntranceElement();
+		
+		// If the element list does not contains this element,
+		// then the arc is linked to a deleted element and should be deleted
+		if (!listElements.contains(elt)) {
+		    
+		}
+	    }
+	}
+	
+	getChangeManager().addChange(listElements);
     }
 
     public void createElement(int type, int x, int y, int nbrSorties) {

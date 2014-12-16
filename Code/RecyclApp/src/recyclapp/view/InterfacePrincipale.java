@@ -307,18 +307,18 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
                     }
                     this.panelTools.setMoveTools(false);
                 } else { // CREATE ARC
-                    int x = (int) (e.getX() / zoom - this.panelTools.getWidth());
-                    int y = (int) (e.getY() / zoom);
+                    int x = e.getX() - this.panelTools.getWidth();
+                    int y = e.getY();
                     if (this.panelTools.getIdTools() >= 0
                             && this.plan.findDataElement(x, y, zoom).element != null) {
                         if (this.plan.isDrawingArc()) {
-                            if (this.plan.createArcEntrance(x, y)) {
+                            if (this.plan.createArcEntrance(x, y, zoom)) {
                                 this.panelTools.setMoveTools(false);
                                 this.panelTools.resetTools();
                                 logDebug.setText("");
                             }
                         } else {
-                            DataElement dataElement = this.plan.createArcExit(x, y);
+                            DataElement dataElement = this.plan.createArcExit(x, y, zoom);
                             if (dataElement != null) {
                                 logDebug.setText("Selectionner l'élément à relier à " + dataElement.element.getName());
                             } else {
