@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.util.LinkedList;
 import javax.swing.JPanel;
 import recyclapp.model.Arc;
 import recyclapp.model.Coordinate;
@@ -56,10 +57,9 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             isDrag = false;
         }
 
-        for (int i = 0; i < interfacePrincipale.getListDataElements(isZoom).size(); i++) {
-
-            DataElement dataElement = interfacePrincipale.getListDataElements(isZoom).get(i);
-
+        LinkedList<DataElement> listDataElements = interfacePrincipale.getListDataElements(isZoom);
+        
+        for (DataElement dataElement : listDataElements) {
             int id = dataElement.element.getType();
             int x = (int) (dataElement.x * zoom);
             int y = (int) (dataElement.y * zoom);

@@ -141,7 +141,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    currentDataElement = dataElement;
 		}
 	    }
-	    listDataElements.remove(currentDataElement);
+	    //listDataElements.remove(currentDataElement);
 	}
 
 	return listDataElements;
@@ -192,34 +192,32 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_ARC) {
 	    mip.changeCursor(InterfaceOutils.ID_TOOL_ARC);
 	}
-	
-	
+
 	int x = e.getX();
 	int y = e.getY();
 	interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(x), mip.convertPixelToMeter(y));
-	
+
 	if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
 	    Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
 	    x = coo.getX();
 	    y = coo.getY();
 	}
-	
+
 	if (e.getSource().equals(interfacePlan)) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
 
 	    if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
-		
 		interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), x, y);
-		
+
 	    }
-	   
+
 	    // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
-	} else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { 
-	    
+	} else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) {
+
 	    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), x, y);
 	}
-	
-	this.interfacePlan.repaint();    
-	
+
+	this.interfacePlan.repaint();
+
     }
 
     @Override
@@ -324,7 +322,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    }
 		}
 		this.panelTools.repaint();
-	    } else if (e.getSource().equals(interfacePlan)) {
+	    } else if (e.getSource().equals(interfacePlan)) { // Déplacement d'un élément
+
 		int x = e.getX();
 		int y = e.getY();
 
@@ -339,12 +338,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		int moveX = (int) (x / zoom) - halfImageSize;
 		int moveY = (int) (y / zoom) - halfImageSize;
 
-		this.plan.moveElement(dataElementTemp, moveX, moveY);
-		dataElementTemp = new DataElement();
+		if (mip.isThereAnElementHere(moveX, moveY)) {
+		    this.plan.moveElement(dataElementTemp, moveX, moveY);
+		    dataElementTemp = new DataElement();
+		}
 	    }
 
 	    this.interfacePlan.repaint();
-	} else {
+	} else { // On est en dehors du plan
 	    if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
 		JOptionPane.showMessageDialog(null,
 			"Déplacer l'élément dans le plan.",
