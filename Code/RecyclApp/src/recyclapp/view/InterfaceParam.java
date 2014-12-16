@@ -204,7 +204,6 @@ public class InterfaceParam extends javax.swing.JPanel {
                 }
 
                 i++;
-
             }
         }
     }
@@ -266,7 +265,7 @@ public class InterfaceParam extends javax.swing.JPanel {
                         JOptionPane.CLOSED_OPTION,
                         JOptionPane.INFORMATION_MESSAGE);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -340,20 +339,10 @@ public class InterfaceParam extends javax.swing.JPanel {
         });
 
         jSpinnerExits.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-        jSpinnerExits.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinnerExitsStateChanged(evt);
-            }
-        });
 
         jLabelEntrances.setText("Entrées");
 
         jSpinnerEntrances.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-        jSpinnerEntrances.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinnerEntrancesStateChanged(evt);
-            }
-        });
 
         jPanelExitValues.setBackground(new java.awt.Color(164, 183, 145));
         jPanelExitValues.setLayout(new java.awt.GridBagLayout());
@@ -508,33 +497,6 @@ public class InterfaceParam extends javax.swing.JPanel {
         JFrame guiFrame = new JFrame();
         selectedColor = JColorChooser.showDialog(guiFrame, "Choisissez une couleur", element.getColor());
     }//GEN-LAST:event_jButtonChoseColorActionPerformed
-
-    private void jSpinnerExitsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerExitsStateChanged
-        // Nombre de sorties incorrectes
-        if ((int) jSpinnerExits.getValue() < element.getNbArcs()) {
-            JOptionPane.showMessageDialog(null,
-                    "Des arcs doivent être supprimées pour avoir " + jSpinnerExits.getValue() + " nombre de sorties.",
-                    "Total de sorties incorrect",
-                    JOptionPane.OK_OPTION,
-                    null);
-            jSpinnerExits.setValue(element.getNbArcs());
-        }
-    }//GEN-LAST:event_jSpinnerExitsStateChanged
-
-    private void jSpinnerEntrancesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerEntrancesStateChanged
-	// Nombre d'entrées incorrectes
-        // Ici ne devraient rentrer que les jonctions
-        if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
-            if ((int) jSpinnerEntrances.getValue() < element.getNbEntranceUsed()) {
-                JOptionPane.showMessageDialog(null,
-                        "Des arcs vers cette jonction doivent être supprimées pour avoir " + jSpinnerEntrances.getValue() + " nombre d'entrées",
-                        "Total d'entrées incorrect",
-                        JOptionPane.OK_OPTION,
-                        null);
-                jSpinnerEntrances.setValue(element.getNbEntrances());
-            }
-        }
-    }//GEN-LAST:event_jSpinnerEntrancesStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
