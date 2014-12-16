@@ -58,12 +58,6 @@ public abstract class Element extends Component {
     }
 
     public boolean getIsMatrixValid() {
-	Iterator<String> listProductsIterator = productsEntrance.keySet().iterator();
-	while (listProductsIterator.hasNext()) {
-	    if (!matrix.containsKey(listProductsIterator.next())) {
-		return false;
-	    }
-	}
 	return true;
     }
 

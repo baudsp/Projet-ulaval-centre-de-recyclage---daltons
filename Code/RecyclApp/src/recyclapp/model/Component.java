@@ -2,6 +2,7 @@ package recyclapp.model;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Map;
 
 public abstract class Component  implements Serializable{
@@ -16,6 +17,16 @@ public abstract class Component  implements Serializable{
 
     public void setMaxFlow(float maxFlow) {
         this.maxFlow = maxFlow;
+    }
+    
+    public float getActualFlow() {
+        float res = 0f;
+        Iterator<String> iteratorProducts = entranceProducts.keySet().iterator();
+        while (iteratorProducts.hasNext()) {
+            String product = iteratorProducts.next();
+            res += entranceProducts.get(product);
+        }
+        return res;
     }
 
     /**

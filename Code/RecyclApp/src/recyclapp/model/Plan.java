@@ -262,12 +262,12 @@ public class Plan implements Serializable, ParamObserver {
     }
     
     public boolean isThereLoop() {
-        for (Element entree : getAllEntreeUsine()) {
+        /*for (Element entree : getAllEntreeUsine()) {
             List<Element> jonctions = new LinkedList<>();
             if (parcoursContainsJonction(jonctions, entree)) {
                 return true;
             }
-        }
+        }*/
         return false;
     }
     
@@ -305,19 +305,37 @@ public class Plan implements Serializable, ParamObserver {
         return true;
     }
     
+    public boolean isFlowValid() {
+        for (Element element : listElements) {
+            if (element.getActualFlow() > element.getMaxFlow()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public boolean isPlanValid() {
         if (!areElementsValid()) {
+            System.out.println("elementsValid");
             return false;
         }
         if (isThereLoop()) {
+            System.out.println("loop");
             return false;
         }
         
         if (!areAllElementsUsed()) {
+            System.out.println("allElmUs");
             return false;
         }
         
         if (!areAllArcsUsed()) {
+            System.out.println("Arcs");
+            return false;
+        }
+        
+        if (!isFlowValid()) {
+            System.out.println("flow");
             return false;
         }
         return true;

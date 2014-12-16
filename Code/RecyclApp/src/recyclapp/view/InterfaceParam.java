@@ -56,7 +56,9 @@ public class InterfaceParam extends javax.swing.JPanel {
      */
     public void setParametersInformations(Element element) {
         this.element = element;
-
+        System.out.println(element.getName());
+        System.out.println(element.getActualFlow());
+        System.out.println("");
         jPanelEditionStation.setVisible(true);
 
         this.jTextFieldName.setText(element.getName());
