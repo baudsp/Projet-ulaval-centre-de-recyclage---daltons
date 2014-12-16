@@ -60,29 +60,6 @@ public abstract class Element extends Component {
 	this.coordinate = coordinate;
     }
 
-    public int getRankArc(Arc arc) {
-	for (int i = 0; i < nbExits; i++) {
-	    if (exits[i].equals(arc)) {
-		return i;
-	    }
-	}
-	return -1;
-    }
-
-    public Arc getArc(int i) {
-	return exits[i];
-    }
-
-    public int getNbArcs() {
-	int nb = 0;
-	for (int i = 0; i < nbExits; i++) {
-	    if (exits[i] != null) {
-		nb++;
-	    }
-	}
-	return nb;
-    }
-
     public int getFirstFreeExit() {
 	int exit = -1;
 
@@ -122,6 +99,43 @@ public abstract class Element extends Component {
 	exits[place] = arc;
     }
 
+    public Arc[] getArcs() {
+	return exits;
+    }
+
+    public void addEntrance(Arc entrance) {
+	entrances.add(entrance);
+    }
+
+    public void removeEntrance(Arc entrance) {
+	if (entrances.contains(entrance)) {
+	    entrances.remove(entrance);
+	}
+    }
+    
+        public int getRankArc(Arc arc) {
+	for (int i = 0; i < nbExits; i++) {
+	    if (exits[i].equals(arc)) {
+		return i;
+	    }
+	}
+	return -1;
+    }
+
+    public Arc getArc(int i) {
+	return exits[i];
+    }
+
+    public int getNbArcs() {
+	int nb = 0;
+	for (int i = 0; i < nbExits; i++) {
+	    if (exits[i] != null) {
+		nb++;
+	    }
+	}
+	return nb;
+    }
+    
     public void addEntrance() {
 	nbEntrancesUsed++;
     }
@@ -232,19 +246,7 @@ public abstract class Element extends Component {
 	return true;
     }
 
-    public Arc[] getArcs() {
-	return exits;
-    }
 
-    public void addEntrance(Arc entrance) {
-	entrances.add(entrance);
-    }
-
-    public void removeEntrance(Arc entrance) {
-	if (entrances.contains(entrance)) {
-	    entrances.remove(entrance);
-	}
-    }
 
     public abstract int getType();
 
@@ -325,7 +327,7 @@ public abstract class Element extends Component {
 	return elt;
     }
 
-    void deleteArc(Arc arcOfElt) {
+    public void deleteArc(Arc arcOfElt) {
 	
     }
 }

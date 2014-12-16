@@ -167,12 +167,14 @@ public class Plan implements Serializable, ParamObserver {
 	    Arc[] arcsOfElt = elementOfPlan.getArcs();
 	    
 	    for (Arc arcOfElt : arcsOfElt) {
-		Element elt = arcOfElt.getEntranceElement();
-		
-		// If the element list does not contains this element,
-		// then the arc is linked to a deleted element and should be deleted
-		if (!listElements.contains(elt)) {
-		    elementOfPlan.deleteArc(arcOfElt);
+		if (arcOfElt != null) {
+		    Element elt = arcOfElt.getEntranceElement();
+
+		    // If the element list does not contains this element,
+		    // then the arc is linked to a deleted element and should be deleted
+		    if (!listElements.contains(elt)) {
+			elementOfPlan.deleteArc(arcOfElt);
+		    }
 		}
 	    }
 	}
