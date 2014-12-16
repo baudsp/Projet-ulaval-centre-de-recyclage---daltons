@@ -22,6 +22,7 @@ public abstract class Element extends Component {
     protected Arc[] exits;
     protected List<Arc> entrances;
     protected Map<String, Map<Integer, Map<String, Float>>> matrix;
+    protected Map<String, Float> productsEntrance;
     protected String name;
     protected String description;
 
@@ -36,8 +37,8 @@ public abstract class Element extends Component {
 	entrances = new LinkedList<>();
 	this.width = width;
 	this.height = height;
-
 	this.id = new Random().nextInt(40);
+        productsEntrance = new LinkedHashMap<>();
     }
 
     public Coordinate getCoordinate() {
@@ -67,6 +68,16 @@ public abstract class Element extends Component {
 
     public void setNbEntrance(int nbEntrance) {
 	this.nbEntrances = nbEntrance;
+    }
+    
+    public boolean getIsMatrixValid() {
+        Iterator<String> listProductsIterator = productsEntrance.keySet().iterator();
+        while (listProductsIterator.hasNext()) {
+            if (!matrix.containsKey(listProductsIterator.next())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void setCoordinate(Coordinate coordinate) {
@@ -156,7 +167,7 @@ public abstract class Element extends Component {
     }
 
     public void pushExitProducts(Map<String, Float> entrance) {
-	
+        productsEntrance = entrance;
 	if (!this.getClass().equals(Jonction.class)) {
 	    entranceProducts = new LinkedHashMap<>();
 	}
@@ -212,7 +223,6 @@ public abstract class Element extends Component {
     // Récupère le dictionnaire de données Produit/Quantité pour un Arc en sortie (numéro de sortie)
     public Map<String, Float> exitProductsFromArc(int exitNumber) {
 	Map<String, Float> result = new HashMap<>();
-
 	// Verifie la Map des produits en entree est instanciee
 	if (entranceProducts != null) {
 	    Set<String> listProducts = entranceProducts.keySet();

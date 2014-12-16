@@ -543,6 +543,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         jCheckBoxMenuItemMagnetique = new javax.swing.JCheckBoxMenuItem();
         jMenuItemZoomIn = new javax.swing.JMenuItem();
         jMenuItemZoomOut = new javax.swing.JMenuItem();
+        jMenuValidation = new javax.swing.JMenu();
+        jMenuItemValiderSchema = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("RecyclApp - Daltons");
@@ -705,6 +707,19 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
         jMenuBar1.add(jMenuVue);
 
+        jMenuValidation.setText("Validation");
+
+        jMenuItemValiderSchema.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, 0));
+        jMenuItemValiderSchema.setText("Valider schéma");
+        jMenuItemValiderSchema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemValiderSchemaActionPerformed(evt);
+            }
+        });
+        jMenuValidation.add(jMenuItemValiderSchema);
+
+        jMenuBar1.add(jMenuValidation);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -773,6 +788,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
         redo();
     }//GEN-LAST:event_jMenuItemRedoActionPerformed
 
+    private void jMenuItemValiderSchemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemValiderSchemaActionPerformed
+        plan.isPlanValid();
+        JOptionPane.showConfirmDialog(null,
+            "" + plan.isPlanValid(),
+            "Validité du plan",
+            JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jMenuItemValiderSchemaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem itemGrid;
     private javax.swing.JCheckBoxMenuItem itemParam;
@@ -788,8 +811,10 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     private javax.swing.JMenuItem jMenuItemRedo;
     private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JMenuItem jMenuItemUndo;
+    private javax.swing.JMenuItem jMenuItemValiderSchema;
     private javax.swing.JMenuItem jMenuItemZoomIn;
     private javax.swing.JMenuItem jMenuItemZoomOut;
+    private javax.swing.JMenu jMenuValidation;
     private javax.swing.JMenu jMenuVue;
     private javax.swing.JLabel logCoordinates;
     private javax.swing.JLabel logDebug;

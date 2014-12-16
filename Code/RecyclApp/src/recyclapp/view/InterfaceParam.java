@@ -24,7 +24,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import recyclapp.model.Element;
-import recyclapp.model.EntreeUsine;
 import recyclapp.model.ParamObserver;
 
 /**
@@ -135,6 +134,7 @@ public class InterfaceParam extends javax.swing.JPanel {
                             "Enregistrement de la suppression de produit",
                             JOptionPane.CLOSED_OPTION,
                             JOptionPane.INFORMATION_MESSAGE);
+                            element.setEntranceProducts(exitValues);
                             setParametersInformations(element);
                         }
                     }
@@ -160,6 +160,7 @@ public class InterfaceParam extends javax.swing.JPanel {
                         "Enregistrement de l'ajout de produit",
                         JOptionPane.CLOSED_OPTION,
                         JOptionPane.INFORMATION_MESSAGE);
+                    element.setEntranceProducts(entranceProducts);
                     setParametersInformations(element);
                 } 
             }
@@ -594,7 +595,6 @@ public class InterfaceParam extends javax.swing.JPanel {
                     }
                 }
             }
-            element.setEntranceProducts(entrees);
         }
 
         updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),

@@ -33,4 +33,9 @@ public class SortieUsine extends Element {
         
         return elt;
     }
+    
+    @Override
+    public boolean getIsMatrixValid() {
+        return true;
+    }
 }

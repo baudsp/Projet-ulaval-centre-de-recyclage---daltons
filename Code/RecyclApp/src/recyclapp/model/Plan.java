@@ -1,6 +1,5 @@
 package recyclapp.model;
 
-import java.awt.Frame;
 import recyclapp.serviceTechnique.ChangeManager;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import recyclapp.view.InterfaceOutils;
-import recyclapp.view.InterfacePrincipale;
 
 public class Plan implements Serializable, ParamObserver {
 
@@ -129,7 +127,7 @@ public class Plan implements Serializable, ParamObserver {
     }
 
     public LinkedList<DataElement> getListDataElements() {
-        LinkedList<DataElement> listDataElements = new LinkedList<DataElement>();
+        LinkedList<DataElement> listDataElements = new LinkedList<>();
         for (Element elt : listElements) {
             listDataElements.add(new DataElement(elt));
         }
@@ -201,5 +199,106 @@ public class Plan implements Serializable, ParamObserver {
     @Override
     public void update(Element element) {
         getChangeManager().addChange(listElements);
+    }
+    
+    public List<Element> getAllEntreeUsine() {
+        List<Element> entrees = new LinkedList<>();
+        for (Element element : listElements) {
+            if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE) {
+                entrees.add(element);
+            }
+        }
+        return entrees;
+    }
+    
+    public boolean areElementsValid() {
+        for (Element element : listElements) {
+            if (!element.getIsMatrixValid()) {
+                System.out.println(element.getName());
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean parcoursContainsJonction(List<Element> list, Element e) {
+        if (e.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
+            if (list.contains(e)) {
+                return true;
+            }
+            list.add(e);
+        }
+        for (Arc arc : e.getArcs()) {
+            if ((arc != null) && (parcoursContainsJonction(list, arc.getEntranceElement()))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean isThereLoop() {
+        for (Element entree : getAllEntreeUsine()) {
+            List<Element> jonctions = new LinkedList<>();
+            if (parcoursContainsJonction(jonctions, entree)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public List<Element> parcoursElements(List<Element> list, Element e) {
+        list.add(e);
+        for (Arc arc : e.getArcs()) {
+            if (arc != null) {
+                list = parcoursElements(list, arc.getEntranceElement());
+            }
+        }
+        return list;
+    }
+    
+    public boolean areAllElementsUsed() {
+        List<Element> elements = new LinkedList<>();
+        for (Element entree : getAllEntreeUsine()) {
+            elements = parcoursElements(elements, entree);
+        }
+        for (Element e : listElements) {
+            if (!elements.contains(e)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean areAllArcsUsed() {
+        for (Element element : listElements) {
+            for (Arc arc : element.getArcs()) {
+                if (arc == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean isPlanValid() {
+        if (!areElementsValid()) {
+            System.out.println("AreElementsValid");
+            return false;
+        }
+        if (isThereLoop()) {
+            System.out.println("IsThereLoop");
+            return false;
+        }
+        
+        if (!areAllElementsUsed()) {
+            System.out.println("AreAllElementsUsed");
+            return false;
+        }
+        
+        if (!areAllArcsUsed()) {
+            System.out.println("AreAllArcsUsed");
+            return false;
+        }
+        return true;
     }
 }
