@@ -17,8 +17,11 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import recyclapp.model.Element;
+import recyclapp.model.EntreeUsine;
 import recyclapp.model.ParamObserver;
 
 /**
@@ -74,7 +77,10 @@ public class InterfaceParam extends javax.swing.JPanel {
             filljPanelMatrix();
         }
         
-	if (element.getType() != InterfaceOutils.ID_TOOL_SORTIE) {
+        if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE) {
+            filljPanelExitValuesForEntreeUsine();
+        }
+        else if (element.getType() != InterfaceOutils.ID_TOOL_SORTIE) {
 	    filljPanelExitValues();
 	} else {
 	    filljPanelExitValuesForSortieUsine();
@@ -84,6 +90,35 @@ public class InterfaceParam extends javax.swing.JPanel {
 	jPanelMatrix.repaint();
 
 	repaint();
+    }
+    
+    private void filljPanelExitValuesForEntreeUsine() {
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        int y = 0;
+
+        Map<String, Float> exitValues = element.exitProductsFromArc(0);
+        if (exitValues != null && !exitValues.isEmpty()) {
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = y;
+            jPanelExitValues.add(new JLabel("Sortie : "), gridBagConstraints);
+            y++;
+
+            Iterator<String> productIterator = exitValues.keySet().iterator();
+            while (productIterator.hasNext()) {
+                String product = productIterator.next();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = y;
+                jPanelExitValues.add(new JLabel(product + " => "), gridBagConstraints);
+                gridBagConstraints.gridx = 1;
+                JSpinner jspin = new JSpinner();
+                jspin.setModel(new SpinnerNumberModel(exitValues.get(product), 0.0f, null, 1.0f));
+                jspin.setSize(80, 20);
+                jspin.setPreferredSize(new Dimension(80, 20));
+                jspin.setName(product);
+                jPanelExitValues.add(jspin, gridBagConstraints);
+                y++;
+            }
+        }
     }
 
     private void filljPanelExitValuesForSortieUsine() {
@@ -482,6 +517,17 @@ public class InterfaceParam extends javax.swing.JPanel {
 	if (inputs.size() != 0) {
 	    element.setMatrix(inputs);
 	}
+        
+        if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE) {
+            Map<String, Float> entrees = element.exitProductsFromArc(0);
+            for (Component comp : jPanelExitValues.getComponents()) {
+                if ((comp.getClass().equals(JSpinner.class)) && entrees.containsKey(comp.getName())) {
+                    JSpinner jspin = (JSpinner) comp;
+                    entrees.put(jspin.getName(), (Float) jspin.getValue());
+                }
+            }
+            element.setEntranceProducts(entrees);
+        }
 
         updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),
                 selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());
