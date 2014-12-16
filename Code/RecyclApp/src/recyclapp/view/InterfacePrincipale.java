@@ -73,7 +73,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
 	// Pour actualiser la scroll Bar (merci Guillaume !)
 	int value = jScrollPane1.getVerticalScrollBar().getValue();
-	int value2 = jScrollPane1.getHorizontalScrollBar().getValue();	
+	int value2 = jScrollPane1.getHorizontalScrollBar().getValue();
 	jScrollPane1.getVerticalScrollBar().setValue(value + 1);
 	jScrollPane1.getHorizontalScrollBar().setValue(value2 + 1);
 	jScrollPane1.getVerticalScrollBar().setValue(value);
@@ -158,7 +158,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseMoved(MouseEvent e) {
 	if (e.getSource().equals(interfacePlan)) {
-	    //System.out.println("egetx " + e.getX());
+
 	    interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 	    this.dataElementTemp = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
 	}
@@ -192,40 +192,43 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	if (this.panelTools.getIdTools() == InterfaceOutils.ID_TOOL_ARC) {
 	    mip.changeCursor(InterfaceOutils.ID_TOOL_ARC);
 	}
-
+	
+	
+	int x = e.getX();
+	int y = e.getY();
+	interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(x), mip.convertPixelToMeter(y));
+	
+	if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
+	    Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
+	    x = coo.getX();
+	    y = coo.getY();
+	}
+	
 	if (e.getSource().equals(interfacePlan)) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
-	    interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
 	    if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
-
-		if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
-		    Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
-		    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (coo.getX()), coo.getY());
-		} else {
-		    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), (int) (e.getX()), e.getY());
-		}
+		
+		interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.dataElementTemp.type), x, y);
+		
 	    }
-	    this.interfacePlan.repaint();
-	} else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
-	    interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
-	    if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
-		Coordinate coo = mip.findCooMagnetique(e.getX(), e.getY());
-
-		interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX(), coo.getY());
-	    } else {
-		//System.out.println("egetx draw " + e.getX());
-		interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
-	    }
+	   
+	    // QUAND ON DRAG AND DROP DEPUIS L'OUTILS
+	} else if (this.panelTools.isMoveTools() && this.panelTools.getIdTools() != InterfaceOutils.ID_TOOL_ARC) { 
+	    
+	    interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), x, y);
 	}
+	
+	this.interfacePlan.repaint();    
+	
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
 
 	this.plan.calc();
-        // Permet de recharger, très moche mais ca permet que ca marche !
-        interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()-50), mip.convertPixelToMeter(e.getY()-50));
-        interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
+	// Permet de recharger, très moche mais ca permet que ca marche !
+	interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX() - 50), mip.convertPixelToMeter(e.getY() - 50));
+	interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
 	DataElement dataElement = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
 	interfacePlan.showSelectedElement(dataElement);
@@ -270,19 +273,19 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 				    return;
 				}
 			    }
-			    if (jCheckBoxMenuItemMagnetique.isSelected()) {
+			    if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
 				Coordinate coo = mip.findCooMagnetique(x, y);
 				x = coo.getX();
 				y = coo.getY();
 			    }
 
 			    int halfImageSize = (int) (zoom * panelTools.getSizeImage() / 2);
-				
+
 			    int panelToolWidth = this.panelTools.getWidth();
-			    
+
 			    int horizontaleScrollBarValue = jScrollPane1.getHorizontalScrollBar().getValue();
 			    int verticaleScrollBarValue = jScrollPane1.getVerticalScrollBar().getValue();
-			    
+
 			    // On crée la position dans le plan à partir de la position dans l'interface
 			    // Il faut prendre en compte la position de la souris, la largeur du panneau des outils, 
 			    // la position des scroll bars, le zoom, et la taille de l'image
@@ -325,7 +328,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		int x = e.getX();
 		int y = e.getY();
 
-		if (jCheckBoxMenuItemMagnetique.isSelected()) {
+		if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
 		    Coordinate coo = mip.findCooMagnetique(x, y);
 		    x = coo.getX();
 		    y = coo.getY();
@@ -419,7 +422,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    try {
 		SavePlan saver = new SavePlan();
 		saver.save(chooser.getSelectedFile(), this.plan);
-		
+
 	    } catch (Exception ex) {
 		String questionEr = "Erreur : " + ex.getMessage();
 
@@ -452,14 +455,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	int option = chooser.showOpenDialog(null);
 	if (option == JFileChooser.APPROVE_OPTION) {
-	try {
-	    SavePlan loader = new SavePlan();
-	    
-	    this.plan = loader.load(chooser.getSelectedFile());
-	    
-	    openPlan();
-	    
-	} catch (IOException | ClassNotFoundException ex) {
+	    try {
+		SavePlan loader = new SavePlan();
+
+		this.plan = loader.load(chooser.getSelectedFile());
+
+		openPlan();
+
+	    } catch (IOException | ClassNotFoundException ex) {
 		String questionEr = "Erreur : " + ex.getMessage();
 
 		JOptionPane.showMessageDialog(null,
