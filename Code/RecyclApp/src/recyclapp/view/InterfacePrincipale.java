@@ -196,9 +196,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	if (e.getSource().equals(interfacePlan)) { // QUAND ON DRAG AND DROP DEPUIS LE PLAN (DEPLACEMENT)
 	    interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
-	    int meterX = mip.convertPixelToMeter(e.getX());
-	    int meterY = mip.convertPixelToMeter(e.getY());
-
 	    if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
 
 		if (jCheckBoxMenuItemMagnetique.isSelected() && interfacePlan.isWithGrid()) {
@@ -226,6 +223,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     public void mouseClicked(MouseEvent e) {
 
 	this.plan.calc();
+        // Permet de recharger, très moche mais ca permet que ca marche !
+        interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()-50), mip.convertPixelToMeter(e.getY()-50));
+        interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 
 	DataElement dataElement = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
 	interfacePlan.showSelectedElement(dataElement);

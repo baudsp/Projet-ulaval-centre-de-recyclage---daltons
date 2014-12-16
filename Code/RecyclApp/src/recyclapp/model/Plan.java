@@ -1,20 +1,21 @@
 package recyclapp.model;
 
+import java.awt.Frame;
 import recyclapp.serviceTechnique.ChangeManager;
 import java.io.Serializable;
 import java.util.ArrayList;
-import static java.util.Collections.list;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import recyclapp.view.InterfaceOutils;
+import recyclapp.view.InterfacePrincipale;
 
 public class Plan implements Serializable, ParamObserver {
 
     private LinkedList<Element> listElements;
     private DataElement tempDataElement = null;
-    private ChangeManager changeManager = new ChangeManager();
+    private final ChangeManager changeManager = new ChangeManager();
 
     /**
      * @return the tempDataElement
@@ -43,14 +44,11 @@ public class Plan implements Serializable, ParamObserver {
      * Reset the entranceValues of all elements of the plan
      */
     private void resetEntranceValues() {
-	List<EntreeUsine> listEntreeUsine = new ArrayList<>();
-	
 	for (Element element : listElements) {
 	    if (!element.getClass().equals(EntreeUsine.class)) {
 		element.setEntranceProducts(new HashMap<String, Float>());
 	    }
 	}
-	
     }
     
     public List<EntreeUsine> findEntreesUsine() {

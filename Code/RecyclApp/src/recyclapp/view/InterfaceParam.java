@@ -17,8 +17,11 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import recyclapp.model.Element;
+import recyclapp.model.EntreeUsine;
 import recyclapp.model.ParamObserver;
 
 /**
@@ -74,7 +77,10 @@ public class InterfaceParam extends javax.swing.JPanel {
             filljPanelMatrix();
         }
         
-	if (element.getType() != InterfaceOutils.ID_TOOL_SORTIE) {
+        if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE) {
+            filljPanelExitValuesForEntreeUsine();
+        }
+        else if (element.getType() != InterfaceOutils.ID_TOOL_SORTIE) {
 	    filljPanelExitValues();
 	} else {
 	    filljPanelExitValuesForSortieUsine();
@@ -84,6 +90,35 @@ public class InterfaceParam extends javax.swing.JPanel {
 	jPanelMatrix.repaint();
 
 	repaint();
+    }
+    
+    private void filljPanelExitValuesForEntreeUsine() {
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        int y = 0;
+
+        Map<String, Float> exitValues = element.exitProductsFromArc(0);
+        if (exitValues != null && !exitValues.isEmpty()) {
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = y;
+            jPanelExitValues.add(new JLabel("Sortie : "), gridBagConstraints);
+            y++;
+
+            Iterator<String> productIterator = exitValues.keySet().iterator();
+            while (productIterator.hasNext()) {
+                String product = productIterator.next();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = y;
+                jPanelExitValues.add(new JLabel(product + " => "), gridBagConstraints);
+                gridBagConstraints.gridx = 1;
+                JSpinner jspin = new JSpinner();
+                jspin.setModel(new SpinnerNumberModel(exitValues.get(product), 0.0f, null, 1.0f));
+                jspin.setSize(80, 20);
+                jspin.setPreferredSize(new Dimension(80, 20));
+                jspin.setName(product);
+                jPanelExitValues.add(jspin, gridBagConstraints);
+                y++;
+            }
+        }
     }
 
     private void filljPanelExitValuesForSortieUsine() {
@@ -204,7 +239,6 @@ public class InterfaceParam extends javax.swing.JPanel {
                 }
 
                 i++;
-
             }
         }
     }
@@ -266,7 +300,7 @@ public class InterfaceParam extends javax.swing.JPanel {
                         JOptionPane.CLOSED_OPTION,
                         JOptionPane.INFORMATION_MESSAGE);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -340,20 +374,10 @@ public class InterfaceParam extends javax.swing.JPanel {
         });
 
         jSpinnerExits.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-        jSpinnerExits.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinnerExitsStateChanged(evt);
-            }
-        });
 
         jLabelEntrances.setText("Entrées");
 
         jSpinnerEntrances.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-        jSpinnerEntrances.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinnerEntrancesStateChanged(evt);
-            }
-        });
 
         jPanelExitValues.setBackground(new java.awt.Color(164, 183, 145));
         jPanelExitValues.setLayout(new java.awt.GridBagLayout());
@@ -493,6 +517,17 @@ public class InterfaceParam extends javax.swing.JPanel {
 	if (inputs.size() != 0) {
 	    element.setMatrix(inputs);
 	}
+        
+        if (element.getType() == InterfaceOutils.ID_TOOL_ENTREE) {
+            Map<String, Float> entrees = element.exitProductsFromArc(0);
+            for (Component comp : jPanelExitValues.getComponents()) {
+                if ((comp.getClass().equals(JSpinner.class)) && entrees.containsKey(comp.getName())) {
+                    JSpinner jspin = (JSpinner) comp;
+                    entrees.put(jspin.getName(), (Float) jspin.getValue());
+                }
+            }
+            element.setEntranceProducts(entrees);
+        }
 
         updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),
                 selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());
@@ -508,33 +543,6 @@ public class InterfaceParam extends javax.swing.JPanel {
         JFrame guiFrame = new JFrame();
         selectedColor = JColorChooser.showDialog(guiFrame, "Choisissez une couleur", element.getColor());
     }//GEN-LAST:event_jButtonChoseColorActionPerformed
-
-    private void jSpinnerExitsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerExitsStateChanged
-        // Nombre de sorties incorrectes
-        if ((int) jSpinnerExits.getValue() < element.getNbArcs()) {
-            JOptionPane.showMessageDialog(null,
-                    "Des arcs doivent être supprimées pour avoir " + jSpinnerExits.getValue() + " nombre de sorties.",
-                    "Total de sorties incorrect",
-                    JOptionPane.OK_OPTION,
-                    null);
-            jSpinnerExits.setValue(element.getNbArcs());
-        }
-    }//GEN-LAST:event_jSpinnerExitsStateChanged
-
-    private void jSpinnerEntrancesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerEntrancesStateChanged
-	// Nombre d'entrées incorrectes
-        // Ici ne devraient rentrer que les jonctions
-        if (element.getType() == InterfaceOutils.ID_TOOL_JONCTION) {
-            if ((int) jSpinnerEntrances.getValue() < element.getNbEntranceUsed()) {
-                JOptionPane.showMessageDialog(null,
-                        "Des arcs vers cette jonction doivent être supprimées pour avoir " + jSpinnerEntrances.getValue() + " nombre d'entrées",
-                        "Total d'entrées incorrect",
-                        JOptionPane.OK_OPTION,
-                        null);
-                jSpinnerEntrances.setValue(element.getNbEntrances());
-            }
-        }
-    }//GEN-LAST:event_jSpinnerEntrancesStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

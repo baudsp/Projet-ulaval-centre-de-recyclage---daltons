@@ -237,7 +237,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
         interfacePrincipale.getLogCoordinates().setText("[" + x + ";" + y + "]");
     }
 
-    private void logZoom() {
+    public void logZoom() {
         int newZoom = Math.round(zoom * 100);
         interfacePrincipale.getLogZoom().setText("    |    Zoom : " + newZoom + "%");
     }
