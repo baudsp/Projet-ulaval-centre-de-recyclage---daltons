@@ -307,21 +307,17 @@ public class Plan implements Serializable, ParamObserver {
     
     public boolean isPlanValid() {
         if (!areElementsValid()) {
-            System.out.println("AreElementsValid");
             return false;
         }
         if (isThereLoop()) {
-            System.out.println("IsThereLoop");
             return false;
         }
         
         if (!areAllElementsUsed()) {
-            System.out.println("AreAllElementsUsed");
             return false;
         }
         
         if (!areAllArcsUsed()) {
-            System.out.println("AreAllArcsUsed");
             return false;
         }
         return true;
