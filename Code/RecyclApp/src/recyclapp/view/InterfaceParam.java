@@ -24,7 +24,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import recyclapp.model.Element;
-import recyclapp.model.EntreeUsine;
 import recyclapp.model.ParamObserver;
 
 /**
