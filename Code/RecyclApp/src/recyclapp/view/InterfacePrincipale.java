@@ -8,13 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -282,11 +276,15 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 				y = coo.getY();
 			    }
 
-			    // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... Ca me dépasse totalement mais ca marache !
-			    int halfImageSize = panelTools.getSizeImage() / 2;
+			    // J'ai l'impression qu'on ne doit pas mettre le zoom ici.... 
+			    // Ca me dépasse totalement mais ca marache !
+			    int halfImageSize = (int) (panelTools.getSizeImage() / 2);
 
-			    int createX = (int) ((x - this.panelTools.getWidth()) / zoom) - halfImageSize;
-			    int createY = (int) (y / zoom) - halfImageSize;
+			    System.out.println("horizontale " + jScrollPane1.getHorizontalScrollBar().getValue());
+			    System.out.println("vert "+jScrollPane1.getVerticalScrollBar().getValue());
+			    
+			    int createX = (int) ((x - this.panelTools.getWidth() + jScrollPane1.getHorizontalScrollBar().getValue()) / zoom) - halfImageSize;
+			    int createY = (int) ((y + jScrollPane1.getVerticalScrollBar().getValue()) / zoom) - halfImageSize;
 
 			    this.plan.createElement(this.panelTools.getIdTools(), createX, createY, nbrSorties);
 
