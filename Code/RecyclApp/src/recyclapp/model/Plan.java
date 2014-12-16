@@ -62,8 +62,8 @@ public class Plan implements Serializable, ParamObserver {
 	return listEntreeUsine;
     }
 
-    public DataElement createArcExit(int x, int y) {
-        DataElement dataElement = findDataElement(x, y, 1);
+    public DataElement createArcExit(int x, int y, float zoom) {
+        DataElement dataElement = findDataElement(x, y, zoom);
         if (dataElement.element != null && (dataElement.element.getFirstFreeExit() >= 0)) {
             tempDataElement = dataElement;
         } else {
@@ -88,9 +88,9 @@ public class Plan implements Serializable, ParamObserver {
         return getTempDataElement();
     }
 
-    public boolean createArcEntrance(int x, int y) {
+    public boolean createArcEntrance(int x, int y, float zoom) {
         boolean found = false;
-        DataElement dataElement = findDataElement(x, y, 1);
+        DataElement dataElement = findDataElement(x, y, zoom);
 
         if (dataElement.element != null) {
             String message = "Erreur lors de l'ajout de l'arc.";
