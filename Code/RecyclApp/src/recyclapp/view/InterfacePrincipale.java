@@ -164,7 +164,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
     @Override
     public void mouseMoved(MouseEvent e) {
 	if (e.getSource().equals(interfacePlan)) {
-	    //System.out.println("egetx " + e.getX());
 	    interfacePlan.logZoomAndCoordinates(mip.convertPixelToMeter(e.getX()), mip.convertPixelToMeter(e.getY()));
 	    this.dataElementTemp = this.plan.findDataElement(e.getX(), e.getY(), this.interfacePlan.getZoom());
 	}
@@ -219,7 +218,6 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
 		interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), coo.getX(), coo.getY());
 	    } else {
-		//System.out.println("egetx draw " + e.getX());
 		interfacePlan.drawImageFollowingCursor(this.panelTools.getImages(this.panelTools.getIdTools()), e.getX(), e.getY());
 	    }
 	}
@@ -320,8 +318,9 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    }
 		}
 		this.panelTools.repaint();
-	    } else if (e.getSource().equals(interfacePlan)) {
-		int x = e.getX();
+	    } else if (e.getSource().equals(interfacePlan)) { // Déplacement d'un élément
+                
+                int x = e.getX();
 		int y = e.getY();
 
 		if (jCheckBoxMenuItemMagnetique.isSelected()) {
@@ -335,12 +334,14 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		int moveX = (int) (x / zoom) - halfImageSize;
 		int moveY = (int) (y / zoom) - halfImageSize;
 
-		this.plan.moveElement(dataElementTemp, moveX, moveY);
-		dataElementTemp = new DataElement();
+                if(mip.isThereAnElementHere(moveX, moveY)){
+                    this.plan.moveElement(dataElementTemp, moveX, moveY);
+                    dataElementTemp = new DataElement();
+                }
 	    }
 
 	    this.interfacePlan.repaint();
-	} else {
+	} else { // On est en dehors du plan
 	    if (this.dataElementTemp != null && this.dataElementTemp.type >= 0) {
 		JOptionPane.showMessageDialog(null,
 			"Déplacer l'élément dans le plan.",
