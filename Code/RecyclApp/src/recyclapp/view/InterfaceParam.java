@@ -340,13 +340,11 @@ public class InterfaceParam extends javax.swing.JPanel {
         }
     }
 
-    private void updateElement(String name, String description, float debitMax, Color color, int nbreExits, int nbreEntrance) {
+    private void updateElement(String name, String description, float debitMax, Color color) {
         element.setName(name);
         element.setDescription(description);
         element.setMaxFlow(debitMax);
         element.setColor(color);
-        element.setNbExits(nbreExits);
-        element.setNbEntrance(nbreEntrance);
 
         for (ParamObserver paramObserver : paramObserverList) {
             paramObserver.update(element.clone());
@@ -597,7 +595,7 @@ public class InterfaceParam extends javax.swing.JPanel {
         }
 
         updateElement(jTextFieldName.getText(), jTextFieldDescription.getText(), (Float) jSpinnerDebitMax.getValue(),
-                selectedColor, (int) jSpinnerExits.getValue(), (int) jSpinnerEntrances.getValue());
+                selectedColor);
 
         JOptionPane.showConfirmDialog(null,
                 "L'enregistrement s'est passé avec succès.",

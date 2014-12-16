@@ -44,15 +44,6 @@ public abstract class Element extends Component {
 	return coordinate;
     }
 
-    public void setNbExits(int nbExits) {
-	Arc[] newExits = new Arc[nbExits];
-	for (int i = 0; (i < this.nbExits) && (i < nbExits); i++) {
-	    newExits[i] = exits[i];
-	}
-	this.nbExits = nbExits;
-	exits = newExits;
-    }
-
     public int getNbExits() {
 	return nbExits;
     }
@@ -63,10 +54,6 @@ public abstract class Element extends Component {
 
     public int getNbEntrances() {
 	return nbEntrances;
-    }
-
-    public void setNbEntrance(int nbEntrance) {
-	this.nbEntrances = nbEntrance;
     }
 
     public void setCoordinate(Coordinate coordinate) {
@@ -336,5 +323,9 @@ public abstract class Element extends Component {
 	elt.width = this.width;
 
 	return elt;
+    }
+
+    void deleteArc(Arc arcOfElt) {
+	
     }
 }

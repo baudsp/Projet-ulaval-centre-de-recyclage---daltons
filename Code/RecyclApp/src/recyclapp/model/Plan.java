@@ -172,7 +172,7 @@ public class Plan implements Serializable, ParamObserver {
 		// If the element list does not contains this element,
 		// then the arc is linked to a deleted element and should be deleted
 		if (!listElements.contains(elt)) {
-		    
+		    elementOfPlan.deleteArc(arcOfElt);
 		}
 	    }
 	}
