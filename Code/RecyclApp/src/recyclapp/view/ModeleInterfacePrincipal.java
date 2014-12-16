@@ -96,7 +96,7 @@ public class ModeleInterfacePrincipal {
      * @return
      */
     public boolean isThereAnElementHere(int x, int y) {
-        LinkedList<DataElement> listDataElements = this.frame.getListDataElements(false);
+        LinkedList<DataElement> listDataElements = this.frame.getPanelPlan().getListDataElements();
         boolean found = false;
         
 
@@ -107,6 +107,7 @@ public class ModeleInterfacePrincipal {
             int rHeight = listDataElement.height;
             Rectangle rectangle = new Rectangle(rX, rY, rWidth, rHeight);
             if (rectangle.contains(x, y)) {
+                System.out.println("TROUVE");
                 this.frame.getDebug().setText("Trouvé");
                 found = true;
                 break;

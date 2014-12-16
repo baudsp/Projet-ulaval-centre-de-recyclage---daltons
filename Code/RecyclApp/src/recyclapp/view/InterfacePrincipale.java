@@ -112,6 +112,10 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	return interfacePlan;
     }
 
+    public Plan getPanelPlan() {
+	return plan;
+    }
+
     public void setPanelMap(InterfacePlan panelMap) {
 	this.interfacePlan = panelMap;
     }
@@ -141,7 +145,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		    currentDataElement = dataElement;
 		}
 	    }
-	    //listDataElements.remove(currentDataElement);
+	    listDataElements.remove(currentDataElement);
 	}
 
 	return listDataElements;
@@ -177,6 +181,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        moveableElement = true;
 	if (e.getSource() != interfacePlan) { // On rentre dedans que si on part de Tools
 	    if (e.getX() < panelTools.getWidth()) {
 		// TODO : Dessiner l'image qui suit dans InterfaceOutils (On est parti de tools : AJOUT)
@@ -237,6 +242,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 
     @Override
     public void mousePressed(MouseEvent e) {
+        moveableElement = false;
 	this.panelTools.repaint();
     }
 
@@ -335,7 +341,7 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 		int moveX = (int) (x / zoom) - halfImageSize;
 		int moveY = (int) (y / zoom) - halfImageSize;
 
-                if(mip.isThereAnElementHere(moveX, moveY)){
+                if(moveableElement){
                     this.plan.moveElement(dataElementTemp, moveX, moveY);
                     dataElementTemp = new DataElement();
                 }
@@ -362,6 +368,8 @@ public class InterfacePrincipale extends javax.swing.JFrame implements ActionLis
 	    this.panelTools.repaint();
 	}
     }
+    
+    private boolean moveableElement = false;
 
     /**
      * **

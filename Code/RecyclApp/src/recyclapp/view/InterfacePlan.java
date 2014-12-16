@@ -57,7 +57,7 @@ public class InterfacePlan extends JPanel implements MouseWheelListener, KeyList
             isDrag = false;
         }
 
-        LinkedList<DataElement> listDataElements = interfacePrincipale.getListDataElements(isZoom);
+        LinkedList<DataElement> listDataElements = interfacePrincipale.getPanelPlan().getListDataElements();
         
         for (DataElement dataElement : listDataElements) {
             int id = dataElement.element.getType();
